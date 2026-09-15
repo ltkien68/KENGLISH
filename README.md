@@ -2,27 +2,6 @@
 
 **Kenglish** là ứng dụng Android hỗ trợ học và ôn luyện từ vựng tiếng Anh theo hướng trực quan, cá nhân hóa và gamification.
 
-Ứng dụng hướng đến việc giúp người học xây dựng vốn từ vựng theo từng mục tiêu như **TOEIC, IELTS, THPT, trình độ tiếng Anh, giao tiếp và từ vựng chuyên ngành**, đồng thời cung cấp các hình thức luyện tập, theo dõi tiến độ và trợ lý AI hỗ trợ học tập.
-
-> 🚧 **Trạng thái dự án:** Đang phát triển — hiện tập trung hoàn thiện giao diện và luồng điều hướng.
-
----
-
-## 🎯 Mục tiêu
-
-Kenglish được xây dựng với mục tiêu tạo ra một ứng dụng học từ vựng tiếng Anh đơn giản, dễ sử dụng nhưng vẫn có đủ công cụ để người dùng duy trì việc học lâu dài.
-
-Các mục tiêu chính:
-
-- Học từ vựng theo từng bộ từ và lộ trình.
-- Phân loại từ vựng theo mục tiêu học tập.
-- Luyện tập và ôn lại từ đã học.
-- Theo dõi tiến độ học tập.
-- Tạo động lực bằng streak, xu và bảng xếp hạng.
-- Hỗ trợ phát âm bằng Text-to-Speech.
-- Hỗ trợ điền phát âm và nghĩa của từ tự động khi thêm từ mới.
-- Tích hợp trợ lý AI hỗ trợ việc học tiếng Anh.
-
 ---
 
 ## 📱 Các màn hình chính
@@ -40,194 +19,21 @@ Kenglish sử dụng một `MainActivity` và `BottomNavigationView` để đi�
 
 ---
 
-## 🏠 Trang chủ
+## 🎯 Tính năng chính
 
-Trang chủ là màn hình hiển thị trực quan thông tin cơ bản, tổng quan.
-
-### Thông tin học tập
-
-Trang chủ hiển thị các thông tin tổng quan như:
-
-- Tổng số từ.
-- Số từ đã thuộc.
-- Phần trăm tiến độ.
-- Số từ đến hạn ôn.
-- Chuỗi ngày học — **streak**.
-- Số xu hiện có.
-
-### Lộ trình học
-
-Người dùng có thể xem các bộ từ được chia thành nhiều nhóm:
-
-- THPT.
-- IELTS.
-- TOEIC.
-- Người nổi tiếng khuyên dùng.
-- Theo level.
-- Người đi làm & Chuyên ngành.
-- THCS & Tiểu học.
-
-## 🧩 Cấu trúc giao diện
-
-Kenglish sử dụng **XML Views**, không sử dụng Jetpack Compose.
-
-Các phần lớn của Trang chủ được tách thành những layout component riêng và ghép lại bằng `<include>`.
-
-Ví dụ:
-
-```text
-trang_chu.xml
-│
-├── trangchu_thongtinnguoidung.xml
-├── trangchu_banner.xml
-├── trangchu_thongke.xml
-├── trangchu_lotrinh.xml
-├── trangchu_tieudedanhsach.xml
-└── trangchu_dslotrinh.xml
-        │
-        ├── trangchu_nhom_thpt.xml
-        ├── trangchu_nhom_ielts.xml
-        ├── trangchu_nhom_toeic.xml
-        ├── trangchu_nhom_nguoi_noi_tieng.xml
-        ├── trangchu_nhom_level.xml
-        ├── trangchu_nhom_chuyen_nganh.xml
-        └── trangchu_nhom_thcs.xml
-```
-
-Việc tách layout giúp giao diện dễ quản lý và chỉnh sửa hơn khi số lượng thành phần trên Trang chủ tăng lên.
+- Học từ vựng theo từng bộ từ và lộ trình.
+- Phân loại từ vựng theo mục tiêu học tập.
+- Luyện tập và ôn lại từ đã học.
+- Theo dõi tiến độ học tập.
+- Tạo động lực bằng streak, xu và bảng xếp hạng.
+- Hỗ trợ phát âm bằng Text-to-Speech.
+- Hỗ trợ điền phát âm và nghĩa của từ tự động khi thêm từ mới.
+- Tích hợp trợ lý AI hỗ trợ việc học tiếng Anh.
 
 ---
 
-## 🧭 Điều hướng
+##  Cài đặt
 
-Ứng dụng sử dụng:
-
-- `MainActivity`
-- `FrameLayout`
-- `BottomNavigationView`
-- `Fragment`
-
-Cấu trúc điều hướng:
-
-```text
-MainActivity
-│
-├── TrangChu
-├── BoTu
-├── LuyenTap
-├── XepHang
-├── CuaHang
-└── CaNhan
-```
-
-`MainActivity` chịu trách nhiệm chuyển đổi Fragment khi người dùng chọn các mục trên Bottom Navigation.
-
-Mỗi tab có thể sử dụng màu nhận diện riêng khi được chọn, trong khi các tab chưa được chọn sử dụng màu trung tính.
-
----
-
-## 🎨 Thiết kế giao diện
-
-Kenglish sử dụng phong cách giao diện tối với màu nền chính:
-
-```text
-#182230
-```
-
-Một số đặc điểm thiết kế:
-
-- Dark UI.
-- Card bo góc.
-- Material Components.
-- Màu sắc thể hiện trạng thái.
-- Giao diện compact.
-- Thanh tiến độ.
-- Các thành phần gamification.
-- Bottom Navigation gồm 6 chức năng chính.
-- Các danh sách lộ trình có thể cuộn ngang.
-
-Ứng dụng hướng đến giao diện hiện đại, trực quan và tạo cảm giác giống một ứng dụng học tập có hệ thống tiến trình thay vì chỉ là một ứng dụng ghi nhớ từ vựng đơn giản.
-
----
-
-## ⚙️ Công nghệ sử dụng
-
-| Công nghệ | Mục đích |
-|---|---|
-| **Java** | Ngôn ngữ lập trình chính |
-| **XML** | Xây dựng giao diện |
-| **Android Studio** | IDE phát triển |
-| **Android SDK** | Nền tảng Android |
-| **Fragment** | Xây dựng các màn hình chính |
-| **Material Components** | Button, Card và các thành phần UI |
-| **BottomNavigationView** | Điều hướng giữa các màn hình |
-| **Git / GitHub** | Quản lý source code |
-
----
-
-## 🛠️ Các chức năng dự kiến
-
-Các chức năng dưới đây nằm trong kế hoạch phát triển tiếp theo.
-
-### 📚 Quản lý từ vựng
-
-- Thêm từ mới.
-- Nghĩa tiếng Việt.
-- Phiên âm IPA.
-- Tìm kiếm từ.
-- Ghi chú.
-- Phân loại theo bộ từ.
-- Danh sách từ đã học.
-- Danh sách từ cần ôn lại.
-
-### 🎮 Luyện tập
-
-Dự kiến hỗ trợ nhiều hình thức luyện tập:
-
-- Trắc nghiệm.
-- Chọn nghĩa đúng.
-- Nối từ với nghĩa.
-- Ôn lại từ đã học.
-- Luyện theo từng bộ từ.
-
-### 🔊 Phát âm
-
-Sử dụng **Text-to-Speech (TTS)** để hỗ trợ nghe cách phát âm của từ tiếng Anh.
-
-### 🔥 Gamification
-
-Hệ thống tạo động lực học tập dự kiến gồm:
-
-- Streak.
-- Xu.
-- Tiến độ.
-- Thành tích.
-- Bảng xếp hạng.
-- Cửa hàng/phần thưởng.
-
-### 🤖 AI Assistant
-
-Kenglish dự kiến tích hợp **AI Assistant / AI Tutor** để hỗ trợ người học:
-
-- Giải thích từ vựng.
-- Đưa ra ví dụ.
-- Hỗ trợ ngữ pháp.
-- Giải thích đáp án.
-- Hỗ trợ luyện tiếng Anh theo ngữ cảnh.
-
-AI sẽ được gọi thông qua **backend/API**, không lưu trực tiếp API Key trong ứng dụng Android.
-
-### 💾 Lưu trữ dữ liệu
-
-Dự kiến sử dụng cơ sở dữ liệu local để lưu:
-
-- Từ vựng.
-- Bộ từ.
-- Tiến độ học.
-- Từ đã thuộc.
-- Từ cần ôn.
-- Ghi chú.
-- Thông tin streak.
 
 ---
 
@@ -306,7 +112,7 @@ Kenglish/
 
 ---
 
-## 🚀 Chạy project
+##  Chạy project
 
 ### Yêu cầu
 
@@ -325,26 +131,15 @@ Kenglish/
 
 ---
 
-## 📖 Mục đích dự án
 
-Kenglish được phát triển như một ứng dụng học tiếng Anh trên Android, đồng thời áp dụng các kiến thức về:
+## Công nghệ sử dụng
 
-- Java Android.
-- XML Layout.
-- Activity và Fragment.
-- Intent.
-- ListView.
-- RadioButton.
-- SharedPreferences.
-- Local Database.
-- API.
-- AI Assistant.
 
-Dự án sẽ tiếp tục được hoàn thiện theo từng giai đoạn, bắt đầu từ **UI → dữ liệu → chức năng học tập → gamification → AI**.
 
 ---
 
-## 👨‍💻 Tác giả
+
+## Liên hệ
 
 **Lê Trung Kiên**
 
