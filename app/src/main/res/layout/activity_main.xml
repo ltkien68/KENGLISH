@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Layout chính của ứng dụng Kenglish.
+    Phần FrameLayout dùng để hiển thị 6 Fragment chính.
+    BottomNavigationView dùng để chuyển đổi giữa các màn hình.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#182230">
+
+
+    <!--
+        Khung nội dung chính.
+        Các Fragment TrangChu, BoTu, LuyenTap...
+        sẽ được hiển thị tại đây.
+    -->
+    <FrameLayout
+        android:id="@+id/khung_noi_dung"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/thanh_dieu_huong"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+    <!--
+        Thanh điều hướng chính gồm 6 chức năng:
+        Trang chủ, Bộ từ, Luyện tập,
+        Xếp hạng, Cửa hàng và Cá nhân.
+    -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/thanh_dieu_huong"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="#182230"
+        app:itemIconSize="22dp"
+        app:labelVisibilityMode="labeled"
+        app:menu="@menu/bottom_menu"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

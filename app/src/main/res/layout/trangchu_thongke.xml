@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="12dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="12dp"
+    app:cardBackgroundColor="#182230"
+    app:cardCornerRadius="17dp"
+    app:cardElevation="0dp"
+    app:strokeColor="#344155"
+    app:strokeWidth="1dp">
+
+
+    <!-- Bao quanh 4 ô thống kê -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:background="#151D28"
+        android:padding="9dp">
+
+
+        <!-- Hàng thống kê 1 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:orientation="horizontal">
+
+
+            <!-- Tổng từ -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/the_tong_tu"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="4dp"
+                android:layout_weight="1"
+                app:cardBackgroundColor="#243044"
+                app:cardCornerRadius="13dp"
+                app:cardElevation="0dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+
+                    <!-- Giá trị tổng từ -->
+                    <TextView
+                        android:id="@+id/txt_tong_tu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="373"
+                        android:textColor="#35C759"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+
+                    <!-- Nhãn tổng từ -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Tổng từ"
+                        android:textColor="#AAB4C5"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+
+
+                </LinearLayout>
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <!-- Đã thuộc -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/the_da_thuoc"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1"
+                app:cardBackgroundColor="#243044"
+                app:cardCornerRadius="13dp"
+                app:cardElevation="0dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+
+                    <!-- Giá trị đã thuộc -->
+                    <TextView
+                        android:id="@+id/txt_da_thuoc"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="268"
+                        android:textColor="#FF9F0A"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+
+                    <!-- Nhãn đã thuộc -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Đã thuộc"
+                        android:textColor="#AAB4C5"
+                        android:textSize="10sp"
+                        android:textStyle="bold"/>
+
+
+                </LinearLayout>
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+        </LinearLayout>
+
+
+        <!-- Hàng thống kê 2 -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
+
+
+            <!-- Tiến độ -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/the_tien_do"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="4dp"
+                android:layout_weight="1"
+                app:cardBackgroundColor="#243044"
+                app:cardCornerRadius="13dp"
+                app:cardElevation="0dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+
+                    <!-- Giá trị tiến độ -->
+                    <TextView
+                        android:id="@+id/txt_tien_do"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="72%"
+                        android:textColor="#22A8E8"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+
+                    <!-- Nhãn tiến độ -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Tiến độ"
+                        android:textColor="#AAB4C5"
+                        android:textSize="10sp"
+                        android:textStyle="bold"/>
+
+
+                </LinearLayout>
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <!-- Từ đến hạn -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/the_tu_den_han"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="4dp"
+                android:layout_weight="1"
+                app:cardBackgroundColor="#FF755E"
+                app:cardCornerRadius="13dp"
+                app:cardElevation="0dp">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+
+                    <!-- Số từ đến hạn -->
+                    <TextView
+                        android:id="@+id/txt_tu_den_han"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="42"
+                        android:textColor="#FFFFFF"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+
+                    <!-- Nhãn từ đến hạn -->
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:text="Từ đến hạn"
+                        android:textColor="#FFFFFF"
+                        android:textSize="10sp"
+                        android:textStyle="bold" />
+
+
+                </LinearLayout>
+
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+</com.google.android.material.card.MaterialCardView>

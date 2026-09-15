@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Menu của thanh điều hướng chính Kenglish.
+    Mỗi item tương ứng với một Fragment.
+-->
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <!-- Màn hình Trang chủ -->
+    <item
+        android:id="@+id/menu_trang_chu"
+        android:icon="@drawable/ic_trangchu"
+        android:title="Trang chủ" />
+
+
+    <!-- Màn hình quản lý Bộ từ -->
+    <item
+        android:id="@+id/menu_bo_tu"
+        android:icon="@drawable/ic_botu"
+        android:title="Bộ từ" />
+
+
+    <!-- Màn hình Luyện tập -->
+    <item
+        android:id="@+id/menu_luyen_tap"
+        android:icon="@drawable/ic_luyentap"
+        android:title="Luyện tập" />
+
+
+    <!-- Màn hình Xếp hạng -->
+    <item
+        android:id="@+id/menu_xep_hang"
+        android:icon="@drawable/ic_xephang"
+        android:title="Xếp hạng" />
+
+
+    <!-- Màn hình Cửa hàng -->
+    <item
+        android:id="@+id/menu_cua_hang"
+        android:icon="@drawable/ic_cuahang"
+        android:title="Cửa hàng" />
+
+
+    <!-- Màn hình Cá nhân -->
+    <item
+        android:id="@+id/menu_ca_nhan"
+        android:icon="@drawable/ic_canhan"
+        android:title="Cá nhân" />
+
+
+</menu>

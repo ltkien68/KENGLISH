@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Danh sách các nhóm lộ trình học trên Trang chủ.
+
+    Mỗi nhóm lộ trình được tách thành một file XML riêng.
+    ID của từng include sẽ được sử dụng trong TrangChu.java
+    để lọc và ẩn/hiện từng nhóm.
+-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/danh_sach_nhom_lo_trinh"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="14dp"
+    android:orientation="vertical">
+
+
+    <!-- ================================================= -->
+    <!-- NHÓM THPT -->
+    <!-- ================================================= -->
+
+    <include
+        android:id="@+id/lotrinh_thpt"
+        layout="@layout/trangchu_dslotrinh_thpt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <!-- ================================================= -->
+    <!-- NHÓM IELTS -->
+    <!-- ================================================= -->
+
+    <include
+        android:id="@+id/lotrinh_ielts"
+        layout="@layout/trangchu_dslotrinh_ielts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <!-- ================================================= -->
+    <!-- NHÓM TOEIC -->
+    <!-- ================================================= -->
+
+    <include
+        android:id="@+id/lotrinh_toeic"
+        layout="@layout/trangchu_dslotrinh_toeic"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <!-- ================================================= -->
+    <!-- NHÓM NGƯỜI NỔI TIẾNG KHUYÊN DÙNG -->
+    <!-- ================================================= -->
+
+    <include
+        android:id="@+id/lotrinh_nguoinoitieng"
+        layout="@layout/trangchu_dslotrinh_nguoinoitieng"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <!-- ================================================= -->
+    <!-- NHÓM THEO LEVEL -->
+    <!-- ================================================= -->
+
+    <include
+        android:id="@+id/lotrinh_level"
+        layout="@layout/trangchu_dslotrinh_theolevel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <!-- ================================================= -->
+    <!-- NHÓM NGƯỜI ĐI LÀM & CHUYÊN NGÀNH -->
+    <!-- ================================================= -->
+
+    <include
+        android:id="@+id/lotrinh_nguoidilam"
+        layout="@layout/trangchu_dslotrinh_nguoidilam"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+    <!-- ================================================= -->
+    <!-- NHÓM THCS & TIỂU HỌC -->
+    <!-- ================================================= -->
+
+    <include
+        android:id="@+id/lotrinh_thcs"
+        layout="@layout/trangchu_dslotrinh_thcs"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+
+</LinearLayout>

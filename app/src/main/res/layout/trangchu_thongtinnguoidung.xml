@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="48dp"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+
+    <!-- Avatar người dùng -->
+    <TextView
+        android:id="@+id/txt_anh_dai_dien"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@drawable/nen_anh_dai_dien"
+        android:gravity="center"
+        android:text="K"
+        android:textColor="#182230"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+
+    <!-- Tên người dùng -->
+    <TextView
+        android:id="@+id/txt_ten_nguoi_dung"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="Kiên"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+
+    <!-- Khoảng trống -->
+    <Space
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_weight="1" />
+
+
+    <!-- Nút nâng cấp -->
+    <TextView
+        android:id="@+id/btn_nang_cap"
+        android:layout_width="wrap_content"
+        android:layout_height="34dp"
+        android:background="@drawable/nen_nang_cap"
+        android:gravity="center"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:text="NÂNG CẤP PRO"
+        android:textColor="#FFFFFF"
+        android:textSize="11sp"
+        android:textStyle="bold" />
+
+
+    <!-- Chuỗi học -->
+    <TextView
+        android:id="@+id/txt_chuoi_hoc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="7dp"
+        android:text="32 🔥"
+        android:textColor="#FF9F0A"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+
+    <!-- Xu -->
+    <TextView
+        android:id="@+id/txt_xu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="7dp"
+        android:text="39.1k"
+        android:textColor="#FFD43B"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+
+</LinearLayout>

@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:gravity="center"
+        android:text="LỘ TRÌNH HỌC"
+        android:textColor="#FFFFFF"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:layout_marginTop="9dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+
+        <!-- Tất cả -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_tat_ca"
+            android:layout_width="70dp"
+            android:layout_height="30dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="0dp"
+            android:text="Tất cả"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="10sp"
+            app:backgroundTint="#23B747"
+            app:cornerRadius="19dp"
+            android:insetBottom="0dp"
+            android:insetTop="0dp" />
+
+
+        <!-- THPT -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_thpt"
+            android:layout_width="60dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="5dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="0dp"
+            android:text="THPT"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="11sp"
+            app:backgroundTint="#243044"
+            app:cornerRadius="19dp"
+            android:insetBottom="0dp"
+            android:insetTop="0dp"
+            app:strokeColor="#344155"
+            app:strokeWidth="1dp" />
+
+
+        <!-- IELTS -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_ielts"
+            android:layout_width="63dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="5dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="0dp"
+            android:text="IELTS"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="10sp"
+            app:backgroundTint="#243044"
+            app:cornerRadius="19dp"
+            android:insetBottom="0dp"
+            android:insetTop="0dp"
+            app:strokeColor="#344155"
+            app:strokeWidth="1dp" />
+
+
+        <!-- TOEIC -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_toeic"
+            android:layout_width="65dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="5dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="0dp"
+            android:text="TOEIC"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="10sp"
+            app:backgroundTint="#243044"
+            app:cornerRadius="19dp"
+            android:insetBottom="0dp"
+            android:insetTop="0dp"
+            app:strokeColor="#344155"
+            app:strokeWidth="1dp" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:layout_marginTop="0dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+
+        <!-- Người nổi tiếng -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_nguoi_noi_tieng"
+            android:layout_width="160dp"
+            android:layout_height="30dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="0dp"
+            android:text="Người nổi tiếng khuyên dùng"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="10sp"
+            app:backgroundTint="#243044"
+            app:cornerRadius="19dp"
+            android:insetBottom="0dp"
+            android:insetTop="0dp"
+            app:strokeColor="#344155"
+            app:strokeWidth="1dp" />
+
+
+        <!-- Theo level -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_theo_level"
+            android:layout_width="80dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="5dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="0dp"
+            android:text="Theo level"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="10sp"
+            app:backgroundTint="#243044"
+            app:cornerRadius="19dp"
+            android:insetBottom="0dp"
+            android:insetTop="0dp"
+            app:strokeColor="#344155"
+            app:strokeWidth="1dp" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="38dp"
+        android:layout_marginTop="0dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+
+        <!-- Người đi làm và chuyên ngành -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_nguoi_di_lam"
+            android:layout_width="160dp"
+            android:layout_height="30dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="0dp"
+            android:text="Người đi làm &amp; Chuyên ngành"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="10sp"
+            app:backgroundTint="#243044"
+            app:cornerRadius="19dp"
+            android:insetBottom="0dp"
+            android:insetTop="0dp"
+            app:strokeColor="#344155"
+            app:strokeWidth="1dp" />
+
+
+        <!-- THCS và Tiểu học -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_thcs_tieu_hoc"
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="5dp"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:padding="0dp"
+            android:text="THCS &amp; Tiểu học"
+            android:textAllCaps="false"
+            android:textColor="#FFFFFF"
+            android:textSize="10sp"
+            app:backgroundTint="#243044"
+            app:cornerRadius="19dp"
+            android:insetBottom="0dp"
+            android:insetTop="0dp"
+            app:strokeColor="#344155"
+            app:strokeWidth="1dp" />
+
+
+    </LinearLayout>
+
+</LinearLayout>
