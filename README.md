@@ -134,7 +134,26 @@ Kenglish/
 
 ## Công nghệ sử dụng
 
+| Công nghệ | Mục đích |
+|---|---|
+| **Java** | Ngôn ngữ lập trình chính |
+| **XML** | Xây dựng giao diện ứng dụng |
+| **Android Studio** | Môi trường phát triển |
+| **Android SDK** | Phát triển ứng dụng Android |
+| **Fragment** | Xây dựng và quản lý các màn hình |
+| **Material Components** | Xây dựng các thành phần giao diện |
+| **BottomNavigationView** | Điều hướng giữa 6 màn hình chính |
+| **Git & GitHub** | Quản lý phiên bản và mã nguồn |
 
+### Công nghệ dự kiến sử dụng
+
+| Công nghệ | Mục đích |
+|---|---|
+| **Room Database** | Lưu trữ từ vựng và dữ liệu học tập trên thiết bị |
+| **SharedPreferences** | Lưu các thiết lập và trạng thái đơn giản |
+| **Text-to-Speech** | Phát âm từ vựng tiếng Anh |
+| **Dictionary API** | Tự động lấy nghĩa và phiên âm của từ |
+| **AI API** | Xây dựng trợ lý AI hỗ trợ học tiếng Anh |
 
 ---
 
