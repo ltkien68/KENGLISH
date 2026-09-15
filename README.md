@@ -20,8 +20,8 @@ Các mục tiêu chính:
 - Theo dõi tiến độ học tập.
 - Tạo động lực bằng streak, xu và bảng xếp hạng.
 - Hỗ trợ phát âm bằng Text-to-Speech.
+- Hỗ trợ điền phát âm và nghĩa của từ tự động khi thêm từ mới.
 - Tích hợp trợ lý AI hỗ trợ việc học tiếng Anh.
-- Hỗ trợ tra cứu từ vựng Anh - Việt.
 
 ---
 
@@ -32,8 +32,8 @@ Kenglish sử dụng một `MainActivity` và `BottomNavigationView` để đi�
 | Màn hình | Chức năng |
 |---|---|
 | 🏠 **Trang chủ** | Tổng quan quá trình học và các lộ trình từ vựng |
-| 📚 **Bộ từ** | Quản lý và học các bộ từ vựng |
-| 🎯 **Luyện tập** | Thực hiện các bài luyện tập và ôn từ |
+| 📚 **Bộ từ** | Quản lý bộ từ vựng của bạn |
+| 🎯 **Luyện tập** | Thực hiện các bài luyện tập và ôn tập với bộ từ của bạn |
 | 🏆 **Xếp hạng** | Hiển thị thành tích và bảng xếp hạng |
 | 🛒 **Cửa hàng** | Sử dụng xu và các phần thưởng trong ứng dụng |
 | 👤 **Cá nhân** | Thông tin người dùng, thành tích và cài đặt |
@@ -42,7 +42,7 @@ Kenglish sử dụng một `MainActivity` và `BottomNavigationView` để đi�
 
 ## 🏠 Trang chủ
 
-Trang chủ là màn hình đang được phát triển chi tiết nhất ở phiên bản hiện tại.
+Trang chủ là màn hình hiển thị trực quan thông tin cơ bản, tổng quan.
 
 ### Thông tin học tập
 
@@ -66,43 +66,6 @@ Người dùng có thể xem các bộ từ được chia thành nhiều nhóm:
 - Theo level.
 - Người đi làm & Chuyên ngành.
 - THCS & Tiểu học.
-
-Mỗi nhóm chứa các bộ từ tương ứng và có thể cuộn ngang để xem thêm.
-
-Ví dụ:
-
-- TOEIC Cơ bản.
-- TOEIC 450+.
-- TOEIC 650+.
-- TOEIC 850+.
-
-Mỗi bộ từ có thể hiển thị:
-
-- Tên bộ từ.
-- Số lượng từ.
-- Tiến độ học.
-- Thanh tiến độ.
-
----
-
-## 🔎 Bộ lọc lộ trình
-
-Trang chủ đã có logic lọc lộ trình trực tiếp trên giao diện.
-
-Người dùng có thể chọn:
-
-`Tất cả` · `THPT` · `IELTS` · `TOEIC` · `Người nổi tiếng` · `Theo level` · `Người đi làm & Chuyên ngành` · `THCS & Tiểu học`
-
-Khi chọn một bộ lọc:
-
-- Chỉ nhóm tương ứng được hiển thị.
-- Các nhóm khác được ẩn.
-- Nút đang được chọn đổi màu để dễ nhận biết.
-- Chọn **Tất cả** sẽ hiển thị lại toàn bộ lộ trình.
-
-Logic hiện tại được xử lý bằng `View.VISIBLE` và `View.GONE`.
-
----
 
 ## 🧩 Cấu trúc giao diện
 
