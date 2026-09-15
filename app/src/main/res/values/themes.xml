@@ -6,4 +6,9 @@
     </style>
 
     <style name="Theme.Kenglish" parent="Base.Theme.Kenglish" />
+
+    <style name="BottomNavigationText">
+        <item name="android:textSize">10sp</item>
+    </style>
+
 </resources>

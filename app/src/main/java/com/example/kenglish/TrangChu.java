@@ -6,15 +6,20 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 
 
 public class TrangChu extends Fragment {
+
+    // Ảnh đại diện
+    private TextView txtAnhDaiDien;
 
 
     // Các nút lọc lộ trình
@@ -55,6 +60,7 @@ public class TrangChu extends Fragment {
         anhXa(view);
 
         thietLapBoLoc();
+        thietLapSuKienAnhDaiDien();
 
 
         return view;
@@ -63,6 +69,9 @@ public class TrangChu extends Fragment {
 
     // Ánh xạ các thành phần giao diện
     private void anhXa(View view) {
+
+        // Ảnh đại diện
+        txtAnhDaiDien = view.findViewById(R.id.txt_anh_dai_dien);
 
         // Nút bộ lọc
         btnTatCa = view.findViewById(R.id.btn_tat_ca);
@@ -151,6 +160,22 @@ public class TrangChu extends Fragment {
 
             capNhatNutDangChon(btnThcsTieuHoc);
         });
+    }
+
+    private void thietLapSuKienAnhDaiDien() {
+
+        txtAnhDaiDien.setOnClickListener(v -> {
+
+            BottomNavigationView thanhDieuHuong =
+                    requireActivity().findViewById(
+                            R.id.thanh_dieu_huong
+                    );
+
+            thanhDieuHuong.setSelectedItemId(
+                    R.id.menu_ca_nhan
+            );
+        });
+
     }
 
 
