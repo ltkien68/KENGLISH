@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Component tài khoản.
+    Chứa đăng xuất và xóa tài khoản.
+-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/nen_canhan_card"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+
+    <!-- Tiêu đề -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tài khoản"
+        android:textColor="#F4F6FA"
+        android:textSize="19sp"
+        android:textStyle="bold" />
+
+
+    <!-- Đăng xuất -->
+    <LinearLayout
+        android:id="@+id/card_dang_xuat"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_marginTop="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/nen_icon_do"
+            android:gravity="center"
+            android:padding="12dp"
+            android:src="@drawable/ic_dangxuat"
+            app:tint="#FF4757" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_weight="1"
+            android:text="Đăng xuất"
+            android:textColor="#FF4757"
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="›"
+            android:textColor="#8F99AA"
+            android:textSize="32sp" />
+
+    </LinearLayout>
+
+
+    <!-- Đường phân cách -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="62dp"
+        android:background="#344052" />
+
+
+    <!-- Xóa tài khoản -->
+    <LinearLayout
+        android:id="@+id/card_xoa_tai_khoan"
+        android:layout_width="match_parent"
+        android:layout_height="78dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/nen_icon_do"
+            android:gravity="center"
+            android:padding="12dp"
+            android:src="@drawable/ic_thungrac"
+            app:tint="#FF4757" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Xóa tài khoản"
+                android:textColor="#FF4757"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="Xóa vĩnh viễn dữ liệu cá nhân của bạn"
+                android:textColor="#9CA6B7"
+                android:textSize="13sp"
+                android:textStyle="bold"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="›"
+            android:textColor="#8F99AA"
+            android:textSize="32sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

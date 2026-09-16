@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Component thông báo.
+    Chứa chức năng nhắc học.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginBottom="16dp"
+    android:background="@drawable/nen_canhan_card"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+
+    <!-- Tiêu đề -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Thông báo"
+        android:textColor="#F4F6FA"
+        android:textSize="19sp"
+        android:textStyle="bold" />
+
+
+    <!-- Nhắc học -->
+    <LinearLayout
+        android:id="@+id/card_nhac_hoc"
+        android:layout_width="match_parent"
+        android:layout_height="82dp"
+        android:layout_marginTop="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+
+        <!-- Icon -->
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/nen_icon_cam"
+            android:gravity="center"
+            android:padding="12dp"
+            android:src="@drawable/ic_thongbao"
+            app:tint="#FF9F1C" />
+
+
+        <!-- Nội dung -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nhắc học"
+                android:textColor="#F4F6FA"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="Bật thông báo để duy trì thói quen"
+                android:textColor="#9CA6B7"
+                android:textSize="13sp" />
+
+        </LinearLayout>
+
+
+        <!-- Điều hướng -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="›"
+            android:textColor="#8F99AA"
+            android:textSize="32sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

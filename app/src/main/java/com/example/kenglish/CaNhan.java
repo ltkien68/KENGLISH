@@ -34,5 +34,45 @@ public class CaNhan extends Fragment {
 
     }
 
+    private void anhXa() {
+        // findViewById(...)
+    }
+
+    private void xuLySuKien() {
+        // Gọi các hàm xử lý
+    }
+
+    private void xuLyNhacHoc() {
+        // Mở tab nhắc học
+    }
+
+    private void xuLyCongDong() {
+        // Mở link Zalo
+    }
+
+    private void xuLyLienHeHoTro() {
+        // Mở trang hỗ trợ
+    }
+
+    private void xuLyChinhSach() {
+        // Mở chính sách
+    }
+
+    private void xuLyDieuKhoan() {
+        // Mở điều khoản
+    }
+
+    private void xuLyMangXaHoi() {
+        // Facebook / Instagram
+    }
+
+    private void xuLyDangXuat() {
+        // Đăng xuất
+    }
+
+    private void xuLyXoaTaiKhoan() {
+        // Xác nhận xóa tài khoản
+    }
+
 
 }

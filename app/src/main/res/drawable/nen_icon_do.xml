@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Nền icon màu đỏ.
+    Sử dụng cho các thao tác tài khoản nguy hiểm.
+-->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+
+    <solid android:color="#3C2935" />
+
+    <corners android:radius="14dp" />
+
+</shape>

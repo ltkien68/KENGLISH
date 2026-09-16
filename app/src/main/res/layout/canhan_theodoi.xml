@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Component mạng xã hội.
+    Chứa các liên kết mạng xã hội của Kenglish.
+-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="16dp"
+    android:background="@drawable/nen_canhan_card"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+
+    <!-- Tiêu đề -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Theo dõi chúng tôi"
+        android:textColor="#F4F6FA"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+
+    <!-- Danh sách mạng xã hội -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:orientation="horizontal">
+
+
+        <!-- Facebook -->
+        <TextView
+            android:id="@+id/btn_facebook"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/logo_facebook"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+
+        <!-- Instagram -->
+        <TextView
+            android:id="@+id/btn_instagram"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginStart="20dp"
+            android:background="@drawable/logo_instagram"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:textColor="#FFFFFF"
+            android:textSize="30sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

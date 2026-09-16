@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Component hỗ trợ.
+    Chứa liên kết cộng đồng và liên hệ hỗ trợ.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginBottom="16dp"
+    android:background="@drawable/nen_canhan_card"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+
+    <!-- Tiêu đề -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hỗ trợ"
+        android:textColor="#F4F6FA"
+        android:textSize="19sp"
+        android:textStyle="bold" />
+
+
+    <!-- Cộng đồng Zalo -->
+    <LinearLayout
+        android:id="@+id/card_cong_dong_zalo"
+        android:layout_width="match_parent"
+        android:layout_height="78dp"
+        android:layout_marginTop="10dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/nen_icon_xanh"
+            android:gravity="center"
+            android:padding="12dp"
+            android:src="@drawable/ic_congdong"
+            app:tint="#2684FF"/>
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Cộng đồng Zalo"
+                android:textColor="#F4F6FA"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="Vào nhóm chat cùng người học Kenglish"
+                android:textColor="#9CA6B7"
+                android:textSize="13sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="›"
+            android:textColor="#8F99AA"
+            android:textSize="32sp" />
+
+    </LinearLayout>
+
+
+    <!-- Đường phân cách -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginStart="62dp"
+        android:background="#344052" />
+
+
+    <!-- Liên hệ hỗ trợ -->
+    <LinearLayout
+        android:id="@+id/card_lien_he_ho_tro"
+        android:layout_width="match_parent"
+        android:layout_height="78dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="@drawable/nen_icon_tim"
+            android:gravity="center"
+            android:padding="12dp"
+            android:src="@drawable/ic_lienhe"
+            app:tint="#C36BFF" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Liên hệ hỗ trợ"
+                android:textColor="#F4F6FA"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="Nhắn tin cho đội ngũ Kenglish"
+                android:textColor="#9CA6B7"
+                android:textSize="13sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="›"
+            android:textColor="#8F99AA"
+            android:textSize="32sp" />
+
+    </LinearLayout>
+
+</LinearLayout>
