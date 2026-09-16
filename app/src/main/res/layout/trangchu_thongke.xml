@@ -196,6 +196,7 @@
 
 
                 <LinearLayout
+                    android:id="@+id/layout_tudenhan"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center"
@@ -204,7 +205,7 @@
 
                     <!-- Số từ đến hạn -->
                     <TextView
-                        android:id="@+id/txt_tu_den_han"
+                        android:id="@+id/txt_tudenhan"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="42"

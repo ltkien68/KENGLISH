@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,7 @@ import com.google.android.material.button.MaterialButton;
 
 
 public class TrangChu extends Fragment {
+    private LinearLayout layoutTuDenHan;
 
     // Ảnh đại diện
     private TextView txtAnhDaiDien;
@@ -61,6 +63,7 @@ public class TrangChu extends Fragment {
 
         thietLapBoLoc();
         thietLapSuKienAnhDaiDien();
+        thietLapSuKienTuDenHan();
 
 
         return view;
@@ -72,6 +75,7 @@ public class TrangChu extends Fragment {
 
         // Ảnh đại diện
         txtAnhDaiDien = view.findViewById(R.id.txt_anh_dai_dien);
+        layoutTuDenHan = view.findViewById(R.id.layout_tudenhan);
 
         // Nút bộ lọc
         btnTatCa = view.findViewById(R.id.btn_tat_ca);
@@ -173,6 +177,22 @@ public class TrangChu extends Fragment {
 
             thanhDieuHuong.setSelectedItemId(
                     R.id.menu_ca_nhan
+            );
+        });
+
+    }
+
+    private void thietLapSuKienTuDenHan() {
+
+        layoutTuDenHan.setOnClickListener(v -> {
+
+            BottomNavigationView thanhDieuHuong =
+                    requireActivity().findViewById(
+                            R.id.thanh_dieu_huong
+                    );
+
+            thanhDieuHuong.setSelectedItemId(
+                    R.id.menu_luyen_tap
             );
         });
 

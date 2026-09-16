@@ -20,7 +20,7 @@
         android:layout_height="wrap_content"
         android:text="Hỗ trợ"
         android:textColor="#F4F6FA"
-        android:textSize="19sp"
+        android:textSize="15sp"
         android:textStyle="bold" />
 
 
@@ -28,7 +28,7 @@
     <LinearLayout
         android:id="@+id/card_cong_dong_zalo"
         android:layout_width="match_parent"
-        android:layout_height="78dp"
+        android:layout_height="68dp"
         android:layout_marginTop="10dp"
         android:clickable="true"
         android:focusable="true"
@@ -36,8 +36,8 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:background="@drawable/nen_icon_xanh"
             android:gravity="center"
             android:padding="12dp"
@@ -56,7 +56,7 @@
                 android:layout_height="wrap_content"
                 android:text="Cộng đồng Zalo"
                 android:textColor="#F4F6FA"
-                android:textSize="17sp"
+                android:textSize="15sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -65,7 +65,7 @@
                 android:layout_marginTop="3dp"
                 android:text="Vào nhóm chat cùng người học Kenglish"
                 android:textColor="#9CA6B7"
-                android:textSize="13sp" />
+                android:textSize="10sp" />
 
         </LinearLayout>
 
@@ -74,7 +74,7 @@
             android:layout_height="wrap_content"
             android:text="›"
             android:textColor="#8F99AA"
-            android:textSize="32sp" />
+            android:textSize="22sp" />
 
     </LinearLayout>
 
@@ -91,15 +91,15 @@
     <LinearLayout
         android:id="@+id/card_lien_he_ho_tro"
         android:layout_width="match_parent"
-        android:layout_height="78dp"
+        android:layout_height="68dp"
         android:clickable="true"
         android:focusable="true"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:background="@drawable/nen_icon_tim"
             android:gravity="center"
             android:padding="12dp"
@@ -118,7 +118,7 @@
                 android:layout_height="wrap_content"
                 android:text="Liên hệ hỗ trợ"
                 android:textColor="#F4F6FA"
-                android:textSize="17sp"
+                android:textSize="15sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -127,7 +127,7 @@
                 android:layout_marginTop="3dp"
                 android:text="Nhắn tin cho đội ngũ Kenglish"
                 android:textColor="#9CA6B7"
-                android:textSize="13sp" />
+                android:textSize="10sp" />
 
         </LinearLayout>
 
@@ -136,7 +136,7 @@
             android:layout_height="wrap_content"
             android:text="›"
             android:textColor="#8F99AA"
-            android:textSize="32sp" />
+            android:textSize="22sp" />
 
     </LinearLayout>
 

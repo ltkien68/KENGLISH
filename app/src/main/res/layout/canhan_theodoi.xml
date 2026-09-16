@@ -12,7 +12,7 @@
     android:background="@drawable/nen_canhan_card"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="20dp">
+    android:padding="16dp">
 
 
     <!-- Tiêu đề -->
@@ -36,8 +36,8 @@
         <!-- Facebook -->
         <TextView
             android:id="@+id/btn_facebook"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:background="@drawable/logo_facebook"
             android:clickable="true"
             android:focusable="true"
@@ -50,8 +50,8 @@
         <!-- Instagram -->
         <TextView
             android:id="@+id/btn_instagram"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginStart="20dp"
             android:background="@drawable/logo_instagram"
             android:clickable="true"
