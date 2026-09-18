@@ -1,6 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Tab Bộ từ
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#182230"
+    android:orientation="vertical"
+    android:paddingStart="16dp"
+    android:paddingTop="24dp"
+    android:paddingEnd="16dp">
+
+
+    <!-- Tiêu đề -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Bộ từ của tôi"
+        android:textColor="#FFFFFF"
+        android:textSize="17sp"
+        android:textStyle="bold" />
+
+
+    <!-- Các chức năng tạo -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginTop="22dp"
+        android:orientation="horizontal">
+
+        <include
+            android:id="@+id/component_tao_bo_tu"
+            layout="@layout/botu_nuttaobotu"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginEnd="6dp"
+            android:layout_weight="1" />
+
+        <include
+            android:id="@+id/component_tao_folder"
+            layout="@layout/botu_nuttaofolder"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginStart="6dp"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+
+    <!-- Tiêu đề danh sách -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Bộ từ của bạn"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/btn_tim_kiem_bo_tu"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:padding="12dp"
+            android:src="@drawable/ic_kinhlup"
+            app:tint="#B6C0CD" />
+
+    </LinearLayout>
+
+
+    <!--
+        Danh sách bộ từ / folder.
+        Sau này dữ liệu sẽ được lấy từ database.
+    -->
+    <ListView
+        android:id="@+id/list_bo_tu"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="12dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:divider="@null"
+        android:dividerHeight="0dp"
+        android:overScrollMode="never"
+        android:paddingBottom="20dp"
+        android:scrollbars="none" />
 
 </LinearLayout>
