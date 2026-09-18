@@ -11,7 +11,7 @@
     android:layout_height="wrap_content"
     android:background="@drawable/nen_canhan_card"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="14dp">
 
 
     <!-- Tiêu đề -->
@@ -28,7 +28,7 @@
     <LinearLayout
         android:id="@+id/card_dang_xuat"
         android:layout_width="match_parent"
-        android:layout_height="68dp"
+        android:layout_height="48dp"
         android:layout_marginTop="10dp"
         android:clickable="true"
         android:focusable="true"
@@ -51,7 +51,7 @@
             android:layout_weight="1"
             android:text="Đăng xuất"
             android:textColor="#FF4757"
-            android:textSize="15sp"
+            android:textSize="13sp"
             android:textStyle="bold" />
 
         <TextView
@@ -76,7 +76,7 @@
     <LinearLayout
         android:id="@+id/card_xoa_tai_khoan"
         android:layout_width="match_parent"
-        android:layout_height="68dp"
+        android:layout_height="48dp"
         android:clickable="true"
         android:focusable="true"
         android:gravity="center_vertical"
@@ -103,7 +103,7 @@
                 android:layout_height="wrap_content"
                 android:text="Xóa tài khoản"
                 android:textColor="#FF4757"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:textStyle="bold" />
 
             <TextView

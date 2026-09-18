@@ -11,7 +11,7 @@
     android:layout_marginBottom="16dp"
     android:background="@drawable/nen_canhan_card"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="14dp">
 
 
     <!-- Tiêu đề -->
@@ -28,7 +28,7 @@
     <LinearLayout
         android:id="@+id/card_chinh_sach_quyen_rieng_tu"
         android:layout_width="match_parent"
-        android:layout_height="68dp"
+        android:layout_height="48dp"
         android:layout_marginTop="10dp"
         android:clickable="true"
         android:focusable="true"
@@ -51,7 +51,7 @@
             android:layout_weight="1"
             android:text="Chính sách quyền riêng tư"
             android:textColor="#F4F6FA"
-            android:textSize="15sp"
+            android:textSize="13sp"
             android:textStyle="bold" />
 
         <TextView
@@ -76,7 +76,7 @@
     <LinearLayout
         android:id="@+id/card_dieu_khoan_su_dung"
         android:layout_width="match_parent"
-        android:layout_height="68dp"
+        android:layout_height="48dp"
         android:clickable="true"
         android:focusable="true"
         android:gravity="center_vertical"
@@ -98,7 +98,7 @@
             android:layout_weight="1"
             android:text="Điều khoản sử dụng"
             android:textColor="#F4F6FA"
-            android:textSize="15sp"
+            android:textSize="13sp"
             android:textStyle="bold" />
 
         <TextView

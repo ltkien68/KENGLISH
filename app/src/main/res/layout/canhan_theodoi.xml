@@ -12,7 +12,7 @@
     android:background="@drawable/nen_canhan_card"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="14dp">
 
 
     <!-- Tiêu đề -->

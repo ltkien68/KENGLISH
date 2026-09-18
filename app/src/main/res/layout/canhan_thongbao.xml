@@ -11,7 +11,7 @@
     android:layout_marginBottom="16dp"
     android:background="@drawable/nen_canhan_card"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="14dp">
 
 
     <!-- Tiêu đề -->
@@ -28,7 +28,7 @@
     <LinearLayout
         android:id="@+id/card_nhac_hoc"
         android:layout_width="match_parent"
-        android:layout_height="68dp"
+        android:layout_height="48dp"
         android:layout_marginTop="10dp"
         android:clickable="true"
         android:focusable="true"
@@ -60,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:text="Nhắc học"
                 android:textColor="#F4F6FA"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:textStyle="bold" />
 
             <TextView
