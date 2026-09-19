@@ -1,6 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<!--
+    Màn hình Xếp hạng.
+
+    Gồm 3 tab:
+    - Lượt chơi game
+    - Streak
+    - Cộng đồng
+
+    Nội dung từng tab được xử lý riêng để sau này
+    có thể thay dữ liệu mẫu bằng dữ liệu Backend.
+-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#182230"
+    android:paddingStart="16dp"
+    android:paddingTop="24dp"
+    android:paddingEnd="16dp">
+
+    <!-- Thanh chuyển tab -->
+    <include
+        layout="@layout/xephang_tab"
+        android:layout_width="match_parent"
+        android:layout_height="54dp" />
+
+
+    <!-- ================= BẢNG XẾP HẠNG ================= -->
+
+    <LinearLayout
+        android:id="@+id/khung_bang_xep_hang"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="18dp"
+        android:orientation="vertical"
+        android:background="@drawable/nen_xephang_bang">
+
+        <include
+            layout="@layout/xephang_tieudebang"
+            android:layout_width="match_parent"
+            android:layout_height="44dp" />
+
+        <ListView
+            android:id="@+id/list_xep_hang"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:divider="#344156"
+            android:dividerHeight="1dp"
+            android:scrollbars="none" />
+
+    </LinearLayout>
+
+
+    <!-- ================= CỘNG ĐỒNG ================= -->
+
+    <FrameLayout
+        android:id="@+id/khung_cong_dong"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="18dp"
+        android:visibility="gone">
+
+        <include
+            layout="@layout/xephang_congdong"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </FrameLayout>
 
 </LinearLayout>
