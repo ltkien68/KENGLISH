@@ -1,6 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<!--
+    Màn hình Cửa hàng.
+    Các phần giao diện lớn được tách thành component riêng.
+-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#182230"
+    android:paddingStart="16dp"
+    android:paddingTop="30dp"
+    android:paddingEnd="16dp">
+
+    <!-- Tiêu đề và số xu -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cửa hàng"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <include
+            layout="@layout/cuahang_thanhxu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
+
+    <!-- Thanh chuyển loại sản phẩm -->
+    <include
+        layout="@layout/cuahang_tab"
+        android:layout_width="360dp"
+        android:layout_height="56dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="28dp" />
+
+    <!-- Danh sách sản phẩm -->
+    <GridView
+        android:id="@+id/grid_san_pham"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_marginTop="20dp"
+        android:numColumns="2"
+        android:horizontalSpacing="12dp"
+        android:verticalSpacing="12dp"
+        android:clipToPadding="false"
+        android:paddingBottom="24dp"
+        android:scrollbars="none"
+        android:stretchMode="columnWidth" />
 
 </LinearLayout>
