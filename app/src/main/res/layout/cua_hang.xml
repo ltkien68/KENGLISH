@@ -40,8 +40,8 @@
     <!-- Thanh chuyển loại sản phẩm -->
     <include
         layout="@layout/cuahang_tab"
-        android:layout_width="360dp"
-        android:layout_height="56dp"
+        android:layout_width="250dp"
+        android:layout_height="40dp"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="28dp" />
 

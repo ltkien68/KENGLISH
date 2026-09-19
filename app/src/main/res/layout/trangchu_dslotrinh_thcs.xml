@@ -77,8 +77,8 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/the_thcs_co_ban"
-                android:layout_width="175dp"
-                android:layout_height="165dp"
+                android:layout_width="135dp"
+                android:layout_height="135dp"
                 android:layout_marginEnd="9dp"
                 app:cardBackgroundColor="#1B2535"
                 app:cardCornerRadius="14dp"
@@ -188,8 +188,8 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/the_thcs_450"
-                android:layout_width="175dp"
-                android:layout_height="165dp"
+                android:layout_width="135dp"
+                android:layout_height="135dp"
                 android:layout_marginEnd="9dp"
                 app:cardBackgroundColor="#1B2535"
                 app:cardCornerRadius="14dp"
@@ -296,8 +296,8 @@
 
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/the_thcs_650"
-                android:layout_width="175dp"
-                android:layout_height="165dp"
+                android:layout_width="135dp"
+                android:layout_height="135dp"
                 android:layout_marginEnd="9dp"
                 app:cardBackgroundColor="#1B2535"
                 app:cardCornerRadius="14dp"
