@@ -1,63 +1,80 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<!-- Một người dùng trong bảng xếp hạng -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="68dp"
-    android:orientation="horizontal"
+    android:layout_height="64dp"
     android:gravity="center_vertical"
-    android:paddingStart="14dp"
-    android:paddingEnd="14dp">
+    android:orientation="horizontal"
+    android:paddingStart="12dp"
+    android:paddingEnd="12dp">
 
     <!-- Hạng -->
     <TextView
         android:id="@+id/txt_hang"
         android:layout_width="42dp"
-        android:layout_height="32dp"
+        android:layout_height="match_parent"
         android:gravity="center"
         android:text="1"
         android:textColor="#FFFFFF"
-        android:textSize="13sp"
-        android:textStyle="bold"
-        android:background="@drawable/nen_xephang_hang" />
+        android:textSize="15sp"
+        android:textStyle="bold" />
 
 
-    <!-- Avatar -->
-    <com.google.android.material.imageview.ShapeableImageView
+    <!-- Ảnh đại diện -->
+    <ImageView
         android:id="@+id/img_anh_dai_dien"
         android:layout_width="42dp"
         android:layout_height="42dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginStart="4dp"
+        android:contentDescription="Ảnh đại diện"
         android:scaleType="centerCrop"
-        android:src="@android:drawable/sym_def_app_icon"
-        android:contentDescription="Ảnh đại diện" />
+        android:src="@drawable/ic_launcher_foreground" />
 
 
-    <!-- Tên -->
+    <!-- Tên người dùng -->
     <TextView
         android:id="@+id/txt_ten_nguoi_dung"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:layout_marginStart="12dp"
+        android:layout_weight="1"
         android:maxLines="1"
         android:ellipsize="end"
-        android:text="Người dùng"
+        android:text="Tên người dùng"
         android:textColor="#FFFFFF"
         android:textSize="13sp"
         android:textStyle="bold" />
 
 
-    <!-- Giá trị xếp hạng -->
-    <TextView
-        android:id="@+id/txt_diem_xep_hang"
-        android:layout_width="72dp"
-        android:layout_height="36dp"
+    <!-- Điểm xếp hạng -->
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
         android:gravity="center"
-        android:text="121 ⚡"
-        android:textColor="#FFD43B"
-        android:textSize="13sp"
-        android:textStyle="bold" />
+        android:orientation="horizontal">
+
+        <!-- Số điểm / streak -->
+        <TextView
+            android:id="@+id/txt_diem_xep_hang"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="265"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <!-- Icon lượt chơi / streak -->
+        <ImageView
+            android:id="@+id/img_icon_diem"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:layout_marginStart="5dp"
+            android:contentDescription="Loại điểm"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_tiaset"
+            app:tint="#FFD43B" />
+
+    </LinearLayout>
 
 </LinearLayout>

@@ -4,10 +4,10 @@
     Card dùng chung cho mọi sản phẩm trong cửa hàng.
     Adapter sẽ đổ dữ liệu vào layout này.
 -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="@drawable/nen_cuahang_card"
     android:paddingBottom="12dp">
@@ -54,13 +54,12 @@
             android:textSize="13sp"
             android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
             android:layout_marginStart="5dp"
-            android:text="●"
-            android:textColor="#FFD43B"
-            android:textSize="13sp" />
+            android:src="@drawable/ic_coin"
+            app:tint="#FFD43B" />
 
     </LinearLayout>
 

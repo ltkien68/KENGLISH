@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,8 +23,16 @@ import com.google.android.material.bottomsheet.BottomSheetDialog;
  */
 public class BoTu extends Fragment {
 
+    /*
+     * Nút tạo bộ từ hiện tại vẫn là TextView.
+     */
     private TextView btnTaoBoTu;
-    private TextView btnTaoFolder;
+
+    /*
+     * Component tạo folder đã được tách thành
+     * LinearLayout gồm icon + TextView.
+     */
+    private LinearLayout btnTaoFolder;
 
 
     /**
@@ -69,10 +78,17 @@ public class BoTu extends Fragment {
      */
     private void xuLySuKien() {
 
+        /*
+         * Mở popup tạo bộ từ.
+         */
         btnTaoBoTu.setOnClickListener(v -> {
             moPopupTaoBoTu();
         });
 
+
+        /*
+         * Mở popup tạo folder.
+         */
         btnTaoFolder.setOnClickListener(v -> {
             moPopupTaoFolder();
         });
@@ -84,45 +100,64 @@ public class BoTu extends Fragment {
      */
     private void moPopupTaoBoTu() {
 
-        BottomSheetDialog dialog = new BottomSheetDialog(
-                requireContext()
-        );
-
-        View popupView = getLayoutInflater().inflate(
-                R.layout.botu_popup_taobotu,
-                null
-        );
-
-        dialog.setContentView(popupView);
+        BottomSheetDialog dialog =
+                new BottomSheetDialog(
+                        requireContext()
+                );
 
 
-        EditText edtTenBoTu = popupView.findViewById(
-                R.id.edt_ten_bo_tu
-        );
+        View popupView =
+                getLayoutInflater().inflate(
+                        R.layout.botu_popup_taobotu,
+                        null
+                );
 
-        EditText edtMoTaBoTu = popupView.findViewById(
-                R.id.edt_mo_ta_bo_tu
-        );
 
-        TextView btnXacNhan = popupView.findViewById(
-                R.id.btn_xac_nhan_tao_bo_tu
+        dialog.setContentView(
+                popupView
         );
 
 
+        /*
+         * Ánh xạ các View trong popup.
+         */
+        EditText edtTenBoTu =
+                popupView.findViewById(
+                        R.id.edt_ten_bo_tu
+                );
+
+        EditText edtMoTaBoTu =
+                popupView.findViewById(
+                        R.id.edt_mo_ta_bo_tu
+                );
+
+        TextView btnXacNhan =
+                popupView.findViewById(
+                        R.id.btn_xac_nhan_tao_bo_tu
+                );
+
+
+        /*
+         * Xử lý khi nhấn nút xác nhận.
+         */
         btnXacNhan.setOnClickListener(v -> {
 
-            String tenBoTu = edtTenBoTu
-                    .getText()
-                    .toString()
-                    .trim();
+            String tenBoTu =
+                    edtTenBoTu
+                            .getText()
+                            .toString()
+                            .trim();
 
-            String moTa = edtMoTaBoTu
-                    .getText()
-                    .toString()
-                    .trim();
+            String moTa =
+                    edtMoTaBoTu
+                            .getText()
+                            .toString()
+                            .trim();
 
 
-            // Kiểm tra tên bộ từ
+            /*
+             * Kiểm tra tên bộ từ.
+             */
             if (tenBoTu.isEmpty()) {
 
                 edtTenBoTu.setError(
@@ -137,8 +172,14 @@ public class BoTu extends Fragment {
 
             /*
              * Hiện tại mới xử lý giao diện.
-             * Sau này sẽ lưu bộ từ vào database tại đây.
+             *
+             * Sau này sẽ lưu:
+             * - tenBoTu
+             * - moTa
+             *
+             * vào database tại đây.
              */
+
 
             Toast.makeText(
                     requireContext(),
@@ -147,13 +188,27 @@ public class BoTu extends Fragment {
             ).show();
 
 
+            /*
+             * Đóng popup sau khi tạo thành công.
+             */
             dialog.dismiss();
         });
 
 
+        /*
+         * Hiển thị BottomSheet.
+         */
         dialog.show();
 
-        moBanPhim(edtTenBoTu, dialog);
+
+        /*
+         * Tự động focus vào ô tên bộ từ
+         * và mở bàn phím.
+         */
+        moBanPhim(
+                edtTenBoTu,
+                dialog
+        );
     }
 
 
@@ -162,36 +217,53 @@ public class BoTu extends Fragment {
      */
     private void moPopupTaoFolder() {
 
-        BottomSheetDialog dialog = new BottomSheetDialog(
-                requireContext()
-        );
-
-        View popupView = getLayoutInflater().inflate(
-                R.layout.botu_popup_taofolder,
-                null
-        );
-
-        dialog.setContentView(popupView);
+        BottomSheetDialog dialog =
+                new BottomSheetDialog(
+                        requireContext()
+                );
 
 
-        EditText edtTenFolder = popupView.findViewById(
-                R.id.edt_ten_folder
-        );
+        View popupView =
+                getLayoutInflater().inflate(
+                        R.layout.botu_popup_taofolder,
+                        null
+                );
 
-        TextView btnXacNhan = popupView.findViewById(
-                R.id.btn_xac_nhan_tao_folder
+
+        dialog.setContentView(
+                popupView
         );
 
 
+        /*
+         * Ánh xạ các View trong popup.
+         */
+        EditText edtTenFolder =
+                popupView.findViewById(
+                        R.id.edt_ten_folder
+                );
+
+        TextView btnXacNhan =
+                popupView.findViewById(
+                        R.id.btn_xac_nhan_tao_folder
+                );
+
+
+        /*
+         * Xử lý khi nhấn nút xác nhận.
+         */
         btnXacNhan.setOnClickListener(v -> {
 
-            String tenFolder = edtTenFolder
-                    .getText()
-                    .toString()
-                    .trim();
+            String tenFolder =
+                    edtTenFolder
+                            .getText()
+                            .toString()
+                            .trim();
 
 
-            // Kiểm tra tên folder
+            /*
+             * Kiểm tra tên folder.
+             */
             if (tenFolder.isEmpty()) {
 
                 edtTenFolder.setError(
@@ -206,8 +278,11 @@ public class BoTu extends Fragment {
 
             /*
              * Hiện tại mới xử lý giao diện.
-             * Sau này sẽ lưu folder vào database tại đây.
+             *
+             * Sau này sẽ lưu folder
+             * vào database tại đây.
              */
+
 
             Toast.makeText(
                     requireContext(),
@@ -216,19 +291,33 @@ public class BoTu extends Fragment {
             ).show();
 
 
+            /*
+             * Đóng popup sau khi tạo thành công.
+             */
             dialog.dismiss();
         });
 
 
+        /*
+         * Hiển thị BottomSheet.
+         */
         dialog.show();
 
-        moBanPhim(edtTenFolder, dialog);
+
+        /*
+         * Tự động focus vào ô tên folder
+         * và mở bàn phím.
+         */
+        moBanPhim(
+                edtTenFolder,
+                dialog
+        );
     }
 
 
     /**
-     * Tự động focus vào ô nhập liệu và mở bàn phím
-     * khi popup được hiển thị.
+     * Tự động focus vào ô nhập liệu
+     * và mở bàn phím khi popup được hiển thị.
      */
     private void moBanPhim(
             EditText editText,
@@ -236,7 +325,10 @@ public class BoTu extends Fragment {
 
         editText.requestFocus();
 
-        Window window = dialog.getWindow();
+
+        Window window =
+                dialog.getWindow();
+
 
         if (window != null) {
 

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/btn_tao_folder"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,7 +9,27 @@
     android:clickable="true"
     android:focusable="true"
     android:gravity="center"
-    android:text="▣  TẠO FOLDER"
-    android:textColor="#FFFFFF"
-    android:textSize="11sp"
-    android:textStyle="bold" />
+    android:orientation="horizontal">
+
+    <!-- Icon folder -->
+    <ImageView
+        android:id="@+id/img_tao_folder"
+        android:layout_width="18dp"
+        android:layout_height="18dp"
+        android:contentDescription="Tạo folder"
+        android:scaleType="centerInside"
+        android:src="@drawable/ic_themfolder"
+        app:tint="#FFFFFF" />
+
+    <!-- Chữ -->
+    <TextView
+        android:id="@+id/txt_tao_folder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="7dp"
+        android:text="TẠO FOLDER"
+        android:textColor="#FFFFFF"
+        android:textSize="11sp"
+        android:textStyle="bold" />
+
+</LinearLayout>

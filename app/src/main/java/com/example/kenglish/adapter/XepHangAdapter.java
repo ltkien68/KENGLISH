@@ -75,6 +75,9 @@ public class XepHangAdapter extends BaseAdapter {
         ViewHolder holder;
 
 
+        /*
+         * Nếu chưa có View thì tạo mới.
+         */
         if (convertView == null) {
 
             convertView = LayoutInflater
@@ -88,6 +91,9 @@ public class XepHangAdapter extends BaseAdapter {
             holder = new ViewHolder();
 
 
+            /*
+             * Ánh xạ các View.
+             */
             holder.txtHang =
                     convertView.findViewById(
                             R.id.txt_hang
@@ -108,22 +114,36 @@ public class XepHangAdapter extends BaseAdapter {
                             R.id.txt_diem_xep_hang
                     );
 
+            holder.imgIconDiem =
+                    convertView.findViewById(
+                            R.id.img_icon_diem
+                    );
 
+
+            /*
+             * Lưu ViewHolder để tái sử dụng.
+             */
             convertView.setTag(holder);
 
         } else {
 
-            holder = (ViewHolder)
-                    convertView.getTag();
+            holder =
+                    (ViewHolder) convertView.getTag();
         }
 
 
+        /*
+         * Lấy người dùng tại vị trí hiện tại.
+         */
         NguoiDungXepHang nguoiDung =
                 danhSach.get(position);
 
 
-        // Hạng bắt đầu từ 1.
-        int hang = position + 1;
+        /*
+         * Hạng bắt đầu từ 1.
+         */
+        int hang =
+                position + 1;
 
 
         hienThiHang(
@@ -132,6 +152,9 @@ public class XepHangAdapter extends BaseAdapter {
         );
 
 
+        /*
+         * Hiển thị tên người dùng.
+         */
         holder.txtTenNguoiDung.setText(
                 nguoiDung.getTenNguoiDung()
         );
@@ -141,24 +164,60 @@ public class XepHangAdapter extends BaseAdapter {
          * Hiện tại dùng avatar mặc định.
          *
          * Sau này khi Backend trả URL ảnh,
-         * có thể dùng Glide để load nguoiDung.getAnhDaiDien().
+         * có thể dùng Glide để load
+         * nguoiDung.getAnhDaiDien().
          */
         holder.imgAnhDaiDien.setImageResource(
                 android.R.drawable.sym_def_app_icon
         );
 
 
-        // Hiển thị giá trị tùy bảng đang chọn.
+        /*
+         * Hiển thị điểm và icon
+         * tùy theo loại bảng xếp hạng.
+         */
         if (LOAI_STREAK.equals(loaiXepHang)) {
 
+            /*
+             * Bảng xếp hạng Streak.
+             */
             holder.txtDiemXepHang.setText(
-                    "🔥 " + nguoiDung.getStreak()
+                    String.valueOf(
+                            nguoiDung.getStreak()
+                    )
+            );
+
+            holder.imgIconDiem.setImageResource(
+                    R.drawable.ic_streak
+            );
+
+            /*
+             * Màu cam đỏ cho icon streak.
+             */
+            holder.imgIconDiem.setColorFilter(
+                    0xFFFF7043
             );
 
         } else {
 
+            /*
+             * Bảng xếp hạng lượt chơi.
+             */
             holder.txtDiemXepHang.setText(
-                    nguoiDung.getLuotChoi() + " ⚡"
+                    String.valueOf(
+                            nguoiDung.getLuotChoi()
+                    )
+            );
+
+            holder.imgIconDiem.setImageResource(
+                    R.drawable.ic_tiaset
+            );
+
+            /*
+             * Màu vàng cho icon lượt chơi.
+             */
+            holder.imgIconDiem.setColorFilter(
+                    0xFFFFD43B
             );
         }
 
@@ -169,7 +228,8 @@ public class XepHangAdapter extends BaseAdapter {
 
     /**
      * Hiển thị hạng.
-     * Top 3 dùng biểu tượng huy chương để nổi bật.
+     *
+     * Top 3 sử dụng biểu tượng huy chương.
      */
     private void hienThiHang(
             TextView txtHang,
@@ -225,6 +285,9 @@ public class XepHangAdapter extends BaseAdapter {
     }
 
 
+    /**
+     * ViewHolder giúp tái sử dụng View.
+     */
     private static class ViewHolder {
 
         TextView txtHang;
@@ -234,5 +297,7 @@ public class XepHangAdapter extends BaseAdapter {
         TextView txtTenNguoiDung;
 
         TextView txtDiemXepHang;
+
+        ImageView imgIconDiem;
     }
 }
