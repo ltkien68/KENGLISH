@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Nội dung tab Cộng đồng -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+    <!-- Tiêu đề -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cộng đồng Kenglish"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/btn_lam_moi_cong_dong"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:gravity="center"
+            android:text="↻"
+            android:textColor="#AAB4C5"
+            android:textSize="15sp" />
+
+    </LinearLayout>
+
+
+    <!-- Danh sách bài viết -->
+    <ListView
+        android:id="@+id/list_cong_dong"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10dp"
+        android:scrollbars="none" />
+
+
+    <!-- Ô nhập bài viết -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="8dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/edt_noi_dung_cong_dong"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_weight="1"
+            android:background="@drawable/nen_xephang_trichdan"
+            android:hint="Viết tin nhắn..."
+            android:inputType="textCapSentences|textMultiLine"
+            android:maxLines="3"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#7E8999"
+            android:textSize="13sp" />
+
+        <TextView
+            android:id="@+id/btn_gui_cong_dong"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:gravity="center"
+            android:text="➤"
+            android:textColor="#FFFFFF"
+            android:textSize="15sp"
+            android:background="@drawable/nen_xephang_tabchon" />
+
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:text="Tối đa 3 tin nhắn/ngày"
+        android:textColor="#7E8999"
+        android:textSize="10sp" />
+
+</LinearLayout>

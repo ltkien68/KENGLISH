@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Component hiển thị số xu hiện có của người dùng -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="48dp"
+    android:orientation="horizontal"
+    android:gravity="center"
+    android:background="@drawable/nen_cuahang_xu"
+    android:paddingStart="14dp"
+    android:paddingEnd="14dp">
+
+    <TextView
+        android:id="@+id/txt_so_xu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="19.209"
+        android:textColor="#FFFFFF"
+        android:textSize="13sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="7dp"
+        android:text="●"
+        android:textColor="#FFD43B"
+        android:textSize="22sp" />
+
+</LinearLayout>

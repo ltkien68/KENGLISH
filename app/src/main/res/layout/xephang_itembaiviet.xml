@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Một bài viết trong Cộng đồng -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:gravity="bottom">
+
+    <ImageView
+        android:id="@+id/img_anh_dai_dien_bai_viet"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        android:layout_marginEnd="10dp"
+        android:src="@android:drawable/sym_def_app_icon"
+        android:contentDescription="Ảnh đại diện" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:background="@drawable/nen_xephang_baiviet"
+        android:padding="12dp">
+
+        <!-- Người đăng + thời gian -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txt_ten_nguoi_dang"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Người dùng"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txt_thoi_gian_bai_viet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="12:10"
+                android:textColor="#7E8999"
+                android:textSize="10sp" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txt_noi_dung_bai_viet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Nội dung bài viết"
+            android:textColor="#E8ECF2"
+            android:textSize="13sp"
+            android:lineSpacingExtra="3dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

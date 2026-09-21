@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    Thanh chuyển giữa Avatar, Hình nền và Đặc biệt.
+    Thanh tab chỉ chiếm một vùng cố định và nằm giữa màn hình.
+-->
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/khung_tab_cua_hang"
+    android:layout_width="250dp"
+    android:layout_height="40dp"
+    android:layout_gravity="center_horizontal"
+    android:background="@drawable/nen_cuahang_tab"
+    android:padding="5dp">
+
+    <!--
+        Nền của tab đang được chọn.
+        Chiều rộng sẽ được CuaHang.java tính bằng 1/3 thanh tab.
+    -->
+    <View
+        android:id="@+id/thanh_chon_tab"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:background="@drawable/nen_cuahang_tabchon" />
+
+    <!-- Nội dung 3 tab -->
+    <LinearLayout
+        android:id="@+id/khung_noi_dung_tab"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal">
+
+        <!-- Avatar -->
+        <TextView
+            android:id="@+id/tab_avatar"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Avatar"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <!-- Hình nền -->
+        <TextView
+            android:id="@+id/tab_hinh_nen"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Hình nền"
+            android:textColor="#AAB4C5"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <!-- Đặc biệt -->
+        <TextView
+            android:id="@+id/tab_dac_biet"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Đặc biệt"
+            android:textColor="#AAB4C5"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+</FrameLayout>
