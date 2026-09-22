@@ -1,15 +1,49 @@
+# =========================
+# Android Studio / Gradle
+# =========================
+
 *.iml
-.gradle
+
+.gradle/
+
 /local.properties
-/.idea/caches
-/.idea/libraries
+local.properties
+
+/.idea/caches/
+/.idea/libraries/
 /.idea/modules.xml
 /.idea/workspace.xml
 /.idea/navEditor.xml
 /.idea/assetWizardSettings.xml
+
 .DS_Store
-/build
-/captures
-.externalNativeBuild
-.cxx
-local.properties
+
+/build/
+**/build/
+
+/captures/
+
+.externalNativeBuild/
+.cxx/
+
+
+# =========================
+# Kenglish Backend
+# =========================
+
+# Composer dependencies
+/backend/vendor/
+
+# Composer executable
+/backend/composer.phar
+
+# Email config chua Gmail App Password
+/backend/config/email_secret.php
+
+
+# =========================
+# Environment / Secrets
+# =========================
+
+.env
+.env.*

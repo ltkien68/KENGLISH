@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:columnCount="2"
+    android:rowCount="2"
+    android:useDefaultMargins="false">
+
+
+    <!-- ================================================= -->
+    <!-- Bộ từ -->
+    <!-- ================================================= -->
+
+    <LinearLayout
+        android:id="@+id/btn_chon_bo_tu"
+        android:layout_width="0dp"
+        android:layout_height="92dp"
+        android:layout_columnWeight="1"
+        android:layout_margin="5dp"
+        android:background="@drawable/nen_luyentap_boloc"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <!-- Tiêu đề -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bộ từ"
+            android:textColor="#9DA7B8"
+            android:textSize="13sp" />
+
+
+        <!-- Ô hiển thị giá trị đang chọn -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/nen_luyentap_ochon"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="14dp">
+
+            <TextView
+                android:id="@+id/txt_bo_tu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Tất cả bộ từ"
+                android:textColor="#FFFFFF"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/img_mui_ten_bo_tu"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_arrowdown"
+                app:tint="#FFFFFF" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <!-- ================================================= -->
+    <!-- Trạng thái -->
+    <!-- ================================================= -->
+
+    <LinearLayout
+        android:id="@+id/btn_chon_trang_thai"
+        android:layout_width="0dp"
+        android:layout_height="92dp"
+        android:layout_columnWeight="1"
+        android:layout_margin="5dp"
+        android:background="@drawable/nen_luyentap_boloc"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <!-- Tiêu đề -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Trạng thái"
+            android:textColor="#9DA7B8"
+            android:textSize="13sp" />
+
+
+        <!-- Ô hiển thị giá trị đang chọn -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/nen_luyentap_ochon"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="14dp">
+
+            <TextView
+                android:id="@+id/txt_trang_thai"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Đã thuộc"
+                android:textColor="#FFFFFF"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/img_mui_ten_trang_thai"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_arrowdown"
+                app:tint="#FFFFFF" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <!-- ================================================= -->
+    <!-- Thứ tự -->
+    <!-- ================================================= -->
+
+    <LinearLayout
+        android:id="@+id/btn_chon_thu_tu"
+        android:layout_width="0dp"
+        android:layout_height="92dp"
+        android:layout_columnWeight="1"
+        android:layout_margin="5dp"
+        android:background="@drawable/nen_luyentap_boloc"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <!-- Tiêu đề -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thứ tự"
+            android:textColor="#9DA7B8"
+            android:textSize="13sp" />
+
+
+        <!-- Ô hiển thị giá trị đang chọn -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/nen_luyentap_ochon"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="14dp">
+
+            <TextView
+                android:id="@+id/txt_thu_tu"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Ngẫu nhiên"
+                android:textColor="#FFFFFF"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/img_mui_ten_thu_tu"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_arrowdown"
+                app:tint="#FFFFFF" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <!-- ================================================= -->
+    <!-- Số lượng -->
+    <!-- ================================================= -->
+
+    <LinearLayout
+        android:id="@+id/btn_chon_so_luong"
+        android:layout_width="0dp"
+        android:layout_height="92dp"
+        android:layout_columnWeight="1"
+        android:layout_margin="5dp"
+        android:background="@drawable/nen_luyentap_boloc"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:padding="10dp">
+
+        <!-- Tiêu đề -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Số lượng"
+            android:textColor="#9DA7B8"
+            android:textSize="13sp" />
+
+
+        <!-- Ô hiển thị giá trị đang chọn -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:layout_marginTop="6dp"
+            android:background="@drawable/nen_luyentap_ochon"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="14dp">
+
+            <TextView
+                android:id="@+id/txt_so_luong"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="10 từ"
+                android:textColor="#FFFFFF"
+                android:textSize="11sp"
+                android:textStyle="bold" />
+
+            <ImageView
+                android:id="@+id/img_mui_ten_so_luong"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/ic_arrowdown"
+                app:tint="#FFFFFF" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</GridLayout>
