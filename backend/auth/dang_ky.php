@@ -14,7 +14,7 @@ $matKhau = $duLieu["mat_khau"] ?? "";
 if (empty($tenHienThi) || empty($email) || empty($matKhau)) {
     echo json_encode([
         "thanh_cong" => false, 
-        "thong_bao" => "Please enter all the required information"
+        "thong_bao" => "Vui lòng điền đủ thông tin yêu cầu"
     ]);
 
     exit;
@@ -23,7 +23,7 @@ if (empty($tenHienThi) || empty($email) || empty($matKhau)) {
 if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
     echo json_encode([
         "thanh_cong" => false,
-        "thong_bao" => "Email is not valid"
+        "thong_bao" => "Email chưa được xác thực"
     ]);
 
     exit;
@@ -32,7 +32,7 @@ if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
 if (strlen($matKhau) < 6) {
     echo json_encode([
         "thanh_cong" => false,
-        "thong_bao" => "Password must be at least 6 characters"
+        "thong_bao" => "Mật khẩu phải chứa ít nhất 6 ký tự"
     ]);
 
     exit;
@@ -49,7 +49,7 @@ $ketQua = $cauLenh->get_result();
 if ($ketQua->num_rows > 0) {
     echo json_encode([
         "thanh_cong" => false,
-        "thong_bao" => "Email already exists"
+        "thong_bao" => "Email đã tồn tại"
     ]);
 
     $cauLenh->close();
@@ -103,20 +103,20 @@ if ($cauLenh->execute()) {
     if ($guiEmailThanhCong) {
         echo json_encode([
             "thanh_cong" => true,
-            "thong_bao" => "Registration successful. Please check your email."
+            "thong_bao" => "Đăng ký thành công. Vui lòng kiểm tra email của bạn."
         ]);
 
     } else {
         echo json_encode([
             "thanh_cong" => false,
-            "thong_bao" => "Account created, but verification email could not be sent"
+            "thong_bao" => "Tạo tài khoản thành công, nhưng mã OTP chưa được gửi tới email của bạn"
         ]);
     }
 
 } else {
     echo json_encode([
         "thanh_cong" => false,
-        "thong_bao" => "Registration failed"
+        "thong_bao" => "Đăng ký thất bại"
     ]);
 }
 

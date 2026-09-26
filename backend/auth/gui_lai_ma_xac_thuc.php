@@ -17,7 +17,7 @@ if (empty($email)) {
 
     echo json_encode([
         "thanh_cong" => false,
-        "thong_bao" => "Please enter your email"
+        "thong_bao" => "Vui lòng nhập email của bạn"
     ]);
 
     exit;
@@ -40,7 +40,7 @@ if ($ketQua->num_rows == 0) {
 
     echo json_encode([
         "thanh_cong" => false,
-        "thong_bao" => "Account not found"
+        "thong_bao" => "Tài khoản không tìm thấy"
     ]);
 
     $cauLenh->close();
@@ -55,7 +55,7 @@ if ($nguoiDung["email_da_xac_thuc"] == 1) {
 
     echo json_encode([
         "thanh_cong" => false,
-        "thong_bao" => "Email has already been verified"
+        "thong_bao" => "Email đã được xác thực"
     ]);
 
     $cauLenh->close();
@@ -100,14 +100,14 @@ if ($cauLenh->execute()) {
 
         echo json_encode([
             "thanh_cong" => true,
-            "thong_bao" => "A new verification code has been sent to your email"
+            "thong_bao" => "Mã OTP đã được gửi tới email của bạn"
         ]);
 
     } else {
 
         echo json_encode([
             "thanh_cong" => false,
-            "thong_bao" => "Failed to send verification email"
+            "thong_bao" => "Gửi mã OTP tới email của bạn thất bại"
         ]);
     }
 

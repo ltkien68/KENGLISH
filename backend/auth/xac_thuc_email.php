@@ -14,7 +14,7 @@ if (empty($email) || empty($maXacThuc)) {
 
     echo json_encode([
         "thanh_cong" => false,
-        "thong_bao" => "Please enter email and verification code"
+        "thong_bao" => "Vui lòng nhập mã OTP đã được gửi tới email của bạn"
     ]);
 
     exit;
@@ -40,7 +40,7 @@ if ($ketQua->num_rows == 0) {
 
     echo json_encode([
         "thanh_cong" => false,
-        "thong_bao" => "Account not found"
+        "thong_bao" => "Tài khoản không tìm thấy"
     ]);
 
     $cauLenh->close();
@@ -56,7 +56,7 @@ if ($nguoiDung["email_da_xac_thuc"] == 1) {
 
     echo json_encode([
         "thanh_cong" => false,
-        "thong_bao" => "Email has already been verified"
+        "thong_bao" => "Email đã được xác thực"
     ]);
 
     $cauLenh->close();
@@ -70,7 +70,7 @@ if ($maXacThuc != $nguoiDung["ma_xac_thuc"]) {
 
     echo json_encode([
         "thanh_cong" => false,
-        "thong_bao" => "Verification code is incorrect"
+        "thong_bao" => "Mã OTP không đúng"
     ]);
 
     $cauLenh->close();
@@ -88,7 +88,7 @@ if (time() > $thoiGianHetHan) {
 
     echo json_encode([
         "thanh_cong" => false,
-        "thong_bao" => "Verification code has expired"
+        "thong_bao" => "Mã OTP đã hết hạn"
     ]);
 
     $cauLenh->close();
@@ -117,14 +117,14 @@ if ($cauLenh->execute()) {
 
     echo json_encode([
         "thanh_cong" => true,
-        "thong_bao" => "Email verified successfully"
+        "thong_bao" => "Email xác thực thành công"
     ]);
 
 } else {
 
     echo json_encode([
         "thanh_cong" => false,
-        "thong_bao" => "Email verification failed"
+        "thong_bao" => "Email xác thực thất bại"
     ]);
 }
 

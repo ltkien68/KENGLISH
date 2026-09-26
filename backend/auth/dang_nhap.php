@@ -14,7 +14,7 @@ $matKhau = $duLieu["mat_khau"] ?? "";
 if (empty($email) || empty($matKhau)) {
     echo json_encode([
         "thanh_cong" => false,
-        "thong_bao" => "Please enter email and password"
+        "thong_bao" => "Vui lòng nhập email và mật khẩu"
     ]);
 
     exit;
@@ -35,7 +35,7 @@ $ketQua = $cauLenh->get_result();
 if ($ketQua->num_rows == 0) {
     echo json_encode([
         "thanh_cong" => false,
-        "thong_bao" => "Email or password is incorrect"
+        "thong_bao" => "Email hoặc tài khoản chưa đúng"
     ]);
 
     $cauLenh->close();
@@ -49,7 +49,7 @@ if ($ketQua->num_rows == 0) {
 if (!password_verify($matKhau, $nguoiDung["mat_khau"])) {
     echo json_encode([
         "thanh_cong" => false,
-        "thong_bao" => "Email or password is incorrect"
+        "thong_bao" => "Email hoặc tài khoản chưa đúng"
     ]);
 
     $cauLenh->close();
@@ -63,7 +63,7 @@ if ($nguoiDung["email_da_xac_thuc"] == 0) {
 
     echo json_encode([
         "thanh_cong" => false,
-        "thong_bao" => "Please verify your email before logging in"
+        "thong_bao" => "Vui lòng xác thực email của bạn trước khi đăng nhập"
     ]);
 
     $cauLenh->close();
@@ -121,7 +121,7 @@ if ($cauLenh->execute()) {
 
     echo json_encode([
         "thanh_cong" => false,
-        "thong_bao" => "Unable to create login session"
+        "thong_bao" => "Đăng nhập thất bại"
     ]);
 }
 
