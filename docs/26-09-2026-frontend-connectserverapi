@@ -1,0 +1,436 @@
+# Kenglish - Android Backend Integration
+
+## Tiến độ 26/09/2026
+
+Hoàn thành kết nối ứng dụng Android với backend PHP/MySQL thông qua Retrofit và chạy thử API trên thiết bị Android thật.
+
+---
+
+## 1. Kiến trúc kết nối
+
+Kenglish sử dụng mô hình:
+
+```text
+Android App
+    ↓
+Retrofit + Gson
+    ↓
+HTTP / JSON
+    ↓
+PHP REST API
+    ↓
+MySQL
+```
+
+Android không kết nối trực tiếp tới MySQL.
+
+Backend chịu trách nhiệm xử lý nghiệp vụ, truy vấn database và trả kết quả dưới dạng JSON cho Android.
+
+---
+
+## 2. Retrofit
+
+Retrofit là thư viện được sử dụng để Android giao tiếp với API thông qua HTTP/HTTPS.
+
+Có thể hiểu gần giống Axios trong JavaScript.
+
+Ví dụ khai báo API đăng nhập:
+
+```java
+@POST("auth/dang_nhap.php")
+Call<DangNhapResponse> dangNhap(
+        @Body DangNhapRequest request
+);
+```
+
+Gọi API:
+
+```java
+apiService.dangNhap(request).enqueue(...);
+```
+
+### Gson
+
+Gson được sử dụng cùng Retrofit để chuyển đổi:
+
+```text
+Java Object ↔ JSON
+```
+
+Ví dụ:
+
+```java
+DangNhapRequest request =
+        new DangNhapRequest(
+                "abc@gmail.com",
+                "123456"
+        );
+```
+
+được chuyển thành:
+
+```json
+{
+  "email": "abc@gmail.com",
+  "mat_khau": "123456"
+}
+```
+
+---
+
+## 3. Request và Response
+
+### Request
+
+Request chứa dữ liệu Android gửi tới backend.
+
+```text
+Android → Backend
+```
+
+Ví dụ:
+
+```java
+public class DangNhapRequest {
+
+    private String email;
+    private String mat_khau;
+
+    public DangNhapRequest(String email, String mat_khau) {
+        this.email = email;
+        this.mat_khau = mat_khau;
+    }
+}
+```
+
+### Response
+
+Response chứa dữ liệu backend trả về Android.
+
+```text
+Backend → Android
+```
+
+Ví dụ:
+
+```java
+public class DangNhapResponse {
+
+    private boolean thanh_cong;
+    private String thong_bao;
+    private String token;
+
+    public boolean isThanhCong() {
+        return thanh_cong;
+    }
+
+    public String getThongBao() {
+        return thong_bao;
+    }
+
+    public String getToken() {
+        return token;
+    }
+}
+```
+
+---
+
+## 4. ApiService
+
+Các endpoint backend được khai báo tập trung trong `ApiService`.
+
+```java
+public interface ApiService {
+
+    @POST("auth/dang_ky.php")
+    Call<ApiResponse> dangKy(
+            @Body DangKyRequest request
+    );
+
+    @POST("auth/xac_thuc_email.php")
+    Call<ApiResponse> xacThucEmail(
+            @Body XacThucEmailRequest request
+    );
+
+    @POST("auth/dang_nhap.php")
+    Call<DangNhapResponse> dangNhap(
+            @Body DangNhapRequest request
+    );
+}
+```
+
+---
+
+## 5. Kết nối backend local
+
+Backend hiện chạy bằng XAMPP trên máy tính:
+
+```text
+http://localhost/kenglish_api/
+```
+
+Điểm quan trọng:
+
+> `localhost` luôn chỉ chính thiết bị đang chạy chương trình.
+
+Vì vậy địa chỉ backend sẽ khác nhau tùy môi trường chạy Android.
+
+### Android Emulator
+
+Emulator sử dụng:
+
+```text
+http://10.0.2.2/kenglish_api/
+```
+
+`10.0.2.2` là địa chỉ đặc biệt để Android Emulator truy cập localhost của máy tính host.
+
+```text
+Android Emulator
+      ↓
+   10.0.2.2
+      ↓
+Windows localhost
+      ↓
+Apache / XAMPP
+```
+
+### Thiết bị Android thật
+
+Khi chạy trên điện thoại thật qua USB, sử dụng ADB Reverse:
+
+```powershell
+adb reverse tcp:8080 tcp:80
+```
+
+Trong môi trường hiện tại:
+
+```powershell
+& "C:\Users\ltrgk\AppData\Local\Android\Sdk\platform-tools\adb.exe" reverse tcp:8080 tcp:80
+```
+
+Sau đó Android sử dụng:
+
+```text
+http://127.0.0.1:8080/kenglish_api/
+```
+
+Luồng kết nối:
+
+```text
+Android Phone
+127.0.0.1:8080
+      ↓
+USB / ADB Reverse
+      ↓
+PC Port 80
+      ↓
+Apache / XAMPP
+      ↓
+PHP API
+```
+
+Kiểm tra thiết bị:
+
+```powershell
+adb devices
+```
+
+Kiểm tra ADB Reverse:
+
+```powershell
+adb reverse --list
+```
+
+---
+
+## 6. Retrofit Base URL
+
+### Khi chạy Emulator
+
+```java
+private static final String BASE_URL =
+        "http://10.0.2.2/kenglish_api/";
+```
+
+### Khi chạy điện thoại thật với ADB Reverse
+
+```java
+private static final String BASE_URL =
+        "http://127.0.0.1:8080/kenglish_api/";
+```
+
+---
+
+## 7. Android Manifest
+
+Ứng dụng cần quyền truy cập Internet:
+
+```xml
+<uses-permission android:name="android.permission.INTERNET" />
+```
+
+Backend local hiện sử dụng HTTP nên trong quá trình development cho phép cleartext traffic:
+
+```xml
+<application
+    android:usesCleartextTraffic="true"
+    ... >
+```
+
+Khi deploy production nên sử dụng HTTPS.
+
+---
+
+## 8. Authentication Flow
+
+Flow Authentication hiện tại:
+
+```text
+Đăng ký
+   ↓
+DangKyRequest
+   ↓
+Retrofit
+   ↓
+dang_ky.php
+   ↓
+MySQL
+   ↓
+Gửi OTP qua Gmail
+   ↓
+Xác thực email
+   ↓
+xac_thuc_email.php
+   ↓
+Đăng nhập
+   ↓
+DangNhapRequest
+   ↓
+dang_nhap.php
+   ↓
+DangNhapResponse
+   ↓
+Token
+   ↓
+SharedPreferences
+   ↓
+MainActivity
+```
+
+---
+
+## 9. Lưu token đăng nhập
+
+Sau khi đăng nhập thành công, backend trả token về Android.
+
+Token được lưu bằng `SharedPreferences`:
+
+```java
+SharedPreferences sharedPreferences =
+        getSharedPreferences(
+                "Kenglish",
+                MODE_PRIVATE
+        );
+
+sharedPreferences
+        .edit()
+        .putString("token", token)
+        .apply();
+```
+
+Các API yêu cầu đăng nhập sau này sẽ sử dụng:
+
+```text
+Authorization: Bearer <token>
+```
+
+---
+
+## 10. Xử lý lỗi giao diện
+
+### Lỗi nhập liệu
+
+Ví dụ:
+
+- Email trống
+- Email sai định dạng
+- Mật khẩu trống
+- Xác nhận mật khẩu không khớp
+
+Hiển thị trực tiếp tại input:
+
+```java
+edtEmail.setError("Email không hợp lệ");
+```
+
+### Lỗi nghiệp vụ từ backend
+
+Ví dụ:
+
+```text
+Tài khoản hoặc mật khẩu không chính xác
+Email đã tồn tại
+OTP không hợp lệ
+```
+
+Sử dụng `TextView` trong XML và ẩn/hiện:
+
+```java
+txtLoi.setVisibility(View.VISIBLE);
+```
+
+```java
+txtLoi.setVisibility(View.GONE);
+```
+
+### Lỗi kết nối
+
+Các lỗi như không kết nối được server hoặc lỗi HTTP có thể hiển thị bằng `Toast`.
+
+---
+
+## 11. Kiến thức học được
+
+- Hiểu luồng `Android → API → Backend → Database`.
+- Sử dụng Retrofit để gọi API từ Android.
+- Sử dụng Gson để chuyển đổi Java Object và JSON.
+- Hiểu vai trò của Request và Response model.
+- Biết cách tổ chức các endpoint bằng `ApiService`.
+- Hiểu `localhost` phụ thuộc vào thiết bị đang chạy ứng dụng.
+- Biết sử dụng `10.0.2.2` khi chạy Android Emulator.
+- Biết sử dụng ADB Reverse để điện thoại thật truy cập backend local trên máy tính.
+- Biết cấu hình Internet permission và HTTP cleartext cho môi trường development.
+- Kết nối flow đăng ký, xác thực email và đăng nhập với backend.
+- Lưu token đăng nhập bằng SharedPreferences.
+- Phân biệt lỗi nhập liệu, lỗi nghiệp vụ backend và lỗi kết nối server.
+
+---
+
+## Ghi nhớ
+
+```text
+PC
+localhost
+    ↓
+Apache / XAMPP
+
+Android Emulator
+10.0.2.2
+    ↓
+localhost của PC
+
+Android thật + USB
+127.0.0.1:8080
+    ↓
+ADB Reverse
+    ↓
+PC:80
+    ↓
+Apache / XAMPP
+```
+
+**Không học thuộc địa chỉ một cách máy móc.**
+
+Cần xác định request đang xuất phát từ thiết bị nào và bằng cách nào thiết bị đó có thể truy cập backend đang chạy trên máy tính.
