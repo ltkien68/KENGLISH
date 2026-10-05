@@ -1,4 +1,4 @@
-# 🔐 Kenglish Authentication
+# 🔐 KENGLISH Authentication
 
 Hệ thống Authentication cho ứng dụng **Kenglish**, xây dựng bằng **Node.js + Express + MySQL + JWT**.
 
