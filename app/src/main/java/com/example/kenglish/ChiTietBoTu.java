@@ -1,11 +1,23 @@
 package com.example.kenglish;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -19,6 +31,9 @@ import com.example.kenglish.api.ApiService;
 import com.example.kenglish.api.RetrofitClient;
 import com.example.kenglish.model.ApiResponse;
 import com.example.kenglish.model.DanhSachTuResponse;
+import com.example.kenglish.model.DictionaryResponse;
+import com.example.kenglish.model.Meaning;
+import com.example.kenglish.model.ThemTuRequest;
 import com.example.kenglish.model.TuVung;
 
 import java.util.ArrayList;
@@ -52,6 +67,8 @@ public class ChiTietBoTu extends Fragment {
     private ListView listTuVung;
 
     private TuVungAdapter tuVungAdapter;
+
+    private ImageView btnThemTu;
 
 
     /*
@@ -182,6 +199,11 @@ public class ChiTietBoTu extends Fragment {
         btnChuaThuoc = view.findViewById(R.id.btn_chua_thuoc);
 
         btnDaThuoc = view.findViewById(R.id.btn_da_thuoc);
+
+        btnThemTu =
+                view.findViewById(
+                        R.id.btn_them_tu
+                );
     }
 
 
@@ -636,6 +658,570 @@ public class ChiTietBoTu extends Fragment {
         tuVungAdapter.notifyDataSetChanged();
     }
 
+    private void moPopupThemTu() {
+
+        Dialog dialog =
+                new Dialog(
+                        requireContext()
+                );
+
+        dialog.setContentView(
+                R.layout.botu_popup_themtu
+        );
+
+
+        /*
+         * Nền ngoài popup trong suốt
+         */
+        Window window =
+                dialog.getWindow();
+
+        if (window != null) {
+
+            window.setBackgroundDrawable(
+                    new ColorDrawable(
+                            Color.TRANSPARENT
+                    )
+            );
+
+            window.setLayout(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+        }
+
+
+        /*
+         * =========================================
+         * ÁNH XẠ
+         * =========================================
+         */
+
+        ImageView btnDongPopup =
+                dialog.findViewById(
+                        R.id.btn_dong_popup
+                );
+
+
+        TextView txtBoTuHienTai =
+                dialog.findViewById(
+                        R.id.txt_bo_tu_hien_tai
+                );
+
+
+        EditText edtTuVung =
+                dialog.findViewById(
+                        R.id.edt_tu_vung
+                );
+
+
+        EditText edtPhienAm =
+                dialog.findViewById(
+                        R.id.edt_phien_am
+                );
+
+
+        AutoCompleteTextView edtNghia =
+                dialog.findViewById(
+                        R.id.edt_nghia
+                );
+
+
+        TextView btnHuy =
+                dialog.findViewById(
+                        R.id.btn_huy
+                );
+
+
+        TextView btnLuuTu =
+                dialog.findViewById(
+                        R.id.btn_luu_tu
+                );
+
+        /*
+         * =========================================
+         * TỰ ĐỘNG TRA TỪ
+         * =========================================
+         */
+
+        Handler handler =
+                new Handler(
+                        Looper.getMainLooper()
+                );
+
+
+        Runnable[] tacVuTraTu =
+                new Runnable[1];
+
+
+        edtTuVung.addTextChangedListener(
+                new TextWatcher() {
+
+                    @Override
+                    public void beforeTextChanged(
+                            CharSequence s,
+                            int start,
+                            int count,
+                            int after) {
+                    }
+
+
+                    @Override
+                    public void onTextChanged(
+                            CharSequence s,
+                            int start,
+                            int before,
+                            int count) {
+
+                        /*
+                         * Nếu trước đó đang chờ tra
+                         * thì hủy.
+                         */
+                        if (tacVuTraTu[0] != null) {
+
+                            handler.removeCallbacks(
+                                    tacVuTraTu[0]
+                            );
+                        }
+
+
+                        String tu =
+                                s.toString()
+                                        .trim();
+
+
+                        /*
+                         * Người dùng xóa từ:
+                         * xóa luôn dữ liệu tự động.
+                         */
+                        if (tu.isEmpty()) {
+
+                            edtPhienAm.setText("");
+
+                            edtNghia.setAdapter(null);
+
+                            return;
+                        }
+
+
+                        /*
+                         * Chờ 500ms sau lần gõ cuối.
+                         */
+                        tacVuTraTu[0] =
+                                () -> traTuChoPopup(
+                                        tu,
+                                        edtPhienAm,
+                                        edtNghia
+                                );
+
+
+                        handler.postDelayed(
+                                tacVuTraTu[0],
+                                500
+                        );
+                    }
+
+
+                    @Override
+                    public void afterTextChanged(
+                            Editable s) {
+                    }
+                }
+        );
+
+
+        /*
+         * Hiển thị bộ từ hiện tại.
+         */
+        txtBoTuHienTai.setText(
+                tenBoTu
+        );
+
+
+        /*
+         * =========================================
+         * ĐÓNG POPUP
+         * =========================================
+         */
+
+        btnDongPopup.setOnClickListener(
+                v -> dialog.dismiss()
+        );
+
+
+        btnHuy.setOnClickListener(
+                v -> dialog.dismiss()
+        );
+
+
+        /*
+         * =========================================
+         * LƯU TỪ
+         * =========================================
+         */
+
+        btnLuuTu.setOnClickListener(v -> {
+
+            String tuVung =
+                    edtTuVung
+                            .getText()
+                            .toString()
+                            .trim();
+
+
+            String phienAm =
+                    edtPhienAm
+                            .getText()
+                            .toString()
+                            .trim();
+
+
+            String nghia =
+                    edtNghia
+                            .getText()
+                            .toString()
+                            .trim();
+
+
+            /*
+             * Từ và nghĩa là bắt buộc.
+             */
+            if (tuVung.isEmpty()) {
+
+                edtTuVung.setError(
+                        "Vui lòng nhập từ vựng"
+                );
+
+                edtTuVung.requestFocus();
+
+                return;
+            }
+
+
+            if (nghia.isEmpty()) {
+
+                edtNghia.setError(
+                        "Vui lòng nhập nghĩa"
+                );
+
+                edtNghia.requestFocus();
+
+                return;
+            }
+
+
+            luuTuVaoServer(
+                    dialog,
+                    tuVung,
+                    phienAm,
+                    nghia
+            );
+        });
+
+
+        /*
+         * Hiển thị popup.
+         */
+        dialog.show();
+
+
+        /*
+         * Phải set width sau show()
+         */
+        if (dialog.getWindow() != null) {
+
+            dialog.getWindow().setLayout(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+            );
+        }
+    }
+
+    private void traTuChoPopup(
+            String tu,
+            EditText edtPhienAm,
+            AutoCompleteTextView edtNghia) {
+
+        ApiService apiService =
+                RetrofitClient
+                        .getClient()
+                        .create(
+                                ApiService.class
+                        );
+
+
+        apiService
+                .traTu(tu)
+                .enqueue(
+                        new Callback<DictionaryResponse>() {
+
+                            @Override
+                            public void onResponse(
+                                    @NonNull Call<DictionaryResponse> call,
+                                    @NonNull Response<DictionaryResponse> response) {
+
+                                if (!response.isSuccessful()
+                                        || response.body() == null) {
+
+                                    return;
+                                }
+
+
+                                DictionaryResponse data =
+                                        response.body();
+
+
+                                /*
+                                 * =========================
+                                 * PHIÊN ÂM
+                                 * =========================
+                                 */
+
+                                if (data.getIpa() != null) {
+
+                                    edtPhienAm.setText(
+                                            data.getIpa()
+                                    );
+                                }
+
+
+                                /*
+                                 * =========================
+                                 * DANH SÁCH NGHĨA
+                                 * =========================
+                                 */
+
+                                List<String> danhSachNghia =
+                                        new ArrayList<>();
+
+
+                                if (data.getMeanings() != null) {
+
+                                    for (Meaning meaning
+                                            : data.getMeanings()) {
+
+                                        if (meaning.getDefinition()
+                                                != null) {
+
+                                            danhSachNghia.add(
+                                                    meaning.getDefinition()
+                                            );
+                                        }
+                                    }
+                                }
+
+
+                                /*
+                                 * Đưa danh sách nghĩa
+                                 * vào dropdown.
+                                 */
+
+                                ArrayAdapter<String> adapterNghia =
+                                        new ArrayAdapter<>(
+                                                requireContext(),
+                                                android.R.layout
+                                                        .simple_dropdown_item_1line,
+                                                danhSachNghia
+                                        );
+
+
+                                edtNghia.setAdapter(
+                                        adapterNghia
+                                );
+
+
+                                /*
+                                 * Bấm vào ô nghĩa
+                                 * → xổ danh sách.
+                                 */
+                                edtNghia.setOnClickListener(v -> {
+
+                                    if (!danhSachNghia.isEmpty()) {
+
+                                        edtNghia.showDropDown();
+                                    }
+                                });
+
+
+                                edtNghia.setOnFocusChangeListener(
+                                        (v, hasFocus) -> {
+
+                                            if (hasFocus
+                                                    && !danhSachNghia.isEmpty()) {
+
+                                                edtNghia.showDropDown();
+                                            }
+                                        }
+                                );
+                            }
+
+
+                            @Override
+                            public void onFailure(
+                                    @NonNull Call<DictionaryResponse> call,
+                                    @NonNull Throwable t) {
+
+                                /*
+                                 * Không Toast ở đây.
+                                 *
+                                 * Tra tự động thất bại thì
+                                 * người dùng vẫn có thể
+                                 * tự nhập phiên âm + nghĩa.
+                                 */
+                            }
+                        }
+                );
+    }
+
+    private void luuTuVaoServer(
+            Dialog dialog,
+            String tuVung,
+            String phienAm,
+            String nghia) {
+
+
+        SharedPreferences sharedPreferences =
+                requireContext()
+                        .getSharedPreferences(
+                                "Kenglish",
+                                Context.MODE_PRIVATE
+                        );
+
+
+        String token =
+                sharedPreferences.getString(
+                        "token",
+                        null
+                );
+
+
+        if (token == null) {
+
+            Toast.makeText(
+                    requireContext(),
+                    "Phiên đăng nhập không hợp lệ",
+                    Toast.LENGTH_SHORT
+            ).show();
+
+            return;
+        }
+
+
+        /*
+         * Tạo request.
+         *
+         * Hiện popup mới có:
+         * - từ
+         * - phiên âm
+         * - nghĩa
+         *
+         * Các trường khác để null.
+         */
+        ThemTuRequest request =
+                new ThemTuRequest(
+                        tuVung,
+                        phienAm.isEmpty()
+                                ? null
+                                : phienAm,
+                        null,
+                        nghia,
+                        null,
+                        null,
+                        null
+                );
+
+
+        ApiService apiService =
+                RetrofitClient
+                        .getClient()
+                        .create(
+                                ApiService.class
+                        );
+
+
+        apiService
+                .themTu(
+                        "Bearer " + token,
+                        boTuId,
+                        request
+                )
+                .enqueue(
+                        new Callback<ApiResponse<TuVung>>() {
+
+                            @Override
+                            public void onResponse(
+                                    @NonNull Call<ApiResponse<TuVung>> call,
+                                    @NonNull Response<ApiResponse<TuVung>> response) {
+
+
+                                if (!response.isSuccessful()) {
+
+                                    Toast.makeText(
+                                            requireContext(),
+                                            "Không thể thêm từ",
+                                            Toast.LENGTH_SHORT
+                                    ).show();
+
+                                    return;
+                                }
+
+
+                                ApiResponse<TuVung> apiResponse =
+                                        response.body();
+
+
+                                if (apiResponse == null
+                                        || !apiResponse.isThanhCong()) {
+
+                                    Toast.makeText(
+                                            requireContext(),
+                                            apiResponse != null
+                                                    ? apiResponse.getThongBao()
+                                                    : "Không thể thêm từ",
+                                            Toast.LENGTH_SHORT
+                                    ).show();
+
+                                    return;
+                                }
+
+
+                                /*
+                                 * Thành công
+                                 */
+                                dialog.dismiss();
+
+
+                                Toast.makeText(
+                                        requireContext(),
+                                        "Đã thêm từ",
+                                        Toast.LENGTH_SHORT
+                                ).show();
+
+
+                                /*
+                                 * Load lại danh sách từ từ DB.
+                                 *
+                                 * Hàm này đã có sẵn và cũng
+                                 * cập nhật thống kê.
+                                 */
+                                layDanhSachTu();
+                            }
+
+
+                            @Override
+                            public void onFailure(
+                                    @NonNull Call<ApiResponse<TuVung>> call,
+                                    @NonNull Throwable t) {
+
+                                Toast.makeText(
+                                        requireContext(),
+                                        "Không thể kết nối đến server",
+                                        Toast.LENGTH_SHORT
+                                ).show();
+                            }
+                        }
+                );
+    }
 
     /*
      * =========================================
@@ -683,6 +1269,10 @@ public class ChiTietBoTu extends Fragment {
                     btnChuaThuoc
             );
         });
+
+        btnThemTu.setOnClickListener(
+                v -> moPopupThemTu()
+        );
     }
 
 

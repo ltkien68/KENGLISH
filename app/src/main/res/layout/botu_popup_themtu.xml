@@ -39,7 +39,7 @@
     </LinearLayout>
 
 
-    <!-- Bộ từ -->
+    <!-- Bộ từ hiện tại -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -50,14 +50,19 @@
         android:textSize="13sp" />
 
 
-    <Spinner
-        android:id="@+id/spinner_bo_tu"
+    <TextView
+        android:id="@+id/txt_bo_tu_hien_tai"
         android:layout_width="match_parent"
         android:layout_height="42dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/nen_input_botu"
+        android:fontFamily="@font/juve_normal"
+        android:gravity="center_vertical"
         android:paddingStart="14dp"
-        android:paddingEnd="14dp" />
+        android:paddingEnd="14dp"
+        android:text="TOEIC Part 1"
+        android:textColor="#4F4F4F"
+        android:textSize="13sp" />
 
 
     <!-- Từ vựng -->
@@ -122,14 +127,16 @@
         android:textColor="#111111"
         android:textSize="13sp" />
 
-    <EditText
+    <AutoCompleteTextView
         android:id="@+id/edt_nghia"
         android:layout_width="match_parent"
         android:layout_height="44dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/nen_input_botu"
+        android:dropDownVerticalOffset="4dp"
         android:fontFamily="@font/juve_normal"
-        android:hint="Nhập nghĩa của từ"
+        android:hint="Chọn hoặc nhập nghĩa"
+        android:inputType="text"
         android:paddingStart="14dp"
         android:paddingEnd="14dp"
         android:singleLine="true"
