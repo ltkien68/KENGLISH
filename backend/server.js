@@ -10,6 +10,7 @@ const userRoutes = require("./routes/userRoutes");
 const dictionaryRoutes = require("./routes/dictionaryRoutes");
 const boTuRoutes = require("./routes/boTuRoutes");
 const folderRoutes = require("./routes/folderRoutes");
+const activityRoutes = require("./routes/activityRoutes");
 
 // Middleware
 app.use(cors());
@@ -20,6 +21,7 @@ app.use("/user", userRoutes);
 app.use("/dictionary", dictionaryRoutes);
 app.use("/vocabulary", boTuRoutes);
 app.use("/folder", folderRoutes);
+app.use("/activity", activityRoutes);
 
 // API kiểm tra server
 app.get("/", (req, res) => {
