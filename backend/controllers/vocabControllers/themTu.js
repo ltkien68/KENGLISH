@@ -98,7 +98,7 @@ const themTu = async (req, res) => {
                 cau_vi_du: cau_vi_du?.trim() || null,
                 tu_dong_nghia: tu_dong_nghia?.trim() || null,
                 tu_trai_nghia: tu_trai_nghia?.trim() || null,
-                da_thuoc: false
+                da_thuoc: 0
             }
         });
 
