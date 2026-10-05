@@ -12,6 +12,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,6 +31,12 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+import com.example.kenglish.adapter.BoTuAdapter;
+import com.example.kenglish.model.MucBoTu;
+
+import java.util.ArrayList;
+import java.util.List;
+
 
 /**
  * Fragment hiển thị màn hình quản lý các bộ từ vựng.
@@ -38,6 +45,12 @@ public class BoTu extends Fragment {
 
     private TextView btnTaoBoTu;
     private LinearLayout btnTaoFolder;
+    private ListView listBoTu;
+
+    private final List<MucBoTu> danhSachMuc =
+            new ArrayList<>();
+
+    private BoTuAdapter boTuAdapter;
 
 
     /**
@@ -57,7 +70,9 @@ public class BoTu extends Fragment {
         );
 
         anhXa(view);
+        khoiTaoDanhSach();
         xuLySuKien();
+        layDuLieuBoTu();
 
         return view;
     }
@@ -75,6 +90,11 @@ public class BoTu extends Fragment {
         btnTaoFolder = view.findViewById(
                 R.id.component_tao_folder
         );
+
+        listBoTu =
+                view.findViewById(
+                        R.id.list_bo_tu
+                );
     }
 
 
@@ -90,6 +110,216 @@ public class BoTu extends Fragment {
         btnTaoFolder.setOnClickListener(v -> {
             moPopupTaoFolder();
         });
+    }
+
+    private void khoiTaoDanhSach() {
+
+        boTuAdapter =
+                new BoTuAdapter(
+                        requireContext(),
+                        danhSachMuc
+                );
+
+        listBoTu.setAdapter(
+                boTuAdapter
+        );
+    }
+
+    private void layDuLieuBoTu() {
+
+        danhSachMuc.clear();
+
+        boTuAdapter.notifyDataSetChanged();
+
+        layDanhSachFolder();
+    }
+
+    private void layDanhSachFolder() {
+
+        SharedPreferences sharedPreferences =
+                requireContext().getSharedPreferences(
+                        "Kenglish",
+                        Context.MODE_PRIVATE
+                );
+
+        String token =
+                sharedPreferences.getString(
+                        "token",
+                        null
+                );
+
+
+        if (token == null) {
+            return;
+        }
+
+
+        ApiService apiService =
+                RetrofitClient
+                        .getClient()
+                        .create(ApiService.class);
+
+
+        apiService
+                .layDanhSachFolder(
+                        "Bearer " + token
+                )
+                .enqueue(
+                        new Callback<ApiResponse<List<Folder>>>() {
+
+                            @Override
+                            public void onResponse(
+                                    Call<ApiResponse<List<Folder>>> call,
+                                    Response<ApiResponse<List<Folder>>> response) {
+
+                                if (!isAdded()) {
+                                    return;
+                                }
+
+
+                                if (response.isSuccessful()
+                                        && response.body() != null
+                                        && response.body().isThanhCong()) {
+
+                                    List<Folder> danhSachFolder =
+                                            response.body().getData();
+
+
+                                    if (danhSachFolder != null) {
+
+                                        for (Folder folder : danhSachFolder) {
+
+                                            danhSachMuc.add(
+                                                    new MucBoTu(
+                                                            folder
+                                                    )
+                                            );
+                                        }
+                                    }
+                                }
+
+
+                                /*
+                                 * Sau khi lấy Folder xong
+                                 * thì lấy tiếp Bộ từ.
+                                 */
+                                layDanhSachBoTu();
+                            }
+
+
+                            @Override
+                            public void onFailure(
+                                    Call<ApiResponse<List<Folder>>> call,
+                                    Throwable t) {
+
+                                if (!isAdded()) {
+                                    return;
+                                }
+
+
+                                /*
+                                 * Folder lỗi thì vẫn thử
+                                 * tải danh sách Bộ từ.
+                                 */
+                                layDanhSachBoTu();
+                            }
+                        }
+                );
+    }
+
+    private void layDanhSachBoTu() {
+
+        SharedPreferences sharedPreferences =
+                requireContext().getSharedPreferences(
+                        "Kenglish",
+                        Context.MODE_PRIVATE
+                );
+
+        String token =
+                sharedPreferences.getString(
+                        "token",
+                        null
+                );
+
+
+        if (token == null) {
+            return;
+        }
+
+
+        ApiService apiService =
+                RetrofitClient
+                        .getClient()
+                        .create(ApiService.class);
+
+
+        apiService
+                .layDanhSachBoTu(
+                        "Bearer " + token
+                )
+                .enqueue(
+                        new Callback<ApiResponse<List<BoTuModel>>>() {
+
+                            @Override
+                            public void onResponse(
+                                    Call<ApiResponse<List<BoTuModel>>> call,
+                                    Response<ApiResponse<List<BoTuModel>>> response) {
+
+                                if (!isAdded()) {
+                                    return;
+                                }
+
+
+                                if (response.isSuccessful()
+                                        && response.body() != null
+                                        && response.body().isThanhCong()) {
+
+                                    List<BoTuModel> danhSachBoTu =
+                                            response.body().getData();
+
+
+                                    if (danhSachBoTu != null) {
+
+                                        for (BoTuModel boTu : danhSachBoTu) {
+
+                                            danhSachMuc.add(
+                                                    new MucBoTu(
+                                                            boTu
+                                                    )
+                                            );
+                                        }
+                                    }
+                                }
+
+
+                                /*
+                                 * Báo Adapter rằng dữ liệu
+                                 * đã thay đổi.
+                                 */
+                                boTuAdapter.notifyDataSetChanged();
+                            }
+
+
+                            @Override
+                            public void onFailure(
+                                    Call<ApiResponse<List<BoTuModel>>> call,
+                                    Throwable t) {
+
+                                if (!isAdded()) {
+                                    return;
+                                }
+
+
+                                boTuAdapter.notifyDataSetChanged();
+
+                                Toast.makeText(
+                                        requireContext(),
+                                        "Không thể tải danh sách bộ từ",
+                                        Toast.LENGTH_SHORT
+                                ).show();
+                            }
+                        }
+                );
     }
 
 
@@ -350,6 +580,7 @@ public class BoTu extends Fragment {
 
                         dialog.dismiss();
 
+                        layDuLieuBoTu();
                     } else {
 
                         String thongBao = ketQua.getThongBao();
@@ -471,6 +702,8 @@ public class BoTu extends Fragment {
                         ).show();
 
                         dialog.dismiss();
+
+                        layDuLieuBoTu();
 
                     } else {
 
