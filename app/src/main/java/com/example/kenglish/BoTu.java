@@ -139,6 +139,13 @@ public class BoTu extends Fragment {
                                 );
                             }
 
+                            public void onMoFolder(
+                                    Folder folder) {
+
+                                moChiTietFolder(
+                                        folder
+                                );
+                            }
 
                             @Override
                             public void onThaVaoFolder(
@@ -150,6 +157,7 @@ public class BoTu extends Fragment {
                                         folder
                                 );
                             }
+
                         }
                 );
 
@@ -189,6 +197,53 @@ public class BoTu extends Fragment {
         listBoTu.setAdapter(
                 boTuAdapter
         );
+    }
+
+    private void moChiTietFolder(
+            Folder folder) {
+
+        ChiTietFolder fragment =
+                new ChiTietFolder();
+
+
+        Bundle bundle =
+                new Bundle();
+
+        bundle.putInt(
+                "folder_id",
+                folder.getId()
+        );
+
+        bundle.putString(
+                "ten_folder",
+                folder.getTenFolder()
+        );
+
+
+        fragment.setArguments(
+                bundle
+        );
+
+
+        requireActivity()
+                .getSupportFragmentManager()
+                .beginTransaction()
+
+                // Ẩn màn Bộ từ nhưng KHÔNG xóa nó
+                .hide(this)
+
+                // Thêm ChiTietFolder lên cùng container
+                .add(
+                        R.id.khung_noi_dung,
+                        fragment,
+                        "CHI_TIET_FOLDER"
+                )
+
+                .addToBackStack(
+                        "CHI_TIET_FOLDER"
+                )
+
+                .commit();
     }
 
     private void batDauKeoBoTu(

@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -263,12 +264,35 @@ public class MainActivity extends AppCompatActivity {
      *
      * @param manHinhMoi Fragment cần hiển thị.
      */
-    private void chuyenManHinh(Fragment manHinhMoi) {
+    private void chuyenManHinh(
+            Fragment manHinhMoi) {
 
-        // Không làm gì nếu đang đứng tại chính màn hình đó.
-        if (manHinhMoi == null ||
-                manHinhMoi == manHinhHienTai) {
+        if (manHinhMoi == null) {
+            return;
+        }
 
+
+        /*
+         * Nếu đang có màn con như ChiTietFolder,
+         * đóng toàn bộ màn con trước khi chuyển tab.
+         */
+        if (getSupportFragmentManager()
+                .getBackStackEntryCount() > 0) {
+
+            getSupportFragmentManager()
+                    .popBackStackImmediate(
+                            null,
+                            FragmentManager.POP_BACK_STACK_INCLUSIVE
+                    );
+        }
+
+
+        /*
+         * Sau khi đóng màn con,
+         * nếu người dùng chọn đúng tab hiện tại
+         * thì tab đó đã được hiện lại rồi.
+         */
+        if (manHinhMoi == manHinhHienTai) {
             return;
         }
 
@@ -280,7 +304,8 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
 
 
-        manHinhHienTai = manHinhMoi;
+        manHinhHienTai =
+                manHinhMoi;
     }
 
     private void thietLapMauThanhDieuHuong() {

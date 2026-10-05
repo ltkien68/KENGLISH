@@ -40,18 +40,7 @@
             android:maxLines="1"
             android:text="TOEIC FOLDER"
             android:textColor="#111111"
-            android:textSize="17sp" />
-
-        <ImageView
-            android:id="@+id/btn_tuy_chon_folder"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:clickable="true"
-            android:contentDescription="Tùy chọn"
-            android:focusable="true"
-            android:padding="9dp"
-            android:src="@drawable/ic_more"
-            app:tint="#37659C" />
+            android:textSize="20sp" />
 
     </LinearLayout>
 
@@ -78,9 +67,9 @@
         android:background="@drawable/nen_nut_xanh"
         android:fontFamily="@font/juve_headin"
         android:gravity="center"
-        android:text="+   TẠO BỘ TỪ"
+        android:text="TẠO BỘ TỪ"
         android:textColor="#FFFFFF"
-        android:textSize="13sp" />
+        android:textSize="17sp" />
 
 
     <!-- TITLE -->
@@ -98,7 +87,7 @@
             android:fontFamily="@font/juve_headin"
             android:text="BỘ TỪ TRONG THƯ MỤC"
             android:textColor="#111111"
-            android:textSize="15sp" />
+            android:textSize="17sp" />
 
         <ImageView
             android:id="@+id/btn_tim_kiem"
@@ -119,13 +108,11 @@
         android:layout_marginTop="10dp"
         android:layout_weight="1">
 
-        <ListView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list_bo_tu_folder"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:divider="@null"
-            android:dividerHeight="0dp"
             android:overScrollMode="never"
             android:paddingBottom="16dp"
             android:scrollbars="none" />
@@ -153,7 +140,7 @@
                 android:fontFamily="@font/juve_headin"
                 android:text="THƯ MỤC ĐANG TRỐNG"
                 android:textColor="#111111"
-                android:textSize="15sp" />
+                android:textSize="17sp" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -162,7 +149,7 @@
                 android:fontFamily="@font/juve_normal"
                 android:text="Tạo bộ từ mới để bắt đầu học."
                 android:textColor="#7C8492"
-                android:textSize="13sp" />
+                android:textSize="15sp" />
 
         </LinearLayout>
 

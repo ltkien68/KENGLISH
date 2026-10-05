@@ -2,7 +2,7 @@ package com.example.kenglish.api;
 
 import com.example.kenglish.model.ApiResponse;
 import com.example.kenglish.model.BoTuModel;
-import com.example.kenglish.model.ChiTietFolder;
+import com.example.kenglish.model.ChiTietFolderResponse;
 import com.example.kenglish.model.ChuyenBoTuRequest;
 import com.example.kenglish.model.DangKyRequest;
 import com.example.kenglish.model.DangNhapRequest;
@@ -29,7 +29,6 @@ import retrofit2.http.DELETE;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.PATCH;
-import retrofit2.http.Path;
 
 public interface ApiService {
 
@@ -98,7 +97,7 @@ public interface ApiService {
     );
 
     @GET("folder/{folderId}/vocabulary")
-    Call<ApiResponse<ChiTietFolder>> layChiTietFolder(
+    Call<ApiResponse<ChiTietFolderResponse>> layBoTuTheoFolder(
             @Header("Authorization") String token,
             @Path("folderId") int folderId
     );
