@@ -7,6 +7,7 @@ import com.example.kenglish.model.ChuyenBoTuRequest;
 import com.example.kenglish.model.DangKyRequest;
 import com.example.kenglish.model.DangNhapRequest;
 import com.example.kenglish.model.DangNhapResponse;
+import com.example.kenglish.model.DanhSachTuResponse;
 import com.example.kenglish.model.Folder;
 import com.example.kenglish.model.TaoBoTuRequest;
 import com.example.kenglish.model.TaoFolderRequest;
@@ -124,6 +125,12 @@ public interface ApiService {
             @Header("Authorization") String token,
             @Path("boTuId") int boTuId,
             @Body ThemTuRequest request
+    );
+
+    @GET("vocabulary/{boTuId}/words")
+    Call<ApiResponse<DanhSachTuResponse>> layDanhSachTu(
+            @Header("Authorization") String token,
+            @Path("boTuId") int boTuId
     );
 
     @PATCH("vocabulary/{boTuId}/folder")

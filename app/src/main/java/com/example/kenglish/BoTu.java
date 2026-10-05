@@ -15,7 +15,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.ListView;
+
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import androidx.annotation.NonNull;
@@ -158,6 +158,15 @@ public class BoTu extends Fragment {
                                 );
                             }
 
+                            @Override
+                            public void onXemBoTu(
+                                    BoTuModel boTu) {
+
+                                moChiTietBoTu(
+                                        boTu
+                                );
+                            }
+
                         }
                 );
 
@@ -197,6 +206,66 @@ public class BoTu extends Fragment {
         listBoTu.setAdapter(
                 boTuAdapter
         );
+    }
+
+    private void moChiTietBoTu(
+            BoTuModel boTu) {
+
+        ChiTietBoTu fragment =
+                new ChiTietBoTu();
+
+
+        Bundle bundle =
+                new Bundle();
+
+        bundle.putInt(
+                "bo_tu_id",
+                boTu.getId()
+        );
+
+        bundle.putString(
+                "ten_bo_tu",
+                boTu.getTenBoTu()
+        );
+
+        bundle.putString(
+                "mo_ta",
+                boTu.getMoTa()
+        );
+
+        bundle.putInt(
+                "so_luong_tu",
+                boTu.getSoLuongTu()
+        );
+
+        bundle.putInt(
+                "so_tu_da_thuoc",
+                boTu.getSoTuDaThuoc()
+        );
+
+
+        fragment.setArguments(
+                bundle
+        );
+
+
+        requireActivity()
+                .getSupportFragmentManager()
+                .beginTransaction()
+
+                .hide(this)
+
+                .add(
+                        R.id.khung_noi_dung,
+                        fragment,
+                        "CHI_TIET_BO_TU"
+                )
+
+                .addToBackStack(
+                        "CHI_TIET_BO_TU"
+                )
+
+                .commit();
     }
 
     private void moChiTietFolder(
