@@ -75,16 +75,6 @@
             android:textColor="#111111"
             android:textSize="17sp" />
 
-        <ImageView
-            android:id="@+id/btn_tim_kiem_bo_tu"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:clickable="true"
-            android:contentDescription="Tìm kiếm bộ từ"
-            android:focusable="true"
-            android:padding="9dp"
-            android:src="@drawable/ic_kinhlup"
-            app:tint="#37659C" />
 
     </LinearLayout>
 

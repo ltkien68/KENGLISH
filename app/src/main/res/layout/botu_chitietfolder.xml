@@ -72,31 +72,87 @@
         android:textSize="17sp" />
 
 
-    <!-- TITLE -->
+    <!-- TITLE + SEARCH -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_marginTop="28dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
+        <!-- Tiêu đề -->
         <TextView
+            android:id="@+id/txt_tieu_de_bo_tu"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/juve_headin"
+            android:maxLines="1"
             android:text="BỘ TỪ TRONG THƯ MỤC"
             android:textColor="#111111"
             android:textSize="17sp" />
 
+
+        <!-- Kính lúp -->
         <ImageView
             android:id="@+id/btn_tim_kiem"
             android:layout_width="36dp"
             android:layout_height="36dp"
             android:clickable="true"
+            android:contentDescription="Tìm kiếm bộ từ"
+            android:focusable="true"
             android:padding="9dp"
             android:src="@drawable/ic_kinhlup"
             app:tint="#37659C" />
+
+
+        <!-- Ô tìm kiếm -->
+        <LinearLayout
+            android:id="@+id/layout_tim_kiem"
+            android:layout_width="0dp"
+            android:layout_height="36dp"
+            android:layout_weight="1"
+            android:background="@drawable/nen_input_botu"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="10dp"
+            android:paddingEnd="6dp"
+            android:visibility="gone">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:padding="3dp"
+                android:src="@drawable/ic_kinhlup"
+                app:tint="#7C8492" />
+
+            <EditText
+                android:id="@+id/edt_tim_bo_tu"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@null"
+                android:fontFamily="@font/juve_normal"
+                android:hint="Tìm bộ từ..."
+                android:paddingStart="6dp"
+                android:paddingEnd="4dp"
+                android:singleLine="true"
+                android:textColor="#4F4F4F"
+                android:textColorHint="#A9A9A9"
+                android:textSize="13sp" />
+
+            <ImageView
+                android:id="@+id/btn_dong_tim_kiem"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
+                android:clickable="true"
+                android:contentDescription="Đóng tìm kiếm"
+                android:focusable="true"
+                android:padding="7dp"
+                android:src="@drawable/ic_close"
+                app:tint="#7C8492" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

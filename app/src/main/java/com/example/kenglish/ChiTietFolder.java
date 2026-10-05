@@ -4,12 +4,16 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -57,6 +61,15 @@ public class ChiTietFolder extends Fragment {
 
     private LinearLayout layoutFolderTrong;
 
+    private TextView txtTieuDeBoTu;
+
+    private ImageView btnTimKiem;
+    private ImageView btnDongTimKiem;
+
+    private LinearLayout layoutTimKiem;
+
+    private EditText edtTimBoTu;
+
 
     /*
      * =========================================
@@ -64,8 +77,22 @@ public class ChiTietFolder extends Fragment {
      * =========================================
      */
 
+    /*
+     * Danh sách gốc lấy từ server.
+     */
     private final List<BoTuModel> danhSachBoTu =
             new ArrayList<>();
+
+
+    /*
+     * Danh sách đang hiển thị trên RecyclerView.
+     *
+     * Khi tìm kiếm, chỉ thay đổi danh sách này.
+     * Không thay đổi danhSachBoTu.
+     */
+    private final List<BoTuModel> danhSachHienThi =
+            new ArrayList<>();
+
 
     private BoTuFolderAdapter adapter;
 
@@ -147,6 +174,31 @@ public class ChiTietFolder extends Fragment {
                 view.findViewById(
                         R.id.layout_folder_trong
                 );
+
+        txtTieuDeBoTu =
+                view.findViewById(
+                        R.id.txt_tieu_de_bo_tu
+                );
+
+        btnTimKiem =
+                view.findViewById(
+                        R.id.btn_tim_kiem
+                );
+
+        layoutTimKiem =
+                view.findViewById(
+                        R.id.layout_tim_kiem
+                );
+
+        edtTimBoTu =
+                view.findViewById(
+                        R.id.edt_tim_bo_tu
+                );
+
+        btnDongTimKiem =
+                view.findViewById(
+                        R.id.btn_dong_tim_kiem
+                );
     }
 
 
@@ -211,6 +263,183 @@ public class ChiTietFolder extends Fragment {
         btnTaoBoTu.setOnClickListener(
                 v -> moPopupTaoBoTu()
         );
+
+        btnTimKiem.setOnClickListener(v -> {
+
+            txtTieuDeBoTu.setVisibility(
+                    View.GONE
+            );
+
+            btnTimKiem.setVisibility(
+                    View.GONE
+            );
+
+            layoutTimKiem.setVisibility(
+                    View.VISIBLE
+            );
+
+            layoutTimKiem.setAlpha(
+                    0f
+            );
+
+            layoutTimKiem.animate()
+                    .alpha(1f)
+                    .setDuration(180)
+                    .start();
+
+            edtTimBoTu.requestFocus();
+
+            InputMethodManager inputMethodManager =
+                    (InputMethodManager)
+                            requireContext()
+                                    .getSystemService(
+                                            Context.INPUT_METHOD_SERVICE
+                                    );
+
+            inputMethodManager.showSoftInput(
+                    edtTimBoTu,
+                    InputMethodManager.SHOW_IMPLICIT
+            );
+        });
+
+        btnDongTimKiem.setOnClickListener(v -> {
+
+            edtTimBoTu.setText("");
+
+            layoutTimKiem.setVisibility(
+                    View.GONE
+            );
+
+            txtTieuDeBoTu.setVisibility(
+                    View.VISIBLE
+            );
+
+            btnTimKiem.setVisibility(
+                    View.VISIBLE
+            );
+
+
+            InputMethodManager inputMethodManager =
+                    (InputMethodManager)
+                            requireContext()
+                                    .getSystemService(
+                                            Context.INPUT_METHOD_SERVICE
+                                    );
+
+            inputMethodManager.hideSoftInputFromWindow(
+                    edtTimBoTu.getWindowToken(),
+                    0
+            );
+        });
+
+        edtTimBoTu.addTextChangedListener(
+                new TextWatcher() {
+
+                    @Override
+                    public void beforeTextChanged(
+                            CharSequence s,
+                            int start,
+                            int count,
+                            int after) {
+                    }
+
+                    @Override
+                    public void onTextChanged(
+                            CharSequence s,
+                            int start,
+                            int before,
+                            int count) {
+
+                        timKiemBoTu(
+                                s.toString()
+                        );
+                    }
+
+                    @Override
+                    public void afterTextChanged(
+                            Editable s) {
+                    }
+                }
+        );
+    }
+
+    private void timKiemBoTu(String tuKhoa) {
+
+        String tuKhoaTim =
+                tuKhoa
+                        .trim()
+                        .toLowerCase();
+
+
+        /*
+         * Xóa dữ liệu đang hiển thị.
+         */
+        danhSachHienThi.clear();
+
+
+        /*
+         * Không có từ khóa
+         * → hiện lại toàn bộ bộ từ.
+         */
+        if (tuKhoaTim.isEmpty()) {
+
+            danhSachHienThi.addAll(
+                    danhSachBoTu
+            );
+
+        } else {
+
+            /*
+             * Tìm theo tên bộ từ.
+             */
+            for (BoTuModel boTu : danhSachBoTu) {
+
+                String tenBoTu =
+                        boTu.getTenBoTu();
+
+
+                if (tenBoTu != null
+                        && tenBoTu
+                        .toLowerCase()
+                        .contains(tuKhoaTim)) {
+
+                    danhSachHienThi.add(
+                            boTu
+                    );
+                }
+            }
+        }
+
+
+        /*
+         * Cập nhật RecyclerView.
+         */
+        adapter.notifyDataSetChanged();
+
+
+        /*
+         * Xử lý trường hợp không có kết quả.
+         */
+        if (danhSachHienThi.isEmpty()) {
+
+            listBoTuFolder.setVisibility(
+                    View.GONE
+            );
+
+            layoutFolderTrong.setVisibility(
+                    View.VISIBLE
+            );
+
+        } else {
+
+            listBoTuFolder.setVisibility(
+                    View.VISIBLE
+            );
+
+            layoutFolderTrong.setVisibility(
+                    View.GONE
+            );
+        }
     }
 
 
@@ -223,13 +452,13 @@ public class ChiTietFolder extends Fragment {
     private void khoiTaoDanhSach() {
 
         /*
-         * Khi người dùng bấm "XEM BỘ TỪ"
-         * trong BoTuFolderAdapter,
-         * Adapter gửi BoTuModel về đây.
+         * Adapter chỉ hiển thị danhSachHienThi.
+         *
+         * danhSachBoTu giữ dữ liệu gốc.
          */
         adapter =
                 new BoTuFolderAdapter(
-                        danhSachBoTu,
+                        danhSachHienThi,
                         boTu -> moChiTietBoTu(
                                 boTu
                         )
@@ -464,6 +693,9 @@ public class ChiTietFolder extends Fragment {
                                     /*
                                      * Danh sách bộ từ.
                                      */
+                                    /*
+                                     * Danh sách gốc.
+                                     */
                                     danhSachBoTu.clear();
 
 
@@ -477,6 +709,17 @@ public class ChiTietFolder extends Fragment {
                                                 danhSachTuServer
                                         );
                                     }
+
+
+                                    /*
+                                     * Danh sách hiển thị ban đầu
+                                     * giống danh sách gốc.
+                                     */
+                                    danhSachHienThi.clear();
+
+                                    danhSachHienThi.addAll(
+                                            danhSachBoTu
+                                    );
 
 
                                     adapter.notifyDataSetChanged();
@@ -844,4 +1087,5 @@ public class ChiTietFolder extends Fragment {
             );
         }
     }
+
 }

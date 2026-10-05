@@ -71,6 +71,8 @@ public class ChiTietBoTu extends Fragment {
 
     private ImageView btnThemTu;
 
+    private EditText edtTimTu;
+
 
     /*
      * =========================================
@@ -204,6 +206,11 @@ public class ChiTietBoTu extends Fragment {
         btnThemTu =
                 view.findViewById(
                         R.id.btn_them_tu
+                );
+
+        edtTimTu =
+                view.findViewById(
+                        R.id.edt_tim_tu
                 );
     }
 
@@ -1436,6 +1443,129 @@ public class ChiTietBoTu extends Fragment {
         btnThemTu.setOnClickListener(
                 v -> moPopupThemTu()
         );
+
+        edtTimTu.addTextChangedListener(
+                new TextWatcher() {
+
+                    @Override
+                    public void beforeTextChanged(
+                            CharSequence s,
+                            int start,
+                            int count,
+                            int after) {
+                    }
+
+
+                    @Override
+                    public void onTextChanged(
+                            CharSequence s,
+                            int start,
+                            int before,
+                            int count) {
+
+                        timKiemTu(
+                                s.toString()
+                        );
+                    }
+
+
+                    @Override
+                    public void afterTextChanged(
+                            Editable s) {
+                    }
+                }
+        );
+    }
+
+    private void timKiemTu(
+            String tuKhoa) {
+
+        /*
+         * Chuẩn hóa từ khóa.
+         */
+        String tuKhoaTim =
+                tuKhoa
+                        .trim()
+                        .toLowerCase();
+
+
+        /*
+         * Xóa danh sách đang hiển thị.
+         *
+         * Không đụng vào danhSachTu
+         * vì đây là danh sách gốc từ API.
+         */
+        danhSachHienThi.clear();
+
+
+        /*
+         * Không nhập gì
+         * → hiện lại toàn bộ.
+         */
+        if (tuKhoaTim.isEmpty()) {
+
+            danhSachHienThi.addAll(
+                    danhSachTu
+            );
+
+            tuVungAdapter
+                    .notifyDataSetChanged();
+
+            return;
+        }
+
+
+        /*
+         * Tìm trong toàn bộ từ của bộ từ.
+         */
+        for (TuVung tuVung : danhSachTu) {
+
+            String tuGoc =
+                    tuVung.getTu_goc();
+
+            String nghia =
+                    tuVung.getNghia_tieng_viet();
+
+
+            /*
+             * Tìm theo từ tiếng Anh.
+             */
+            boolean khopTuGoc =
+                    tuGoc != null
+                            && tuGoc
+                            .toLowerCase()
+                            .contains(
+                                    tuKhoaTim
+                            );
+
+
+            /*
+             * Tìm theo nghĩa tiếng Việt.
+             */
+            boolean khopNghia =
+                    nghia != null
+                            && nghia
+                            .toLowerCase()
+                            .contains(
+                                    tuKhoaTim
+                            );
+
+
+            if (khopTuGoc
+                    || khopNghia) {
+
+                danhSachHienThi.add(
+                        tuVung
+                );
+            }
+        }
+
+
+        /*
+         * Vẽ lại ListView.
+         */
+        tuVungAdapter
+                .notifyDataSetChanged();
     }
 
     private void capNhatTrangThaiTu(
