@@ -1,19 +1,169 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--
-    Component streak.
-    Hiện tại chỉ giữ khung trống.
-    Nội dung thống kê streak sẽ được phát triển sau.
+    Component theo dõi hoạt động học tập.
+
+    - Hiển thị streak hiện tại.
+    - Hiển thị contribution graph của năm hiện tại.
+    - Xám: không hoạt động.
+    - Xanh: có hoạt động.
 -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/card_streak"
     android:layout_width="match_parent"
-    android:layout_height="180dp"
+    android:layout_height="wrap_content"
     android:layout_marginBottom="16dp"
     android:background="@drawable/nen_canhan_card"
-    android:clickable="true"
-    android:focusable="true"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="16dp">
+
+
+    <!-- HEADER -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+
+        <!-- Icon -->
+        <ImageView
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:background="@drawable/nen_icon_xanh"
+            android:contentDescription="Hoạt động học tập"
+            android:padding="8dp"
+            android:src="@drawable/ic_streak"
+            app:tint="#37659C" />
+
+
+        <!-- Tiêu đề -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/juve_headin"
+                android:text="HOẠT ĐỘNG HỌC TẬP"
+                android:textColor="#111111"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/txt_nam_hoat_dong"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/juve_normal"
+                android:text="2026"
+                android:textColor="#7C8492"
+                android:textSize="11sp" />
+
+        </LinearLayout>
+
+
+        <!-- Streak -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txt_streak"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/juve_headin"
+                android:text="0 ngày"
+                android:textColor="#37659C"
+                android:textSize="15sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/juve_normal"
+                android:text="Streak"
+                android:textColor="#7C8492"
+                android:textSize="11sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <!-- Contribution graph -->
+    <HorizontalScrollView
+        android:id="@+id/scroll_hoat_dong"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:fillViewport="false"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+
+        <!--
+            Java sẽ tự sinh các ô ngày vào đây.
+
+            Mỗi cột = 1 tuần.
+            Mỗi cột chứa tối đa 7 ngày.
+        -->
+        <LinearLayout
+            android:id="@+id/layout_contribution_graph"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
+
+    </HorizontalScrollView>
+
+
+    <!-- Chú thích -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:gravity="end|center_vertical"
+        android:orientation="horizontal">
+
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:background="@drawable/nen_activity_inactive" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:fontFamily="@font/juve_normal"
+            android:text="Không hoạt động"
+            android:textColor="#7C8492"
+            android:textSize="11sp" />
+
+
+        <View
+            android:layout_width="10dp"
+            android:layout_height="10dp"
+            android:layout_marginStart="12dp"
+            android:background="@drawable/nen_activity_active" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:fontFamily="@font/juve_normal"
+            android:text="Có hoạt động"
+            android:textColor="#7C8492"
+            android:textSize="11sp" />
+
+    </LinearLayout>
 
 </LinearLayout>

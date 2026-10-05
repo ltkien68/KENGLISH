@@ -10,6 +10,7 @@ import com.example.kenglish.model.DangNhapRequest;
 import com.example.kenglish.model.DangNhapResponse;
 import com.example.kenglish.model.DanhSachTuResponse;
 import com.example.kenglish.model.Folder;
+import com.example.kenglish.model.HoatDongNamResponse;
 import com.example.kenglish.model.TaoBoTuRequest;
 import com.example.kenglish.model.TaoFolderRequest;
 import com.example.kenglish.model.ThemTuRequest;
@@ -154,5 +155,10 @@ public interface ApiService {
             @Path("boTuId") int boTuId,
             @Path("tuVungId") int tuVungId,
             @Body CapNhatTrangThaiTuRequest request
+    );
+
+    @GET("activity/current-year")
+    Call<ApiResponse<HoatDongNamResponse>> layHoatDongNamHienTai(
+            @Header("Authorization") String token
     );
 }
