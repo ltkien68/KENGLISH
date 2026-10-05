@@ -2,6 +2,7 @@ package com.example.kenglish.api;
 
 import com.example.kenglish.model.ApiResponse;
 import com.example.kenglish.model.BoTuModel;
+import com.example.kenglish.model.CapNhatTrangThaiTuRequest;
 import com.example.kenglish.model.ChiTietFolderResponse;
 import com.example.kenglish.model.ChuyenBoTuRequest;
 import com.example.kenglish.model.DangKyRequest;
@@ -138,5 +139,20 @@ public interface ApiService {
             @Header("Authorization") String token,
             @Path("boTuId") int boTuId,
             @Body ChuyenBoTuRequest request
+    );
+
+    @DELETE("vocabulary/{boTuId}/words/{tuVungId}")
+    Call<ApiResponse<Object>> xoaTu(
+            @Header("Authorization") String token,
+            @Path("boTuId") int boTuId,
+            @Path("tuVungId") int tuVungId
+    );
+
+    @PATCH("vocabulary/{boTuId}/words/{tuVungId}/status")
+    Call<ApiResponse<Object>> capNhatTrangThaiTu(
+            @Header("Authorization") String token,
+            @Path("boTuId") int boTuId,
+            @Path("tuVungId") int tuVungId,
+            @Body CapNhatTrangThaiTuRequest request
     );
 }

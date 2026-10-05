@@ -30,6 +30,7 @@ import com.example.kenglish.adapter.TuVungAdapter;
 import com.example.kenglish.api.ApiService;
 import com.example.kenglish.api.RetrofitClient;
 import com.example.kenglish.model.ApiResponse;
+import com.example.kenglish.model.CapNhatTrangThaiTuRequest;
 import com.example.kenglish.model.DanhSachTuResponse;
 import com.example.kenglish.model.DictionaryResponse;
 import com.example.kenglish.model.Meaning;
@@ -581,12 +582,174 @@ public class ChiTietBoTu extends Fragment {
         tuVungAdapter =
                 new TuVungAdapter(
                         requireContext(),
-                        danhSachHienThi
+                        danhSachHienThi,
+
+                        // Swipe / bấm X
+                        tuVung -> xoaTu(
+                                tuVung
+                        ),
+
+                        // Bấm Đã thuộc / Chưa thuộc
+                        tuVung -> capNhatTrangThaiTu(
+                                tuVung
+                        )
                 );
+
 
         listTuVung.setAdapter(
                 tuVungAdapter
         );
+    }
+
+    private void xoaTu(
+            TuVung tuVung) {
+
+
+        SharedPreferences sharedPreferences =
+                requireContext()
+                        .getSharedPreferences(
+                                "Kenglish",
+                                Context.MODE_PRIVATE
+                        );
+
+
+        String token =
+                sharedPreferences.getString(
+                        "token",
+                        null
+                );
+
+
+        if (token == null) {
+
+            Toast.makeText(
+                    requireContext(),
+                    "Phiên đăng nhập không hợp lệ",
+                    Toast.LENGTH_SHORT
+            ).show();
+
+            return;
+        }
+
+
+        ApiService apiService =
+                RetrofitClient
+                        .getClient()
+                        .create(
+                                ApiService.class
+                        );
+
+
+        apiService
+                .xoaTu(
+                        "Bearer " + token,
+                        boTuId,
+                        tuVung.getId()
+                )
+                .enqueue(
+                        new Callback<ApiResponse<Object>>() {
+
+
+                            @Override
+                            public void onResponse(
+                                    @NonNull Call<ApiResponse<Object>> call,
+                                    @NonNull Response<ApiResponse<Object>> response) {
+
+
+                                /*
+                                 * HTTP lỗi.
+                                 */
+                                if (!response.isSuccessful()) {
+
+                                    Toast.makeText(
+                                            requireContext(),
+                                            "Không thể xóa từ",
+                                            Toast.LENGTH_SHORT
+                                    ).show();
+
+
+                                    /*
+                                     * Reset lại card vì
+                                     * server chưa xóa.
+                                     */
+                                    tuVungAdapter
+                                            .notifyDataSetChanged();
+
+
+                                    return;
+                                }
+
+
+                                ApiResponse<Object> apiResponse =
+                                        response.body();
+
+
+                                /*
+                                 * API báo thất bại.
+                                 */
+                                if (apiResponse == null
+                                        || !apiResponse.isThanhCong()) {
+
+
+                                    Toast.makeText(
+                                            requireContext(),
+                                            apiResponse != null
+                                                    ? apiResponse.getThongBao()
+                                                    : "Không thể xóa từ",
+                                            Toast.LENGTH_SHORT
+                                    ).show();
+
+
+                                    tuVungAdapter
+                                            .notifyDataSetChanged();
+
+
+                                    return;
+                                }
+
+
+                                /*
+                                 * =================================
+                                 * XÓA THÀNH CÔNG
+                                 * =================================
+                                 *
+                                 * Không tự đoán dữ liệu local.
+                                 * Lấy lại danh sách chuẩn từ DB.
+                                 */
+
+                                layDanhSachTu();
+
+
+                                Toast.makeText(
+                                        requireContext(),
+                                        "Đã xóa từ",
+                                        Toast.LENGTH_SHORT
+                                ).show();
+                            }
+
+
+                            @Override
+                            public void onFailure(
+                                    @NonNull Call<ApiResponse<Object>> call,
+                                    @NonNull Throwable t) {
+
+
+                                /*
+                                 * Nếu request lỗi thì card
+                                 * trở về trạng thái ban đầu.
+                                 */
+                                tuVungAdapter
+                                        .notifyDataSetChanged();
+
+
+                                Toast.makeText(
+                                        requireContext(),
+                                        "Không thể kết nối đến server",
+                                        Toast.LENGTH_SHORT
+                                ).show();
+                            }
+                        }
+                );
     }
 
     /*
@@ -1275,5 +1438,182 @@ public class ChiTietBoTu extends Fragment {
         );
     }
 
+    private void capNhatTrangThaiTu(
+            TuVung tuVung) {
+
+
+        /*
+         * =====================================
+         * TRẠNG THÁI MỚI
+         * =====================================
+         *
+         * Đang thuộc     → 0
+         * Chưa thuộc     → 1
+         */
+
+        int trangThaiMoi =
+                tuVung.isDa_thuoc()
+                        ? 0
+                        : 1;
+
+
+        /*
+         * =====================================
+         * TOKEN
+         * =====================================
+         */
+
+        SharedPreferences sharedPreferences =
+                requireContext()
+                        .getSharedPreferences(
+                                "Kenglish",
+                                Context.MODE_PRIVATE
+                        );
+
+
+        String token =
+                sharedPreferences.getString(
+                        "token",
+                        null
+                );
+
+
+        if (token == null) {
+
+            Toast.makeText(
+                    requireContext(),
+                    "Phiên đăng nhập không hợp lệ",
+                    Toast.LENGTH_SHORT
+            ).show();
+
+            return;
+        }
+
+
+        /*
+         * =====================================
+         * REQUEST BODY
+         * =====================================
+         */
+
+        CapNhatTrangThaiTuRequest request =
+                new CapNhatTrangThaiTuRequest(
+                        trangThaiMoi
+                );
+
+
+        /*
+         * =====================================
+         * API
+         * =====================================
+         */
+
+        ApiService apiService =
+                RetrofitClient
+                        .getClient()
+                        .create(
+                                ApiService.class
+                        );
+
+
+        apiService
+                .capNhatTrangThaiTu(
+                        "Bearer " + token,
+                        boTuId,
+                        tuVung.getId(),
+                        request
+                )
+                .enqueue(
+                        new Callback<ApiResponse<Object>>() {
+
+
+                            @Override
+                            public void onResponse(
+                                    @NonNull Call<ApiResponse<Object>> call,
+                                    @NonNull Response<ApiResponse<Object>> response) {
+
+
+                                /*
+                                 * HTTP lỗi
+                                 */
+                                if (!response.isSuccessful()) {
+
+                                    Toast.makeText(
+                                            requireContext(),
+                                            "Không thể cập nhật trạng thái",
+                                            Toast.LENGTH_SHORT
+                                    ).show();
+
+                                    return;
+                                }
+
+
+                                ApiResponse<Object> apiResponse =
+                                        response.body();
+
+
+                                /*
+                                 * Backend báo lỗi
+                                 */
+                                if (apiResponse == null
+                                        || !apiResponse.isThanhCong()) {
+
+
+                                    Toast.makeText(
+                                            requireContext(),
+                                            apiResponse != null
+                                                    ? apiResponse.getThongBao()
+                                                    : "Không thể cập nhật trạng thái",
+                                            Toast.LENGTH_SHORT
+                                    ).show();
+
+                                    return;
+                                }
+
+
+                                /*
+                                 * =================================
+                                 * CẬP NHẬT LOCAL
+                                 * =================================
+                                 */
+
+                                tuVung.setDa_thuoc(
+                                        trangThaiMoi
+                                );
+
+
+                                /*
+                                 * Vẽ lại badge.
+                                 */
+                                tuVungAdapter
+                                        .notifyDataSetChanged();
+
+
+                                /*
+                                 * Cập nhật:
+                                 *
+                                 * Tổng từ
+                                 * Đã thuộc
+                                 * Chưa thuộc
+                                 */
+                                capNhatThongKe();
+                            }
+
+
+                            @Override
+                            public void onFailure(
+                                    @NonNull Call<ApiResponse<Object>> call,
+                                    @NonNull Throwable t) {
+
+
+                                Toast.makeText(
+                                        requireContext(),
+                                        "Không thể kết nối đến server",
+                                        Toast.LENGTH_SHORT
+                                ).show();
+                            }
+                        }
+                );
+    }
 
 }

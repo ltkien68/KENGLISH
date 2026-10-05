@@ -83,4 +83,8 @@ public class TuVung {
     public String getNgay_tao() {
         return ngay_tao;
     }
+
+    public void setDa_thuoc(int da_thuoc) {
+        this.da_thuoc = da_thuoc;
+    }
 }

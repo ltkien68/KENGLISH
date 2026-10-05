@@ -1,102 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    android:background="@drawable/nen_botu_itemtuvung"
-    android:orientation="vertical"
-    android:padding="14dp">
+    android:layout_marginBottom="8dp">
 
 
     <!-- ===================================== -->
-    <!-- HÀNG TRÊN: TỪ GỐC + TRẠNG THÁI -->
+    <!-- VÙNG XÓA NẰM PHÍA SAU -->
     <!-- ===================================== -->
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-
-        <!-- TỪ GỐC -->
-
-        <TextView
-            android:id="@+id/txt_tu_goc"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:fontFamily="@font/juve_headin"
-            android:text="achieve"
-            android:textColor="#111111"
-            android:textSize="15sp" />
-
-
-        <!-- TRẠNG THÁI -->
+        android:id="@+id/layout_xoa"
+        android:layout_width="82dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:background="@drawable/nen_tuvung_xoa"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <TextView
-            android:id="@+id/txt_trang_thai"
             android:layout_width="wrap_content"
-            android:layout_height="28dp"
-            android:background="@drawable/nen_tuvung_chuathuoc"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/juve_headin"
+            android:text="✕"
+            android:textColor="#FFFFFF"
+            android:textSize="17sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
             android:fontFamily="@font/juve_normal"
-            android:gravity="center"
-            android:minWidth="76dp"
-            android:paddingStart="10dp"
-            android:paddingEnd="10dp"
-            android:text="Chưa thuộc"
-            android:textColor="#7C8492"
+            android:text="XÓA"
+            android:textColor="#FFFFFF"
             android:textSize="11sp" />
 
     </LinearLayout>
 
 
     <!-- ===================================== -->
-    <!-- PHIÊN ÂM + LOẠI TỪ -->
+    <!-- CARD TỪ VỰNG -->
     <!-- ===================================== -->
 
-    <TextView
-        android:id="@+id/txt_phien_am_loai_tu"
+    <LinearLayout
+        android:id="@+id/card_tu_vung"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        android:fontFamily="@font/juve_normal"
-        android:text="/əˈtʃiːv/  •  verb"
-        android:textColor="#7C8492"
-        android:textSize="11sp" />
+        android:background="@drawable/nen_botu_itemtuvung"
+        android:orientation="vertical"
+        android:padding="14dp">
 
 
-    <!-- ===================================== -->
-    <!-- NGHĨA TIẾNG VIỆT -->
-    <!-- ===================================== -->
+        <!-- TỪ + TRẠNG THÁI -->
 
-    <TextView
-        android:id="@+id/txt_nghia_tieng_viet"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:fontFamily="@font/juve_headin"
-        android:text="đạt được"
-        android:textColor="#4F4F4F"
-        android:textSize="13sp" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/txt_tu_goc"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/juve_headin"
+                android:text="achieve"
+                android:textColor="#111111"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/txt_trang_thai"
+                android:layout_width="wrap_content"
+                android:layout_height="28dp"
+                android:background="@drawable/nen_tuvung_chuathuoc"
+                android:fontFamily="@font/juve_normal"
+                android:gravity="center"
+                android:minWidth="76dp"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="Chưa thuộc"
+                android:textColor="#7C8492"
+                android:textSize="11sp" />
+
+        </LinearLayout>
 
 
-    <!-- ===================================== -->
-    <!-- CÂU VÍ DỤ -->
-    <!-- ===================================== -->
+        <!-- PHIÊN ÂM + LOẠI TỪ -->
 
-    <TextView
-        android:id="@+id/txt_cau_vi_du"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:fontFamily="@font/juve_normal"
-        android:maxLines="2"
-        android:text="She achieved her goal."
-        android:textColor="#7C8492"
-        android:textSize="11sp" />
+        <TextView
+            android:id="@+id/txt_phien_am_loai_tu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="@font/juve_normal"
+            android:text="/əˈtʃiːv/  •  verb"
+            android:textColor="#7C8492"
+            android:textSize="11sp" />
 
 
-</LinearLayout>
+        <!-- NGHĨA -->
+
+        <TextView
+            android:id="@+id/txt_nghia_tieng_viet"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/juve_headin"
+            android:text="đạt được"
+            android:textColor="#4F4F4F"
+            android:textSize="13sp" />
+
+
+        <!-- VÍ DỤ -->
+
+        <TextView
+            android:id="@+id/txt_cau_vi_du"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:fontFamily="@font/juve_normal"
+            android:maxLines="2"
+            android:text="She achieved her goal."
+            android:textColor="#7C8492"
+            android:textSize="11sp" />
+
+    </LinearLayout>
+
+</FrameLayout>
