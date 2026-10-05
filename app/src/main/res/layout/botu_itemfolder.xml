@@ -5,8 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="78dp"
-    android:layout_marginBottom="12dp"
-    android:background="@drawable/nen_nutcardbotu"
+    android:background="@drawable/nen_botu_itemfolder"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:paddingStart="16dp"
@@ -17,11 +16,11 @@
     <ImageView
         android:layout_width="42dp"
         android:layout_height="42dp"
-        android:background="@drawable/nen_botu_icon"
+        android:background="@drawable/nen_icon_folder"
         android:contentDescription="Thư mục"
         android:padding="10dp"
         android:src="@drawable/ic_themfolder"
-        app:tint="#37659C" />
+        app:tint="#B98524" />
 
 
     <!-- Thông tin folder -->
