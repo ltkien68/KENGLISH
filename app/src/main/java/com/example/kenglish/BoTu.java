@@ -1,8 +1,11 @@
 package com.example.kenglish;
 
+import android.content.ClipData;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.os.Bundle;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,15 +16,18 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ListView;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.kenglish.api.ApiService;
 import com.example.kenglish.api.RetrofitClient;
 import com.example.kenglish.model.ApiResponse;
 import com.example.kenglish.model.BoTuModel;
+import com.example.kenglish.model.ChuyenBoTuRequest;
 import com.example.kenglish.model.Folder;
 import com.example.kenglish.model.TaoBoTuRequest;
 import com.example.kenglish.model.TaoFolderRequest;
@@ -45,7 +51,8 @@ public class BoTu extends Fragment {
 
     private TextView btnTaoBoTu;
     private LinearLayout btnTaoFolder;
-    private ListView listBoTu;
+    private RecyclerView listBoTu;
+    private BoTuModel boTuDangKeo;
 
     private final List<MucBoTu> danhSachMuc =
             new ArrayList<>();
@@ -83,13 +90,15 @@ public class BoTu extends Fragment {
      */
     private void anhXa(View view) {
 
-        btnTaoBoTu = view.findViewById(
-                R.id.component_tao_bo_tu
-        );
+        btnTaoBoTu =
+                view.findViewById(
+                        R.id.component_tao_bo_tu
+                );
 
-        btnTaoFolder = view.findViewById(
-                R.id.component_tao_folder
-        );
+        btnTaoFolder =
+                view.findViewById(
+                        R.id.component_tao_folder
+                );
 
         listBoTu =
                 view.findViewById(
@@ -116,12 +125,336 @@ public class BoTu extends Fragment {
 
         boTuAdapter =
                 new BoTuAdapter(
-                        requireContext(),
-                        danhSachMuc
+                        danhSachMuc,
+                        new BoTuAdapter.OnBoTuDragListener() {
+
+                            @Override
+                            public void onBatDauKeo(
+                                    View view,
+                                    BoTuModel boTu) {
+
+                                batDauKeoBoTu(
+                                        view,
+                                        boTu
+                                );
+                            }
+
+
+                            @Override
+                            public void onThaVaoFolder(
+                                    BoTuModel boTu,
+                                    Folder folder) {
+
+                                xuLyThaVaoFolder(
+                                        boTu,
+                                        folder
+                                );
+                            }
+                        }
                 );
+
+
+        listBoTu.setLayoutManager(
+                new LinearLayoutManager(
+                        requireContext()
+                )
+        );
+
+
+        int khoangCach =
+                (int) (
+                        8 * getResources()
+                                .getDisplayMetrics()
+                                .density
+                );
+
+
+        listBoTu.addItemDecoration(
+                new RecyclerView.ItemDecoration() {
+
+                    @Override
+                    public void getItemOffsets(
+                            @NonNull Rect outRect,
+                            @NonNull View view,
+                            @NonNull RecyclerView parent,
+                            @NonNull RecyclerView.State state) {
+
+                        outRect.bottom =
+                                khoangCach;
+                    }
+                }
+        );
+
 
         listBoTu.setAdapter(
                 boTuAdapter
+        );
+    }
+
+    private void batDauKeoBoTu(
+            View view,
+            BoTuModel boTu) {
+
+        boTuDangKeo =
+                boTu;
+
+
+        ClipData clipData =
+                ClipData.newPlainText(
+                        "bo_tu_id",
+                        String.valueOf(
+                                boTu.getId()
+                        )
+                );
+
+
+        View.DragShadowBuilder shadowBuilder =
+                new View.DragShadowBuilder(
+                        view
+                );
+
+
+        /*
+         * Thu nhỏ + làm mờ card gốc.
+         */
+        view.animate()
+                .scaleX(0.92f)
+                .scaleY(0.92f)
+                .alpha(0.45f)
+                .setDuration(120)
+                .start();
+
+
+        /*
+         * Khi kết thúc kéo, dù thả ở đâu,
+         * card gốc cũng trở lại bình thường.
+         */
+        view.setOnDragListener(
+                (v, event) -> {
+
+                    if (event.getAction()
+                            == DragEvent.ACTION_DRAG_ENDED) {
+
+                        v.animate()
+                                .scaleX(1f)
+                                .scaleY(1f)
+                                .alpha(1f)
+                                .setDuration(180)
+                                .start();
+
+                        boTuDangKeo =
+                                null;
+                    }
+
+                    return true;
+                }
+        );
+
+
+        view.startDragAndDrop(
+                clipData,
+                shadowBuilder,
+                boTu,
+                0
+        );
+    }
+
+    private void xuLyThaVaoFolder(
+            BoTuModel boTu,
+            Folder folder) {
+
+        SharedPreferences sharedPreferences =
+                requireContext().getSharedPreferences(
+                        "Kenglish",
+                        Context.MODE_PRIVATE
+                );
+
+        String token =
+                sharedPreferences.getString(
+                        "token",
+                        null
+                );
+
+
+        if (token == null) {
+
+            Toast.makeText(
+                    requireContext(),
+                    "Phiên đăng nhập không hợp lệ",
+                    Toast.LENGTH_SHORT
+            ).show();
+
+            return;
+        }
+
+
+        ChuyenBoTuRequest request =
+                new ChuyenBoTuRequest(
+                        folder.getId()
+                );
+
+
+        ApiService apiService =
+                RetrofitClient
+                        .getClient()
+                        .create(ApiService.class);
+
+
+        apiService
+                .chuyenBoTuVaoFolder(
+                        "Bearer " + token,
+                        boTu.getId(),
+                        request
+                )
+                .enqueue(
+                        new Callback<ApiResponse<Object>>() {
+
+                            @Override
+                            public void onResponse(
+                                    Call<ApiResponse<Object>> call,
+                                    Response<ApiResponse<Object>> response) {
+
+                                if (!isAdded()) {
+                                    return;
+                                }
+
+
+                                if (response.isSuccessful()
+                                        && response.body() != null
+                                        && response.body().isThanhCong()) {
+
+                                    capNhatSauKhiChuyen(
+                                            boTu,
+                                            folder
+                                    );
+
+
+                                    Toast.makeText(
+                                            requireContext(),
+                                            "Đã chuyển vào "
+                                                    + folder.getTenFolder(),
+                                            Toast.LENGTH_SHORT
+                                    ).show();
+
+                                } else {
+
+                                    String thongBao =
+                                            "Không thể chuyển bộ từ";
+
+
+                                    if (response.body() != null
+                                            && response.body().getThongBao() != null) {
+
+                                        thongBao =
+                                                response.body()
+                                                        .getThongBao();
+                                    }
+
+
+                                    Toast.makeText(
+                                            requireContext(),
+                                            thongBao,
+                                            Toast.LENGTH_SHORT
+                                    ).show();
+                                }
+                            }
+
+
+                            @Override
+                            public void onFailure(
+                                    Call<ApiResponse<Object>> call,
+                                    Throwable t) {
+
+                                if (!isAdded()) {
+                                    return;
+                                }
+
+
+                                Toast.makeText(
+                                        requireContext(),
+                                        "Không thể kết nối đến server",
+                                        Toast.LENGTH_SHORT
+                                ).show();
+                            }
+                        }
+                );
+    }
+
+    private void capNhatSauKhiChuyen(
+            BoTuModel boTu,
+            Folder folder) {
+
+        int viTriBoTu = -1;
+        int viTriFolder = -1;
+
+
+        /*
+         * Tìm lại position bằng ID.
+         *
+         * Không dùng position lúc bắt đầu drag
+         * vì RecyclerView có thể thay đổi/recycle ViewHolder.
+         */
+        for (int i = 0;
+             i < danhSachMuc.size();
+             i++) {
+
+            MucBoTu muc =
+                    danhSachMuc.get(i);
+
+
+            if (muc.getLoai()
+                    == MucBoTu.LOAI_FOLDER) {
+
+                if (muc.getFolder().getId()
+                        == folder.getId()) {
+
+                    viTriFolder = i;
+                }
+
+            } else if (muc.getLoai()
+                    == MucBoTu.LOAI_BO_TU) {
+
+                if (muc.getBoTu().getId()
+                        == boTu.getId()) {
+
+                    viTriBoTu = i;
+                }
+            }
+        }
+
+
+        if (viTriBoTu == -1
+                || viTriFolder == -1) {
+
+            return;
+        }
+
+
+        /*
+         * Folder tăng số lượng bộ từ.
+         */
+        folder.tangSoBoTu();
+
+
+        /*
+         * Folder hiện tại nằm trước các bộ từ,
+         * nên update folder trước.
+         */
+        boTuAdapter.notifyItemChanged(
+                viTriFolder
+        );
+
+
+        /*
+         * Xóa bộ từ khỏi danh sách ngoài folder.
+         */
+        danhSachMuc.remove(
+                viTriBoTu
+        );
+
+
+        boTuAdapter.notifyItemRemoved(
+                viTriBoTu
         );
     }
 

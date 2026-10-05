@@ -90,15 +90,13 @@
 
 
     <!-- Danh sách bộ từ / folder -->
-    <ListView
+    <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/list_bo_tu"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginTop="12dp"
         android:layout_weight="1"
         android:clipToPadding="false"
-        android:divider="@android:color/transparent"
-        android:dividerHeight="8dp"
         android:overScrollMode="never"
         android:paddingBottom="20dp"
         android:scrollbars="none" />

@@ -29,4 +29,8 @@ public class Folder {
     public int getSoBoTu() {
         return so_bo_tu;
     }
+
+    public void tangSoBoTu() {
+        so_bo_tu++;
+    }
 }
