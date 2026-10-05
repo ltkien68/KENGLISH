@@ -43,6 +43,9 @@ public class ChiTietBoTu extends Fragment {
     private TextView txtTenBoTu;
     private TextView txtMoTaBoTu;
     private TextView txtTongTu;
+    private TextView btnTatCa;
+    private TextView btnDaThuoc;
+    private TextView btnChuaThuoc;
     private TextView txtDaThuoc;
     private TextView txtChuaThuoc;
 
@@ -70,6 +73,8 @@ public class ChiTietBoTu extends Fragment {
     private final List<TuVung> danhSachTu =
             new ArrayList<>();
 
+    private final List<TuVung> danhSachHienThi =
+            new ArrayList<>();
 
     /*
      * =========================================
@@ -171,6 +176,12 @@ public class ChiTietBoTu extends Fragment {
                 view.findViewById(
                         R.id.list_tu_vung
                 );
+
+        btnTatCa = view.findViewById(R.id.btn_tat_ca);
+
+        btnChuaThuoc = view.findViewById(R.id.btn_chua_thuoc);
+
+        btnDaThuoc = view.findViewById(R.id.btn_da_thuoc);
     }
 
 
@@ -394,16 +405,8 @@ public class ChiTietBoTu extends Fragment {
                                         apiResponse.getData();
 
 
-                                /*
-                                 * Xóa dữ liệu cũ trước.
-                                 */
                                 danhSachTu.clear();
 
-
-                                /*
-                                 * Đưa dữ liệu database
-                                 * vào danhSachTu.
-                                 */
                                 if (data.getTuVung() != null) {
 
                                     danhSachTu.addAll(
@@ -413,14 +416,15 @@ public class ChiTietBoTu extends Fragment {
 
 
                                 /*
-                                 * Báo Adapter rằng danh sách
-                                 * vừa được cập nhật.
+                                 * Mặc định khi vừa mở màn hình:
+                                 * hiển thị tất cả.
                                  */
-                                tuVungAdapter.notifyDataSetChanged();
+                                hienThiTatCa();
 
 
                                 /*
-                                 * Cập nhật thống kê.
+                                 * Thống kê vẫn tính trên
+                                 * danh sách gốc.
                                  */
                                 capNhatThongKe();
                             }
@@ -510,17 +514,126 @@ public class ChiTietBoTu extends Fragment {
         );
     }
 
+    private void capNhatGiaoDienFilter(TextView filterDangChon) {
+
+        // Reset tất cả về trạng thái mặc định
+        btnTatCa.setBackgroundResource(
+                R.drawable.nen_filter
+        );
+
+        btnTatCa.setTextColor(
+                android.graphics.Color.parseColor("#7C8492")
+        );
+
+
+        btnDaThuoc.setBackgroundResource(
+                R.drawable.nen_filter
+        );
+
+        btnDaThuoc.setTextColor(
+                android.graphics.Color.parseColor("#7C8492")
+        );
+
+
+        btnChuaThuoc.setBackgroundResource(
+                R.drawable.nen_filter
+        );
+
+        btnChuaThuoc.setTextColor(
+                android.graphics.Color.parseColor("#7C8492")
+        );
+
+
+        // Filter đang được chọn
+        filterDangChon.setBackgroundResource(
+                R.drawable.nen_filter_active
+        );
+
+        filterDangChon.setTextColor(
+                android.graphics.Color.parseColor("#37659C")
+        );
+    }
+
     private void khoiTaoDanhSachTu() {
 
         tuVungAdapter =
                 new TuVungAdapter(
                         requireContext(),
-                        danhSachTu
+                        danhSachHienThi
                 );
 
         listTuVung.setAdapter(
                 tuVungAdapter
         );
+    }
+
+    /*
+     * =========================================
+     * FILTER - TẤT CẢ
+     * =========================================
+     */
+
+    private void hienThiTatCa() {
+
+        danhSachHienThi.clear();
+
+        danhSachHienThi.addAll(
+                danhSachTu
+        );
+
+        tuVungAdapter.notifyDataSetChanged();
+    }
+
+
+    /*
+     * =========================================
+     * FILTER - ĐÃ THUỘC
+     * =========================================
+     */
+
+    private void hienThiDaThuoc() {
+
+        danhSachHienThi.clear();
+
+
+        for (TuVung tuVung : danhSachTu) {
+
+            if (tuVung.isDa_thuoc()) {
+
+                danhSachHienThi.add(
+                        tuVung
+                );
+            }
+        }
+
+
+        tuVungAdapter.notifyDataSetChanged();
+    }
+
+
+    /*
+     * =========================================
+     * FILTER - CHƯA THUỘC
+     * =========================================
+     */
+
+    private void hienThiChuaThuoc() {
+
+        danhSachHienThi.clear();
+
+
+        for (TuVung tuVung : danhSachTu) {
+
+            if (!tuVung.isDa_thuoc()) {
+
+                danhSachHienThi.add(
+                        tuVung
+                );
+            }
+        }
+
+
+        tuVungAdapter.notifyDataSetChanged();
     }
 
 
@@ -537,5 +650,40 @@ public class ChiTietBoTu extends Fragment {
                         .getSupportFragmentManager()
                         .popBackStack()
         );
+
+
+        // TẤT CẢ
+        btnTatCa.setOnClickListener(v -> {
+
+            hienThiTatCa();
+
+            capNhatGiaoDienFilter(
+                    btnTatCa
+            );
+        });
+
+
+        // ĐÃ THUỘC
+        btnDaThuoc.setOnClickListener(v -> {
+
+            hienThiDaThuoc();
+
+            capNhatGiaoDienFilter(
+                    btnDaThuoc
+            );
+        });
+
+
+        // CHƯA THUỘC
+        btnChuaThuoc.setOnClickListener(v -> {
+
+            hienThiChuaThuoc();
+
+            capNhatGiaoDienFilter(
+                    btnChuaThuoc
+            );
+        });
     }
+
+
 }
