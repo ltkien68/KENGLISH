@@ -459,9 +459,28 @@ public class ChiTietFolder extends Fragment {
         adapter =
                 new BoTuFolderAdapter(
                         danhSachHienThi,
-                        boTu -> moChiTietBoTu(
-                                boTu
-                        )
+
+                        new BoTuFolderAdapter.OnBoTuClickListener() {
+
+                            @Override
+                            public void onXemBoTu(
+                                    BoTuModel boTu) {
+
+                                moChiTietBoTu(
+                                        boTu
+                                );
+                            }
+
+
+                            @Override
+                            public void onXoaBoTu(
+                                    BoTuModel boTu) {
+
+                                xoaBoTu(
+                                        boTu
+                                );
+                            }
+                        }
                 );
 
 
@@ -501,6 +520,219 @@ public class ChiTietFolder extends Fragment {
         listBoTuFolder.setAdapter(
                 adapter
         );
+    }
+
+    /*
+     * =========================================
+     * XÓA BỘ TỪ
+     * =========================================
+     */
+
+    private void xoaBoTu(
+            BoTuModel boTu) {
+
+        SharedPreferences sharedPreferences =
+                requireContext()
+                        .getSharedPreferences(
+                                "Kenglish",
+                                Context.MODE_PRIVATE
+                        );
+
+
+        String token =
+                sharedPreferences.getString(
+                        "token",
+                        null
+                );
+
+
+        if (token == null) {
+
+            Toast.makeText(
+                    requireContext(),
+                    "Phiên đăng nhập không hợp lệ",
+                    Toast.LENGTH_SHORT
+            ).show();
+
+            return;
+        }
+
+
+        ApiService apiService =
+                RetrofitClient
+                        .getClient()
+                        .create(
+                                ApiService.class
+                        );
+
+
+        apiService
+                .xoaBoTu(
+                        "Bearer " + token,
+                        boTu.getId()
+                )
+                .enqueue(
+                        new Callback<ApiResponse<Object>>() {
+
+                            @Override
+                            public void onResponse(
+                                    Call<ApiResponse<Object>> call,
+                                    Response<ApiResponse<Object>> response) {
+
+                                if (!isAdded()) {
+
+                                    return;
+                                }
+
+
+                                if (response.isSuccessful()
+                                        && response.body() != null
+                                        && response.body()
+                                        .isThanhCong()) {
+
+
+                                    capNhatSauKhiXoaBoTu(
+                                            boTu
+                                    );
+
+
+                                    Toast.makeText(
+                                            requireContext(),
+                                            "Đã xóa bộ từ",
+                                            Toast.LENGTH_SHORT
+                                    ).show();
+
+
+                                } else {
+
+                                    String thongBao =
+                                            "Không thể xóa bộ từ";
+
+
+                                    if (response.body() != null
+                                            && response.body()
+                                            .getThongBao() != null) {
+
+                                        thongBao =
+                                                response.body()
+                                                        .getThongBao();
+                                    }
+
+
+                                    Toast.makeText(
+                                            requireContext(),
+                                            thongBao,
+                                            Toast.LENGTH_SHORT
+                                    ).show();
+                                }
+                            }
+
+
+                            @Override
+                            public void onFailure(
+                                    Call<ApiResponse<Object>> call,
+                                    Throwable t) {
+
+                                if (!isAdded()) {
+
+                                    return;
+                                }
+
+
+                                Toast.makeText(
+                                        requireContext(),
+                                        "Không thể kết nối đến server",
+                                        Toast.LENGTH_SHORT
+                                ).show();
+                            }
+                        }
+                );
+    }
+
+    /*
+     * =========================================
+     * CẬP NHẬT SAU KHI XÓA BỘ TỪ
+     * =========================================
+     */
+
+    private void capNhatSauKhiXoaBoTu(
+            BoTuModel boTu) {
+
+
+        /*
+         * Xóa khỏi danh sách gốc.
+         */
+        for (int i =
+             danhSachBoTu.size() - 1;
+             i >= 0;
+             i--) {
+
+            if (danhSachBoTu
+                    .get(i)
+                    .getId()
+                    == boTu.getId()) {
+
+                danhSachBoTu.remove(
+                        i
+                );
+
+                break;
+            }
+        }
+
+
+        /*
+         * Tìm vị trí trong danh sách
+         * đang hiển thị.
+         *
+         * Quan trọng vì người dùng
+         * có thể đang tìm kiếm.
+         */
+        int viTriHienThi =
+                -1;
+
+
+        for (int i = 0;
+             i < danhSachHienThi.size();
+             i++) {
+
+            if (danhSachHienThi
+                    .get(i)
+                    .getId()
+                    == boTu.getId()) {
+
+                viTriHienThi =
+                        i;
+
+                break;
+            }
+        }
+
+
+        /*
+         * Nếu Bộ từ đang hiển thị
+         * thì xóa đúng card đó.
+         */
+        if (viTriHienThi != -1) {
+
+            danhSachHienThi.remove(
+                    viTriHienThi
+            );
+
+
+            adapter.notifyItemRemoved(
+                    viTriHienThi
+            );
+        }
+
+
+        /*
+         * Cập nhật:
+         *
+         * - số bộ từ
+         * - trạng thái Folder trống
+         */
+        capNhatGiaoDien();
     }
 
 

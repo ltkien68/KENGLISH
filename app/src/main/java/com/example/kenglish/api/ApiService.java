@@ -167,4 +167,10 @@ public interface ApiService {
     Call<ApiResponse<ThongKeHocTap>> layThongKeHocTap(
             @Header("Authorization") String token
     );
+
+    @DELETE("vocabulary/{id}")
+    Call<ApiResponse<Object>> xoaBoTu(
+            @Header("Authorization") String token,
+            @Path("id") int boTuId
+    );
 }

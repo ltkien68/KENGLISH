@@ -40,7 +40,7 @@
             android:maxLines="1"
             android:text="TOEIC"
             android:textColor="#111111"
-            android:textSize="17sp" />
+            android:textSize="20sp" />
 
         <ImageView
             android:id="@+id/btn_them_tu"

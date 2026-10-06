@@ -4,8 +4,11 @@ import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.PopupWindow;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -32,6 +35,8 @@ public class BoTuAdapter
 
     private final OnBoTuDragListener dragListener;
 
+    private final OnXoaBoTuListener onXoaBoTuListener;
+
 
     /*
      * =========================================
@@ -39,29 +44,45 @@ public class BoTuAdapter
      * =========================================
      */
 
+    public interface OnXoaBoTuListener {
+
+        void onXoaBoTu(
+                BoTuModel boTu
+        );
+    }
+
+
     public interface OnBoTuDragListener {
 
-        // Khi nhấn giữ Bộ từ
+        /*
+         * Khi nhấn giữ Bộ từ.
+         */
         void onBatDauKeo(
                 View view,
                 BoTuModel boTu
         );
 
 
-        // Khi thả Bộ từ vào Folder
+        /*
+         * Khi thả Bộ từ vào Folder.
+         */
         void onThaVaoFolder(
                 BoTuModel boTu,
                 Folder folder
         );
 
 
-        // Khi bấm vào Folder
+        /*
+         * Khi bấm vào Folder.
+         */
         void onMoFolder(
                 Folder folder
         );
 
 
-        // Khi bấm XEM BỘ TỪ
+        /*
+         * Khi bấm XEM BỘ TỪ.
+         */
         void onXemBoTu(
                 BoTuModel boTu
         );
@@ -76,13 +97,17 @@ public class BoTuAdapter
 
     public BoTuAdapter(
             List<MucBoTu> danhSach,
-            OnBoTuDragListener dragListener) {
+            OnBoTuDragListener dragListener,
+            OnXoaBoTuListener onXoaBoTuListener) {
 
         this.danhSach =
                 danhSach;
 
         this.dragListener =
                 dragListener;
+
+        this.onXoaBoTuListener =
+                onXoaBoTuListener;
     }
 
 
@@ -116,8 +141,11 @@ public class BoTuAdapter
 
 
         /*
+         * =====================================
          * FOLDER
+         * =====================================
          */
+
         if (viewType
                 == MucBoTu.LOAI_FOLDER) {
 
@@ -137,8 +165,11 @@ public class BoTuAdapter
 
 
         /*
+         * =====================================
          * BỘ TỪ
+         * =====================================
          */
+
         View view =
                 LayoutInflater
                         .from(parent.getContext())
@@ -230,11 +261,11 @@ public class BoTuAdapter
 
 
                             /*
-                             * Có một Drag bắt đầu.
-                             *
-                             * Chỉ chấp nhận nếu dữ liệu
-                             * đang kéo là BoTuModel.
+                             * =========================
+                             * DRAG BẮT ĐẦU
+                             * =========================
                              */
+
                             case DragEvent.ACTION_DRAG_STARTED:
 
                                 return event.getLocalState()
@@ -242,8 +273,11 @@ public class BoTuAdapter
 
 
                             /*
-                             * Bộ từ đi vào Folder.
+                             * =========================
+                             * BỘ TỪ ĐI VÀO FOLDER
+                             * =========================
                              */
+
                             case DragEvent.ACTION_DRAG_ENTERED:
 
                                 view.animate()
@@ -256,8 +290,11 @@ public class BoTuAdapter
 
 
                             /*
-                             * Bộ từ rời khỏi Folder.
+                             * =========================
+                             * BỘ TỪ RỜI FOLDER
+                             * =========================
                              */
+
                             case DragEvent.ACTION_DRAG_EXITED:
 
                                 view.animate()
@@ -270,9 +307,13 @@ public class BoTuAdapter
 
 
                             /*
-                             * Thả Bộ từ vào Folder.
+                             * =========================
+                             * THẢ BỘ TỪ VÀO FOLDER
+                             * =========================
                              */
+
                             case DragEvent.ACTION_DROP:
+
 
                                 /*
                                  * Trả Folder về kích thước cũ.
@@ -304,12 +345,16 @@ public class BoTuAdapter
                                     }
                                 }
 
+
                                 return true;
 
 
                             /*
-                             * Drag kết thúc.
+                             * =========================
+                             * DRAG KẾT THÚC
+                             * =========================
                              */
+
                             case DragEvent.ACTION_DRAG_ENDED:
 
                                 view.animate()
@@ -344,9 +389,9 @@ public class BoTuAdapter
 
 
             /*
-             * -----------------------------
+             * =====================================
              * HIỂN THỊ DỮ LIỆU
-             * -----------------------------
+             * =====================================
              */
 
             int tongSoTu =
@@ -386,7 +431,8 @@ public class BoTuAdapter
             /*
              * Tính phần trăm tiến độ.
              */
-            int phanTram = 0;
+            int phanTram =
+                    0;
 
 
             if (tongSoTu > 0) {
@@ -404,9 +450,78 @@ public class BoTuAdapter
 
 
             /*
-             * -----------------------------
+             * =====================================
+             * MENU BỘ TỪ
+             * =====================================
+             */
+
+
+            boTuHolder.btnMenuBoTu.setOnClickListener(
+                    view -> {
+
+                        View popupView =
+                                LayoutInflater
+                                        .from(view.getContext())
+                                        .inflate(
+                                                R.layout.botu_popup_menu,
+                                                null
+                                        );
+
+
+                        PopupWindow popupWindow =
+                                new PopupWindow(
+                                        popupView,
+                                        (int) (
+                                                150
+                                                        * view.getResources()
+                                                        .getDisplayMetrics()
+                                                        .density
+                                        ),
+                                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                                        true
+                                );
+
+
+                        popupWindow.setOutsideTouchable(
+                                true
+                        );
+
+
+                        LinearLayout btnXoaBoTu =
+                                popupView.findViewById(
+                                        R.id.btn_xoa_bo_tu
+                                );
+
+
+                        btnXoaBoTu.setOnClickListener(
+                                v -> {
+
+                                    popupWindow.dismiss();
+
+
+                                    if (onXoaBoTuListener != null) {
+
+                                        onXoaBoTuListener.onXoaBoTu(
+                                                boTu
+                                        );
+                                    }
+                                }
+                        );
+
+
+                        popupWindow.showAsDropDown(
+                                boTuHolder.btnMenuBoTu,
+                                -120,
+                                -5
+                        );
+                    }
+            );
+
+
+            /*
+             * =====================================
              * XEM CHI TIẾT BỘ TỪ
-             * -----------------------------
+             * =====================================
              *
              * Adapter chỉ gửi BoTuModel
              * về Fragment BoTu.
@@ -414,6 +529,7 @@ public class BoTuAdapter
              * Việc mở ChiTietBoTu
              * sẽ được xử lý ở BoTu.java.
              */
+
             boTuHolder.btnXemBoTu.setOnClickListener(
                     view -> {
 
@@ -428,10 +544,11 @@ public class BoTuAdapter
 
 
             /*
-             * -----------------------------
+             * =====================================
              * NHẤN GIỮ ĐỂ KÉO
-             * -----------------------------
+             * =====================================
              */
+
             boTuHolder.itemView.setOnLongClickListener(
                     view -> {
 
@@ -578,4 +695,6 @@ public class BoTuAdapter
                     );
         }
     }
+
+
 }

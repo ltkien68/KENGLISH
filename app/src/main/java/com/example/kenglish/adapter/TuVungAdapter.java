@@ -1,5 +1,6 @@
 package com.example.kenglish.adapter;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -96,6 +97,7 @@ public class TuVungAdapter
      * =========================================
      */
 
+    @SuppressLint("ClickableViewAccessibility")
     @NonNull
     @Override
     public View getView(

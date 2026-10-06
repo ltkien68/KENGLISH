@@ -1,8 +1,12 @@
 package com.example.kenglish.adapter;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -19,17 +23,23 @@ public class BoTuFolderAdapter
         extends RecyclerView.Adapter<BoTuFolderAdapter.BoTuViewHolder> {
 
 
+    /*
+     * =========================================
+     * BIẾN
+     * =========================================
+     */
+
     private final List<BoTuModel> danhSachBoTu;
 
     private final OnBoTuClickListener listener;
 
 
-    /**
-     * Constructor Adapter.
-     *
-     * @param danhSachBoTu danh sách bộ từ trong folder
-     * @param listener xử lý sự kiện khi người dùng thao tác với bộ từ
+    /*
+     * =========================================
+     * CONSTRUCTOR
+     * =========================================
      */
+
     public BoTuFolderAdapter(
             List<BoTuModel> danhSachBoTu,
             OnBoTuClickListener listener) {
@@ -41,6 +51,12 @@ public class BoTuFolderAdapter
                 listener;
     }
 
+
+    /*
+     * =========================================
+     * TẠO VIEW HOLDER
+     * =========================================
+     */
 
     @NonNull
     @Override
@@ -57,11 +73,18 @@ public class BoTuFolderAdapter
                                 false
                         );
 
+
         return new BoTuViewHolder(
                 view
         );
     }
 
+
+    /*
+     * =========================================
+     * HIỂN THỊ DỮ LIỆU
+     * =========================================
+     */
 
     @Override
     public void onBindViewHolder(
@@ -69,21 +92,27 @@ public class BoTuFolderAdapter
             int position) {
 
         BoTuModel boTu =
-                danhSachBoTu.get(position);
+                danhSachBoTu.get(
+                        position
+                );
 
 
         /*
-         * Lấy tiến độ của bộ từ.
+         * =====================================
+         * TIẾN ĐỘ
+         * =====================================
          */
+
         int tongSoTu =
                 boTu.getSoLuongTu();
+
 
         int soTuDaThuoc =
                 boTu.getSoTuDaThuoc();
 
 
         /*
-         * Hiển thị tên bộ từ.
+         * Tên Bộ từ.
          */
         holder.txtTenBoTu.setText(
                 boTu.getTenBoTu()
@@ -91,15 +120,16 @@ public class BoTuFolderAdapter
 
 
         /*
-         * Hiển thị tổng số từ.
+         * Tổng số từ.
          */
         holder.txtSoLuongTu.setText(
-                tongSoTu + " từ"
+                tongSoTu
+                        + " từ"
         );
 
 
         /*
-         * Hiển thị số từ đã thuộc / tổng số từ.
+         * Số từ đã thuộc / tổng số từ.
          */
         holder.txtTienDo.setText(
                 soTuDaThuoc
@@ -109,9 +139,11 @@ public class BoTuFolderAdapter
 
 
         /*
-         * Tính phần trăm tiến độ.
+         * Tính phần trăm.
          */
-        int phanTram = 0;
+        int phanTram =
+                0;
+
 
         if (tongSoTu > 0) {
 
@@ -128,13 +160,150 @@ public class BoTuFolderAdapter
 
 
         /*
-         * Nút XEM BỘ TỪ.
-         *
-         * Adapter không tự mở Fragment.
-         * Nó gửi bộ từ được chọn về ChiTietFolder.
+         * =====================================
+         * MENU BỘ TỪ
+         * =====================================
          */
+
+        holder.btnMenuBoTu.setOnClickListener(
+                view -> {
+
+                    /*
+                     * Inflate giao diện menu custom.
+                     */
+                    View popupView =
+                            LayoutInflater
+                                    .from(view.getContext())
+                                    .inflate(
+                                            R.layout.botu_popup_menu,
+                                            null
+                                    );
+
+
+                    /*
+                     * Chiều rộng menu: 150dp.
+                     */
+                    int popupWidth =
+                            (int) (
+                                    150
+                                            * view
+                                            .getResources()
+                                            .getDisplayMetrics()
+                                            .density
+                            );
+
+
+                    /*
+                     * Tạo PopupWindow.
+                     */
+                    PopupWindow popupWindow =
+                            new PopupWindow(
+                                    popupView,
+                                    popupWidth,
+                                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                                    true
+                            );
+
+
+                    /*
+                     * Cho phép bấm ra ngoài
+                     * để đóng popup.
+                     */
+                    popupWindow.setOutsideTouchable(
+                            true
+                    );
+
+
+                    /*
+                     * Background trong suốt
+                     * để sử dụng background
+                     * của layout custom.
+                     */
+                    popupWindow.setBackgroundDrawable(
+                            new ColorDrawable(
+                                    Color.TRANSPARENT
+                            )
+                    );
+
+
+                    /*
+                     * Không dùng shadow mặc định.
+                     */
+                    popupWindow.setElevation(
+                            0f
+                    );
+
+
+                    /*
+                     * =================================
+                     * NÚT XÓA BỘ TỪ
+                     * =================================
+                     */
+
+                    LinearLayout btnXoaBoTu =
+                            popupView.findViewById(
+                                    R.id.btn_xoa_bo_tu
+                            );
+
+
+                    btnXoaBoTu.setOnClickListener(
+                            v -> {
+
+                                /*
+                                 * Đóng menu trước.
+                                 */
+                                popupWindow.dismiss();
+
+
+                                /*
+                                 * Adapter không gọi API.
+                                 *
+                                 * Chỉ gửi Bộ từ cần xóa
+                                 * về ChiTietFolder.
+                                 */
+                                if (listener != null) {
+
+                                    listener.onXoaBoTu(
+                                            boTu
+                                    );
+                                }
+                            }
+                    );
+
+
+                    /*
+                     * =================================
+                     * HIỂN THỊ MENU
+                     * =================================
+                     *
+                     * Menu xuất hiện phía dưới dấu ⋮
+                     * và căn về bên trái.
+                     */
+
+                    int offsetX =
+                            -popupWidth
+                                    + holder
+                                    .btnMenuBoTu
+                                    .getWidth();
+
+
+                    popupWindow.showAsDropDown(
+                            holder.btnMenuBoTu,
+                            offsetX,
+                            -5
+                    );
+                }
+        );
+
+
+        /*
+         * =====================================
+         * XEM BỘ TỪ
+         * =====================================
+         */
+
         holder.btnXemBoTu.setOnClickListener(
-                v -> {
+                view -> {
 
                     if (listener != null) {
 
@@ -147,6 +316,12 @@ public class BoTuFolderAdapter
     }
 
 
+    /*
+     * =========================================
+     * SỐ LƯỢNG ITEM
+     * =========================================
+     */
+
     @Override
     public int getItemCount() {
 
@@ -154,18 +329,25 @@ public class BoTuFolderAdapter
     }
 
 
-    /**
-     * ViewHolder của card bộ từ.
+    /*
+     * =========================================
+     * VIEW HOLDER
+     * =========================================
      */
+
     public static class BoTuViewHolder
             extends RecyclerView.ViewHolder {
 
         TextView txtTenBoTu;
+
         TextView txtSoLuongTu;
+
         TextView txtTienDo;
 
         TextView btnMenuBoTu;
+
         TextView btnXemBoTu;
+
         TextView btnLuyenTapBoTu;
 
         ProgressBar progressBoTu;
@@ -174,7 +356,9 @@ public class BoTuFolderAdapter
         public BoTuViewHolder(
                 @NonNull View itemView) {
 
-            super(itemView);
+            super(
+                    itemView
+            );
 
 
             txtTenBoTu =
@@ -182,30 +366,36 @@ public class BoTuFolderAdapter
                             R.id.txt_ten_bo_tu
                     );
 
+
             txtSoLuongTu =
                     itemView.findViewById(
                             R.id.txt_so_luong_tu
                     );
+
 
             txtTienDo =
                     itemView.findViewById(
                             R.id.txt_tien_do
                     );
 
+
             progressBoTu =
                     itemView.findViewById(
                             R.id.progress_bo_tu
                     );
+
 
             btnMenuBoTu =
                     itemView.findViewById(
                             R.id.btn_menu_bo_tu
                     );
 
+
             btnXemBoTu =
                     itemView.findViewById(
                             R.id.btn_xem_bo_tu
                     );
+
 
             btnLuyenTapBoTu =
                     itemView.findViewById(
@@ -215,12 +405,20 @@ public class BoTuFolderAdapter
     }
 
 
-    /**
-     * Gửi sự kiện từ Adapter về Fragment.
+    /*
+     * =========================================
+     * CALLBACK VỀ CHI TIẾT FOLDER
+     * =========================================
      */
+
     public interface OnBoTuClickListener {
 
         void onXemBoTu(
+                BoTuModel boTu
+        );
+
+
+        void onXoaBoTu(
                 BoTuModel boTu
         );
     }
