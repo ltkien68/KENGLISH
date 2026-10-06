@@ -53,7 +53,7 @@
                 android:fontFamily="@font/juve_headin"
                 android:text="HOẠT ĐỘNG HỌC TẬP"
                 android:textColor="#111111"
-                android:textSize="15sp" />
+                android:textSize="17sp" />
 
             <TextView
                 android:id="@+id/txt_nam_hoat_dong"
@@ -63,7 +63,7 @@
                 android:fontFamily="@font/juve_normal"
                 android:text="2026"
                 android:textColor="#7C8492"
-                android:textSize="11sp" />
+                android:textSize="13sp" />
 
         </LinearLayout>
 
@@ -145,7 +145,7 @@
             android:fontFamily="@font/juve_normal"
             android:text="Không hoạt động"
             android:textColor="#7C8492"
-            android:textSize="11sp" />
+            android:textSize="13sp" />
 
 
         <View
@@ -162,7 +162,7 @@
             android:fontFamily="@font/juve_normal"
             android:text="Có hoạt động"
             android:textColor="#7C8492"
-            android:textSize="11sp" />
+            android:textSize="13sp" />
 
     </LinearLayout>
 

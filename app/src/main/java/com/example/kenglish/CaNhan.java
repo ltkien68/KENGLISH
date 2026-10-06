@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -50,8 +51,8 @@ public class CaNhan extends Fragment {
     private ImageView btnInstagram;
     private TextView txtNamHoatDong;
     private TextView txtStreak;
-
     private LinearLayout layoutContributionGraph;
+    private HorizontalScrollView scrollHoatDong;
 
 
     /**
@@ -118,6 +119,9 @@ public class CaNhan extends Fragment {
                 view.findViewById(
                         R.id.layout_contribution_graph
                 );
+
+        scrollHoatDong =
+                view.findViewById(R.id.scroll_hoat_dong);
     }
 
     private void layHoatDongNamHienTai() {
@@ -394,6 +398,32 @@ public class CaNhan extends Fragment {
                     oNgay
             );
         }
+
+        /*
+         * Sau khi Android đo xong chiều rộng graph,
+         * tự đưa màn hình sang nửa cuối.
+         */
+        scrollHoatDong.post(() -> {
+
+            int doRongGraph =
+                    layoutContributionGraph.getWidth();
+
+            int doRongManHinh =
+                    scrollHoatDong.getWidth();
+
+            int scrollTo =
+                    (doRongGraph / 2)
+                            - (doRongManHinh / 2);
+
+            if (scrollTo < 0) {
+                scrollTo = 0;
+            }
+
+            scrollHoatDong.scrollTo(
+                    scrollTo,
+                    0
+            );
+        });
     }
 
     private int dpToPx(int dp) {
