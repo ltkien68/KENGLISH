@@ -14,6 +14,7 @@ import com.example.kenglish.model.HoatDongNamResponse;
 import com.example.kenglish.model.TaoBoTuRequest;
 import com.example.kenglish.model.TaoFolderRequest;
 import com.example.kenglish.model.ThemTuRequest;
+import com.example.kenglish.model.ThongKeHocTap;
 import com.example.kenglish.model.TuVung;
 import com.example.kenglish.model.XacThucEmailRequest;
 import com.example.kenglish.model.DictionaryResponse;
@@ -159,6 +160,11 @@ public interface ApiService {
 
     @GET("activity/current-year")
     Call<ApiResponse<HoatDongNamResponse>> layHoatDongNamHienTai(
+            @Header("Authorization") String token
+    );
+
+    @GET("user/thong-ke-hoc-tap")
+    Call<ApiResponse<ThongKeHocTap>> layThongKeHocTap(
             @Header("Authorization") String token
     );
 }

@@ -1,5 +1,7 @@
 package com.example.kenglish;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -195,7 +197,6 @@ public class XepHang extends Fragment {
                         R.id.btn_lam_moi_cong_dong
                 );
     }
-
 
     /**
      * Khởi tạo Adapter.

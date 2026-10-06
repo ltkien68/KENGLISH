@@ -30,6 +30,7 @@ import com.example.kenglish.model.ApiResponse;
 import com.example.kenglish.model.LichSuTraTu;
 import com.example.kenglish.model.LichSuTraTuResponse;
 import com.example.kenglish.model.SuggestionResponse;
+import com.example.kenglish.model.ThongKeHocTap;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
@@ -56,6 +57,11 @@ public class TrangChu extends Fragment {
     private TextView txtChuoiHoc;
     private TextView btnBoTu;
 
+    private TextView txtTongTu;
+    private TextView txtDaThuoc;
+    private TextView txtTienDo;
+    private TextView txtTuDenHan;
+
 
     /*
      * Tra từ.
@@ -67,6 +73,10 @@ public class TrangChu extends Fragment {
     private ApiService apiService;
 
     private LinearLayout layoutLichSuTraTu;
+    private LinearLayout btnLuyenTapNhanh;
+    private  LinearLayout btnTaoBoTuNhanh;
+    private LinearLayout btnCongDongNhanh;
+
     private ImageView btnXoaLichSu;
     private View khungLichSuTraTu;
 
@@ -98,6 +108,8 @@ public class TrangChu extends Fragment {
 
         anhXa(view);
 
+        layThongKeHocTap();
+
         thietLapSuKienAnhDaiDien();
 
         thietLapSuKienTuDenHan();
@@ -109,9 +121,25 @@ public class TrangChu extends Fragment {
         hienThiChuoiHoc();
 
         layLichSuTraTu();
+
         thietLapXoaLichSu();
 
+        thietLapSuKienLuyenTapNhanh();
+
+        thietLapSuKienTaoBoTuNhanh();
+
+        thietLapSuKienCongDongNhanh();
+
         return view;
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+
+        if (!hidden) {
+            layThongKeHocTap();
+        }
     }
 
 
@@ -179,6 +207,32 @@ public class TrangChu extends Fragment {
                 view.findViewById(
                         R.id.khung_lich_su_tra_tu
                 );
+
+        btnLuyenTapNhanh = view.findViewById(R.id.btn_luyen_tap_nhanh);
+
+        btnTaoBoTuNhanh = view.findViewById(R.id.btn_tao_bo_tu_nhanh);
+
+        btnCongDongNhanh = view.findViewById(R.id.btn_cong_dong);
+
+        txtTongTu =
+                view.findViewById(
+                        R.id.txt_tong_tu
+                );
+
+        txtDaThuoc =
+                view.findViewById(
+                        R.id.txt_da_thuoc
+                );
+
+        txtTienDo =
+                view.findViewById(
+                        R.id.txt_tien_do
+                );
+
+        txtTuDenHan =
+                view.findViewById(
+                        R.id.txt_tudenhan
+                );
     }
 
 
@@ -195,6 +249,86 @@ public class TrangChu extends Fragment {
         txtChuoiHoc.setText(
                 String.valueOf(chuoiHoc)
         );
+    }
+
+    private void layThongKeHocTap() {
+
+        SharedPreferences sharedPreferences =
+                requireContext().getSharedPreferences(
+                        "Kenglish",
+                        Context.MODE_PRIVATE
+                );
+
+        String token =
+                sharedPreferences.getString(
+                        "token",
+                        null
+                );
+
+
+        if (token == null) {
+            return;
+        }
+
+
+        apiService
+                .layThongKeHocTap(
+                        "Bearer " + token
+                )
+                .enqueue(
+                        new Callback<ApiResponse<ThongKeHocTap>>() {
+
+                            @Override
+                            public void onResponse(
+                                    @NonNull Call<ApiResponse<ThongKeHocTap>> call,
+                                    @NonNull Response<ApiResponse<ThongKeHocTap>> response) {
+
+                                if (!isAdded()) {
+                                    return;
+                                }
+
+
+                                if (response.isSuccessful()
+                                        && response.body() != null
+                                        && response.body().getData() != null) {
+
+                                    ThongKeHocTap thongKe =
+                                            response.body().getData();
+
+
+                                    txtTongTu.setText(
+                                            String.valueOf(
+                                                    thongKe.getTongTu()
+                                            )
+                                    );
+
+                                    txtDaThuoc.setText(
+                                            String.valueOf(
+                                                    thongKe.getDaThuoc()
+                                            )
+                                    );
+
+                                    txtTienDo.setText(
+                                            thongKe.getTienDo() + "%"
+                                    );
+
+                                    txtTuDenHan.setText(
+                                            String.valueOf(
+                                                    thongKe.getTuDenHan()
+                                            )
+                                    );
+                                }
+                            }
+
+
+                            @Override
+                            public void onFailure(
+                                    @NonNull Call<ApiResponse<ThongKeHocTap>> call,
+                                    @NonNull Throwable t) {
+
+                            }
+                        }
+                );
     }
 
 
@@ -234,6 +368,27 @@ public class TrangChu extends Fragment {
             thanhDieuHuong.setSelectedItemId(
                     R.id.menu_luyen_tap
             );
+        });
+    }
+
+    private void thietLapSuKienLuyenTapNhanh() {
+        btnLuyenTapNhanh.setOnClickListener(v -> {
+            BottomNavigationView thanhDieuHuong = requireActivity().findViewById(R.id.thanh_dieu_huong);
+            thanhDieuHuong.setSelectedItemId(R.id.menu_luyen_tap);
+        });
+    }
+
+    private void thietLapSuKienTaoBoTuNhanh() {
+        btnTaoBoTuNhanh.setOnClickListener(v -> {
+            BottomNavigationView thanhDieuHuong = requireActivity().findViewById(R.id.thanh_dieu_huong);
+            thanhDieuHuong.setSelectedItemId(R.id.menu_bo_tu);
+        });
+    }
+
+    private void thietLapSuKienCongDongNhanh() {
+        btnCongDongNhanh.setOnClickListener(v -> {
+            BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.thanh_dieu_huong);
+            bottomNavigationView.setSelectedItemId(R.id.menu_xep_hang);
         });
     }
 
