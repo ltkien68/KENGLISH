@@ -12,6 +12,8 @@ const layDanhSachTu = require("../controllers/vocabControllers/layDanhSachTu");
 const chuyenBoTuVaoFolder = require("../controllers/boTuControllers/chuyenBoTuVaoFolder");
 const xoaTu = require("../controllers/vocabControllers/xoaTu");
 const capNhatTrangThaiTu = require("../controllers/vocabControllers/capNhatTrangThaiTu");
+const xoaBoTu = require("../controllers/boTuControllers/xoaBoTu");
+const { route } = require("./userRoutes");
 
 router.post("/", xacThucToken, taoBoTu);
 router.get("/", xacThucToken, layDanhSachBoTu);
@@ -28,5 +30,7 @@ router.patch(
 );
 
 router.delete("/:boTuId/words/:tuVungId", xacThucToken, xoaTu);
+
+router.delete("/:boTuId", xacThucToken, xoaBoTu);
 
 module.exports = router;
