@@ -70,6 +70,8 @@ public class BoTu extends Fragment {
 
     private BoTuAdapter boTuAdapter;
 
+    private boolean daTaiLanDau = false;
+
 
     /*
      * =========================================
@@ -98,10 +100,9 @@ public class BoTu extends Fragment {
 
         khoiTaoDanhSach();
 
-        xuLySuKien();
-
         layDuLieuBoTu();
 
+        xuLySuKien();
 
         return view;
     }
@@ -157,6 +158,25 @@ public class BoTu extends Fragment {
                     moPopupTaoFolder();
                 }
         );
+    }
+
+    @Override
+    public void onHiddenChanged(
+            boolean hidden) {
+
+        super.onHiddenChanged(
+                hidden
+        );
+
+
+        /*
+         * Fragment Bộ từ vừa được hiện lại
+         * sau khi Back từ màn con.
+         */
+        if (!hidden) {
+
+            layDuLieuBoTu();
+        }
     }
 
 
