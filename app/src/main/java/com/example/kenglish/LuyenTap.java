@@ -1,5 +1,8 @@
+
 package com.example.kenglish;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,12 +11,18 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.kenglish.adapter.GameLuyenTapAdapter;
+import com.example.kenglish.api.ApiService;
+import com.example.kenglish.api.RetrofitClient;
+import com.example.kenglish.model.ApiResponse;
+import com.example.kenglish.model.BoTuModel;
+import com.example.kenglish.model.DanhSachTuResponse;
 import com.example.kenglish.model.GameLuyenTap;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
@@ -21,30 +30,22 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * Fragment hiển thị màn hình luyện tập.
- */
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class LuyenTap extends Fragment {
 
-    /*
-     * Khung click của 4 bộ lọc.
-     */
     private LinearLayout btnChonBoTu;
     private LinearLayout btnChonTrangThai;
     private LinearLayout btnChonThuTu;
     private LinearLayout btnChonSoLuong;
 
-    /*
-     * Text hiển thị giá trị đang chọn.
-     */
     private TextView txtBoTu;
     private TextView txtTrangThai;
     private TextView txtThuTu;
     private TextView txtSoLuong;
 
-    /*
-     * Icon mũi tên của từng bộ lọc.
-     */
     private ImageView imgMuiTenBoTu;
     private ImageView imgMuiTenTrangThai;
     private ImageView imgMuiTenThuTu;
@@ -55,8 +56,28 @@ public class LuyenTap extends Fragment {
     private final List<GameLuyenTap> danhSachGame =
             new ArrayList<>();
 
-    private GameLuyenTapAdapter gameAdapter;
+    private final List<BoTuModel> danhSachBoTu =
+            new ArrayList<>();
 
+    private GameLuyenTapAdapter gameAdapter;
+    private ApiService apiService;
+
+    // ==================== GIÁ TRỊ BỘ LỌC ====================
+
+    // -1: Tất cả bộ từ
+    private int boTuIdDaChon = -1;
+    private String tenBoTuDaChon = "Tất cả bộ từ";
+
+    // all / learned / unlearned
+    private String trangThaiDaChon = "all";
+
+    // random / default
+    private String thuTuDaChon = "random";
+
+    // Giới hạn tối đa số từ
+    private int soLuongDaChon = 20;
+
+    private boolean dangTaiTuLuyenTap = false;
 
     @Nullable
     @Override
@@ -79,101 +100,75 @@ public class LuyenTap extends Fragment {
         return view;
     }
 
+    // ==================== ÁNH XẠ ====================
 
-    /**
-     * Ánh xạ các View.
-     */
     private void anhXa(View view) {
 
-        /*
-         * Bộ từ.
-         */
         btnChonBoTu =
-                view.findViewById(
-                        R.id.btn_chon_bo_tu
-                );
+                view.findViewById(R.id.btn_chon_bo_tu);
+
+        btnChonTrangThai =
+                view.findViewById(R.id.btn_chon_trang_thai);
+
+        btnChonThuTu =
+                view.findViewById(R.id.btn_chon_thu_tu);
+
+        btnChonSoLuong =
+                view.findViewById(R.id.btn_chon_so_luong);
 
         txtBoTu =
-                view.findViewById(
-                        R.id.txt_bo_tu
-                );
-
-        imgMuiTenBoTu =
-                view.findViewById(
-                        R.id.img_mui_ten_bo_tu
-                );
-
-
-        /*
-         * Trạng thái.
-         */
-        btnChonTrangThai =
-                view.findViewById(
-                        R.id.btn_chon_trang_thai
-                );
+                view.findViewById(R.id.txt_bo_tu);
 
         txtTrangThai =
-                view.findViewById(
-                        R.id.txt_trang_thai
-                );
-
-        imgMuiTenTrangThai =
-                view.findViewById(
-                        R.id.img_mui_ten_trang_thai
-                );
-
-
-        /*
-         * Thứ tự.
-         */
-        btnChonThuTu =
-                view.findViewById(
-                        R.id.btn_chon_thu_tu
-                );
+                view.findViewById(R.id.txt_trang_thai);
 
         txtThuTu =
-                view.findViewById(
-                        R.id.txt_thu_tu
-                );
-
-        imgMuiTenThuTu =
-                view.findViewById(
-                        R.id.img_mui_ten_thu_tu
-                );
-
-
-        /*
-         * Số lượng.
-         */
-        btnChonSoLuong =
-                view.findViewById(
-                        R.id.btn_chon_so_luong
-                );
+                view.findViewById(R.id.txt_thu_tu);
 
         txtSoLuong =
-                view.findViewById(
-                        R.id.txt_so_luong
-                );
+                view.findViewById(R.id.txt_so_luong);
+
+        imgMuiTenBoTu =
+                view.findViewById(R.id.img_mui_ten_bo_tu);
+
+        imgMuiTenTrangThai =
+                view.findViewById(R.id.img_mui_ten_trang_thai);
+
+        imgMuiTenThuTu =
+                view.findViewById(R.id.img_mui_ten_thu_tu);
 
         imgMuiTenSoLuong =
-                view.findViewById(
-                        R.id.img_mui_ten_so_luong
-                );
+                view.findViewById(R.id.img_mui_ten_so_luong);
 
-
-        /*
-         * Danh sách game.
-         */
         gridGame =
-                view.findViewById(
-                        R.id.grid_game
-                );
+                view.findViewById(R.id.grid_game);
+
+        apiService =
+                RetrofitClient.getClient()
+                        .create(ApiService.class);
+
+        hienThiBoLoc();
     }
 
+    private void hienThiBoLoc() {
 
-    /**
-     * Khởi tạo dữ liệu game mẫu.
-     */
+        txtBoTu.setText(tenBoTuDaChon);
+
+        txtTrangThai.setText(
+                layTenTrangThai(trangThaiDaChon)
+        );
+
+        txtThuTu.setText(
+                layTenThuTu(thuTuDaChon)
+        );
+
+        txtSoLuong.setText(
+                soLuongDaChon + " từ"
+        );
+    }
+
+    // ==================== DANH SÁCH GAME ====================
+
     private void khoiTaoDuLieuGame() {
 
         danhSachGame.clear();
@@ -239,10 +234,6 @@ public class LuyenTap extends Fragment {
         );
     }
 
-
-    /**
-     * Khởi tạo Adapter cho danh sách game.
-     */
     private void khoiTaoAdapter() {
 
         gameAdapter = new GameLuyenTapAdapter(
@@ -253,136 +244,263 @@ public class LuyenTap extends Fragment {
         gridGame.setAdapter(gameAdapter);
     }
 
+    // ==================== SỰ KIỆN ====================
 
-    /**
-     * Xử lý sự kiện click.
-     */
     private void xuLySuKien() {
 
-        /*
-         * Chọn bộ từ.
-         * Hiện tại dùng dữ liệu mẫu.
-         * Sau này thay bằng danh sách bộ từ thật.
-         */
         btnChonBoTu.setOnClickListener(v -> {
-
-            List<String> danhSach = Arrays.asList(
-                    "Tất cả bộ từ",
-                    "Trang từ liên kết",
-                    "Từ vựng TOEIC"
-            );
-
-            moPopupLuaChon(
-                    "Chọn bộ từ",
-                    danhSach,
-                    txtBoTu.getText().toString(),
-                    txtBoTu
-            );
+            layDanhSachBoTu();
         });
 
-
-        /*
-         * Chọn trạng thái từ.
-         */
         btnChonTrangThai.setOnClickListener(v -> {
-
-            List<String> danhSach = Arrays.asList(
-                    "Chưa thuộc",
-                    "Đã thuộc",
-                    "Tất cả"
-            );
 
             moPopupLuaChon(
                     "Chọn trạng thái từ",
-                    danhSach,
-                    txtTrangThai.getText().toString(),
-                    txtTrangThai
+                    Arrays.asList(
+                            "Tất cả",
+                            "Chưa thuộc",
+                            "Đã thuộc"
+                    ),
+                    layTenTrangThai(trangThaiDaChon),
+                    txtTrangThai,
+                    noiDung -> {
+                        trangThaiDaChon =
+                                layMaTrangThai(noiDung);
+                    }
             );
         });
 
-
-        /*
-         * Chọn thứ tự.
-         */
         btnChonThuTu.setOnClickListener(v -> {
-
-            List<String> danhSach = Arrays.asList(
-                    "Ngẫu nhiên",
-                    "Theo thứ tự"
-            );
 
             moPopupLuaChon(
                     "Chọn thứ tự",
-                    danhSach,
-                    txtThuTu.getText().toString(),
-                    txtThuTu
+                    Arrays.asList(
+                            "Ngẫu nhiên",
+                            "Theo thứ tự"
+                    ),
+                    layTenThuTu(thuTuDaChon),
+                    txtThuTu,
+                    noiDung -> {
+                        thuTuDaChon =
+                                layMaThuTu(noiDung);
+                    }
             );
         });
 
-
-        /*
-         * Chọn số lượng từ.
-         */
         btnChonSoLuong.setOnClickListener(v -> {
-
-            List<String> danhSach = Arrays.asList(
-                    "10 từ",
-                    "20 từ",
-                    "50 từ",
-                    "100 từ",
-                    "200 từ"
-            );
 
             moPopupLuaChon(
                     "Chọn số lượng từ",
-                    danhSach,
-                    txtSoLuong.getText().toString(),
-                    txtSoLuong
+                    Arrays.asList(
+                            "10 từ",
+                            "20 từ",
+                            "50 từ",
+                            "100 từ",
+                            "200 từ"
+                    ),
+                    soLuongDaChon + " từ",
+                    txtSoLuong,
+                    noiDung -> {
+                        String giaTri =
+                                noiDung.replace(" từ", "");
+
+                        soLuongDaChon =
+                                Integer.parseInt(giaTri);
+                    }
             );
         });
 
-
-        /*
-         * Click vào một game.
-         */
         gridGame.setOnItemClickListener(
                 (parent, view, position, id) -> {
 
-                    GameLuyenTap game =
-                            danhSachGame.get(position);
+                    if (position < 0 ||
+                            position >= danhSachGame.size()) {
+                        return;
+                    }
 
-                    // Logic mở game sẽ làm sau.
+                    layTuLuyenTap();
                 }
         );
     }
 
+    // ==================== CHUYỂN ĐỔI GIÁ TRỊ ====================
 
-    /**
-     * Mở BottomSheet dùng chung cho
-     * Bộ từ, Trạng thái, Thứ tự và Số lượng.
-     */
-    private void moPopupLuaChon(
-            String tieuDe,
-            List<String> danhSach,
-            String giaTriDangChon,
-            TextView textViewCanCapNhat) {
+    private String layMaTrangThai(String ten) {
+
+        switch (ten) {
+            case "Đã thuộc":
+                return "learned";
+
+            case "Chưa thuộc":
+                return "unlearned";
+
+            default:
+                return "all";
+        }
+    }
+
+    private String layTenTrangThai(String ma) {
+
+        switch (ma) {
+            case "learned":
+                return "Đã thuộc";
+
+            case "unlearned":
+                return "Chưa thuộc";
+
+            default:
+                return "Tất cả";
+        }
+    }
+
+    private String layMaThuTu(String ten) {
+
+        if ("Theo thứ tự".equals(ten)) {
+            return "default";
+        }
+
+        return "random";
+    }
+
+    private String layTenThuTu(String ma) {
+
+        if ("default".equals(ma)) {
+            return "Theo thứ tự";
+        }
+
+        return "Ngẫu nhiên";
+    }
+
+    // ==================== TOKEN ====================
+
+    private String layToken() {
+
+        SharedPreferences sharedPreferences =
+                requireContext().getSharedPreferences(
+                        "Kenglish",
+                        Context.MODE_PRIVATE
+                );
+
+        return sharedPreferences.getString(
+                "token",
+                null
+        );
+    }
+
+    // ==================== LẤY BỘ TỪ ====================
+
+    private void layDanhSachBoTu() {
+
+        String token = layToken();
+
+        if (token == null || token.isEmpty()) {
+
+            thongBao("Vui lòng đăng nhập lại");
+            return;
+        }
+
+        btnChonBoTu.setEnabled(false);
+
+        apiService.layTatCaBoTuLuyenTap(
+                "Bearer " + token,
+                true
+        ).enqueue(
+                new Callback<ApiResponse<List<BoTuModel>>>() {
+
+                    @Override
+                    public void onResponse(
+                            @NonNull Call<ApiResponse<List<BoTuModel>>> call,
+                            @NonNull Response<ApiResponse<List<BoTuModel>>> response) {
+
+                        if (!isAdded() || getView() == null) {
+                            return;
+                        }
+
+                        btnChonBoTu.setEnabled(true);
+
+                        if (!response.isSuccessful()
+                                || response.body() == null
+                                || response.body().getData() == null) {
+
+                            thongBao(
+                                    "Không tải được danh sách bộ từ"
+                            );
+                            return;
+                        }
+
+                        danhSachBoTu.clear();
+
+                        danhSachBoTu.addAll(
+                                response.body().getData()
+                        );
+
+                        // Nếu bộ từ đang chọn đã bị xóa,
+                        // tự quay về tất cả bộ từ.
+                        if (boTuIdDaChon != -1) {
+
+                            boolean conTonTai = false;
+
+                            for (BoTuModel boTu : danhSachBoTu) {
+
+                                if (boTu.getId() == boTuIdDaChon) {
+
+                                    conTonTai = true;
+
+                                    tenBoTuDaChon =
+                                            boTu.getTenBoTu();
+
+                                    break;
+                                }
+                            }
+
+                            if (!conTonTai) {
+
+                                boTuIdDaChon = -1;
+                                tenBoTuDaChon =
+                                        "Tất cả bộ từ";
+                            }
+
+                            txtBoTu.setText(tenBoTuDaChon);
+                        }
+
+                        moPopupChonBoTu();
+                    }
+
+                    @Override
+                    public void onFailure(
+                            @NonNull Call<ApiResponse<List<BoTuModel>>> call,
+                            @NonNull Throwable t) {
+
+                        if (!isAdded() || getView() == null) {
+                            return;
+                        }
+
+                        btnChonBoTu.setEnabled(true);
+
+                        thongBao(
+                                "Không thể kết nối đến server"
+                        );
+                    }
+                }
+        );
+    }
+
+    // ==================== POPUP BỘ TỪ ====================
+
+    private void moPopupChonBoTu() {
 
         BottomSheetDialog dialog =
                 new BottomSheetDialog(requireContext());
 
-        View popupView = LayoutInflater
-                .from(requireContext())
-                .inflate(
-                        R.layout.luyentap_popup_luachon,
-                        null
-                );
+        View popupView =
+                LayoutInflater.from(requireContext())
+                        .inflate(
+                                R.layout.luyentap_popup_luachon,
+                                null
+                        );
 
         dialog.setContentView(popupView);
 
-
-        /*
-         * Ánh xạ View của popup.
-         */
         TextView txtTieuDe =
                 popupView.findViewById(
                         R.id.txt_tieu_de_popup
@@ -393,23 +511,128 @@ public class LuyenTap extends Fragment {
                         R.id.khung_danh_sach_lua_chon
                 );
 
+        txtTieuDe.setText("Chọn bộ từ");
+
+        themItemBoTu(
+                khungDanhSach,
+                dialog,
+                "Tất cả bộ từ",
+                -1
+        );
+
+        for (BoTuModel boTu : danhSachBoTu) {
+
+            themItemBoTu(
+                    khungDanhSach,
+                    dialog,
+                    boTu.getTenBoTu(),
+                    boTu.getId()
+            );
+        }
+
+        dialog.show();
+    }
+
+    private void themItemBoTu(
+            LinearLayout khungDanhSach,
+            BottomSheetDialog dialog,
+            String tenBoTu,
+            int boTuId) {
+
+        View itemView =
+                LayoutInflater.from(requireContext())
+                        .inflate(
+                                R.layout.luyentap_item_luachon,
+                                khungDanhSach,
+                                false
+                        );
+
+        LinearLayout khungLuaChon =
+                itemView.findViewById(
+                        R.id.khung_lua_chon
+                );
+
+        ImageView imgDauChon =
+                itemView.findViewById(
+                        R.id.txt_dau_chon
+                );
+
+        TextView txtNoiDung =
+                itemView.findViewById(
+                        R.id.txt_noi_dung_lua_chon
+                );
+
+        txtNoiDung.setText(tenBoTu);
+
+        boolean dangChon =
+                boTuId == boTuIdDaChon;
+
+        capNhatGiaoDienLuaChon(
+                khungLuaChon,
+                imgDauChon,
+                txtNoiDung,
+                dangChon
+        );
+
+        itemView.setOnClickListener(v -> {
+
+            boTuIdDaChon = boTuId;
+            tenBoTuDaChon = tenBoTu;
+
+            txtBoTu.setText(tenBoTuDaChon);
+
+            dialog.dismiss();
+        });
+
+        khungDanhSach.addView(itemView);
+    }
+
+    // ==================== POPUP DÙNG CHUNG ====================
+
+    private interface XuLyLuaChon {
+        void khiChon(String noiDung);
+    }
+
+    private void moPopupLuaChon(
+            String tieuDe,
+            List<String> danhSach,
+            String giaTriDangChon,
+            TextView textViewCanCapNhat,
+            XuLyLuaChon xuLyLuaChon) {
+
+        BottomSheetDialog dialog =
+                new BottomSheetDialog(requireContext());
+
+        View popupView =
+                LayoutInflater.from(requireContext())
+                        .inflate(
+                                R.layout.luyentap_popup_luachon,
+                                null
+                        );
+
+        dialog.setContentView(popupView);
+
+        TextView txtTieuDe =
+                popupView.findViewById(
+                        R.id.txt_tieu_de_popup
+                );
+
+        LinearLayout khungDanhSach =
+                popupView.findViewById(
+                        R.id.khung_danh_sach_lua_chon
+                );
 
         txtTieuDe.setText(tieuDe);
 
-
-        /*
-         * Render từng lựa chọn.
-         */
         for (String noiDung : danhSach) {
 
-            View itemView = LayoutInflater
-                    .from(requireContext())
-                    .inflate(
-                            R.layout.luyentap_item_luachon,
-                            khungDanhSach,
-                            false
-                    );
-
+            View itemView =
+                    LayoutInflater.from(requireContext())
+                            .inflate(
+                                    R.layout.luyentap_item_luachon,
+                                    khungDanhSach,
+                                    false
+                            );
 
             LinearLayout khungLuaChon =
                     itemView.findViewById(
@@ -426,84 +649,182 @@ public class LuyenTap extends Fragment {
                             R.id.txt_noi_dung_lua_chon
                     );
 
-
             txtNoiDung.setText(noiDung);
 
-
-            /*
-             * Kiểm tra item hiện tại có đang được chọn không.
-             */
             boolean dangChon =
                     noiDung.equals(giaTriDangChon);
 
+            capNhatGiaoDienLuaChon(
+                    khungLuaChon,
+                    imgDauChon,
+                    txtNoiDung,
+                    dangChon
+            );
 
-            if (dangChon) {
-
-                /*
-                 * Item đang chọn.
-                 */
-                khungLuaChon.setBackgroundResource(
-                        R.drawable.nen_luyentap_luachon_chon
-                );
-
-                imgDauChon.setImageResource(
-                        R.drawable.ic_check
-                );
-
-                // Màu xanh Primary Kenglish
-                imgDauChon.setColorFilter(
-                        0xFF37659C
-                );
-
-                txtNoiDung.setTextColor(
-                        0xFF37659C
-                );
-
-            } else {
-
-                /*
-                 * Item chưa chọn.
-                 */
-                khungLuaChon.setBackgroundResource(
-                        R.drawable.nen_luyentap_luachon
-                );
-
-                imgDauChon.setImageResource(
-                        R.drawable.ic_bullet
-                );
-
-                // Bullet màu xám
-                imgDauChon.setColorFilter(
-                        0xFFA9A9A9
-                );
-
-                // Chữ đen
-                txtNoiDung.setTextColor(
-                        0xFF111111
-                );
-            }
-
-
-            /*
-             * Khi người dùng chọn item.
-             */
             itemView.setOnClickListener(v -> {
 
-                /*
-                 * Chỉ cập nhật phần chữ.
-                 * Mũi tên là ImageView riêng nên không cần
-                 * nối ký tự "⌄" vào String nữa.
-                 */
+                xuLyLuaChon.khiChon(noiDung);
+
                 textViewCanCapNhat.setText(noiDung);
 
                 dialog.dismiss();
             });
 
-
             khungDanhSach.addView(itemView);
         }
 
-
         dialog.show();
+    }
+
+    // ==================== GIAO DIỆN LỰA CHỌN ====================
+
+    private void capNhatGiaoDienLuaChon(
+            LinearLayout khungLuaChon,
+            ImageView imgDauChon,
+            TextView txtNoiDung,
+            boolean dangChon) {
+
+        if (dangChon) {
+
+            khungLuaChon.setBackgroundResource(
+                    R.drawable.nen_luyentap_luachon_chon
+            );
+
+            imgDauChon.setImageResource(
+                    R.drawable.ic_check
+            );
+
+            imgDauChon.setColorFilter(
+                    0xFF37659C
+            );
+
+            txtNoiDung.setTextColor(
+                    0xFF37659C
+            );
+
+        } else {
+
+            khungLuaChon.setBackgroundResource(
+                    R.drawable.nen_luyentap_luachon
+            );
+
+            imgDauChon.setImageResource(
+                    R.drawable.ic_bullet
+            );
+
+            imgDauChon.setColorFilter(
+                    0xFFA9A9A9
+            );
+
+            txtNoiDung.setTextColor(
+                    0xFF111111
+            );
+        }
+    }
+
+    // ==================== LẤY TỪ LUYỆN TẬP ====================
+
+    private void layTuLuyenTap() {
+
+        if (dangTaiTuLuyenTap) {
+            return;
+        }
+
+        String token = layToken();
+
+        if (token == null || token.isEmpty()) {
+
+            thongBao("Vui lòng đăng nhập lại");
+            return;
+        }
+
+        dangTaiTuLuyenTap = true;
+
+        apiService.layTuLuyenTap(
+                "Bearer " + token,
+                boTuIdDaChon,
+                trangThaiDaChon,
+                thuTuDaChon,
+                soLuongDaChon
+        ).enqueue(
+                new Callback<ApiResponse<DanhSachTuResponse>>() {
+
+                    @Override
+                    public void onResponse(
+                            @NonNull Call<ApiResponse<DanhSachTuResponse>> call,
+                            @NonNull Response<ApiResponse<DanhSachTuResponse>> response) {
+
+                        dangTaiTuLuyenTap = false;
+
+                        if (!isAdded() || getView() == null) {
+                            return;
+                        }
+
+                        if (!response.isSuccessful()
+                                || response.body() == null
+                                || response.body().getData() == null) {
+
+                            thongBao(
+                                    "Không tải được từ vựng luyện tập"
+                            );
+                            return;
+                        }
+
+                        DanhSachTuResponse duLieu =
+                                response.body().getData();
+
+                        if (duLieu.getTuVung() == null
+                                || duLieu.getTuVung().isEmpty()) {
+
+                            thongBao(
+                                    "Không có từ vựng phù hợp với bộ lọc"
+                            );
+                            return;
+                        }
+
+                        int soTuThucTe =
+                                duLieu.getTuVung().size();
+
+                        // Chưa có màn hình Flashcard.
+                        // Kiểm tra dữ liệu API trước.
+                        thongBao(
+                                "Đã chuẩn bị "
+                                        + soTuThucTe
+                                        + " từ luyện tập"
+                        );
+                    }
+
+                    @Override
+                    public void onFailure(
+                            @NonNull Call<ApiResponse<DanhSachTuResponse>> call,
+                            @NonNull Throwable t) {
+
+                        dangTaiTuLuyenTap = false;
+
+                        if (!isAdded() || getView() == null) {
+                            return;
+                        }
+
+                        thongBao(
+                                "Không thể kết nối đến server"
+                        );
+                    }
+                }
+        );
+    }
+
+    // ==================== THÔNG BÁO ====================
+
+    private void thongBao(String noiDung) {
+
+        if (!isAdded()) {
+            return;
+        }
+
+        Toast.makeText(
+                requireContext(),
+                noiDung,
+                Toast.LENGTH_SHORT
+        ).show();
     }
 }

@@ -8,11 +8,7 @@
     android:rowCount="2"
     android:useDefaultMargins="false">
 
-
-    <!-- ================================================= -->
     <!-- Bộ từ -->
-    <!-- ================================================= -->
-
     <LinearLayout
         android:id="@+id/btn_chon_bo_tu"
         android:layout_width="0dp"
@@ -50,7 +46,7 @@
                 android:ellipsize="end"
                 android:fontFamily="@font/juve_headin"
                 android:maxLines="1"
-                android:text="TOEIC_Vocabulary"
+                android:text="Tất cả bộ từ"
                 android:textColor="#111111"
                 android:textSize="15sp" />
 
@@ -61,16 +57,10 @@
                 android:contentDescription="Mở danh sách bộ từ"
                 android:src="@drawable/ic_arrowdown"
                 app:tint="#111111" />
-
         </LinearLayout>
-
     </LinearLayout>
 
-
-    <!-- ================================================= -->
     <!-- Trạng thái -->
-    <!-- ================================================= -->
-
     <LinearLayout
         android:id="@+id/btn_chon_trang_thai"
         android:layout_width="0dp"
@@ -117,16 +107,10 @@
                 android:contentDescription="Mở trạng thái"
                 android:src="@drawable/ic_arrowdown"
                 app:tint="#111111" />
-
         </LinearLayout>
-
     </LinearLayout>
 
-
-    <!-- ================================================= -->
     <!-- Thứ tự -->
-    <!-- ================================================= -->
-
     <LinearLayout
         android:id="@+id/btn_chon_thu_tu"
         android:layout_width="0dp"
@@ -173,16 +157,10 @@
                 android:contentDescription="Mở thứ tự"
                 android:src="@drawable/ic_arrowdown"
                 app:tint="#111111" />
-
         </LinearLayout>
-
     </LinearLayout>
 
-
-    <!-- ================================================= -->
     <!-- Số lượng -->
-    <!-- ================================================= -->
-
     <LinearLayout
         android:id="@+id/btn_chon_so_luong"
         android:layout_width="0dp"
@@ -229,9 +207,7 @@
                 android:contentDescription="Mở số lượng"
                 android:src="@drawable/ic_arrowdown"
                 app:tint="#111111" />
-
         </LinearLayout>
-
     </LinearLayout>
 
 </GridLayout>

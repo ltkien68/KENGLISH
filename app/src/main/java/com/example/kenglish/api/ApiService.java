@@ -1,3 +1,4 @@
+
 package com.example.kenglish.api;
 
 import com.example.kenglish.model.ApiResponse;
@@ -24,17 +25,19 @@ import com.example.kenglish.model.ThemLichSuRequest;
 
 import java.util.List;
 
-import retrofit2.http.GET;
-import retrofit2.http.Path;
-import retrofit2.http.Query;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
+import retrofit2.http.GET;
 import retrofit2.http.Header;
-import retrofit2.http.POST;
 import retrofit2.http.PATCH;
+import retrofit2.http.POST;
+import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 public interface ApiService {
+
+    // ==================== AUTH ====================
 
     @POST("auth/dang-ky")
     Call<ApiResponse> dangKy(
@@ -60,6 +63,8 @@ public interface ApiService {
     Call<ApiResponse> xoaTaiKhoan(
             @Header("Authorization") String token
     );
+
+    // ==================== DICTIONARY ====================
 
     @GET("dictionary/search")
     Call<SuggestionResponse> timKiemTu(
@@ -106,8 +111,7 @@ public interface ApiService {
             @Path("folderId") int folderId
     );
 
-
-// ==================== BỘ TỪ ====================
+    // ==================== BỘ TỪ ====================
 
     @POST("vocabulary")
     Call<ApiResponse<BoTuModel>> taoBoTu(
@@ -120,8 +124,26 @@ public interface ApiService {
             @Header("Authorization") String token
     );
 
+    @GET("vocabulary")
+    Call<ApiResponse<List<BoTuModel>>> layTatCaBoTuLuyenTap(
+            @Header("Authorization") String token,
+            @Query("tat_ca") boolean tatCa
+    );
 
-// ==================== TỪ VỰNG ====================
+    @PATCH("vocabulary/{boTuId}/folder")
+    Call<ApiResponse<Object>> chuyenBoTuVaoFolder(
+            @Header("Authorization") String token,
+            @Path("boTuId") int boTuId,
+            @Body ChuyenBoTuRequest request
+    );
+
+    @DELETE("vocabulary/{id}")
+    Call<ApiResponse<Object>> xoaBoTu(
+            @Header("Authorization") String token,
+            @Path("id") int boTuId
+    );
+
+    // ==================== TỪ VỰNG ====================
 
     @POST("vocabulary/{boTuId}/words")
     Call<ApiResponse<TuVung>> themTu(
@@ -134,13 +156,6 @@ public interface ApiService {
     Call<ApiResponse<DanhSachTuResponse>> layDanhSachTu(
             @Header("Authorization") String token,
             @Path("boTuId") int boTuId
-    );
-
-    @PATCH("vocabulary/{boTuId}/folder")
-    Call<ApiResponse<Object>> chuyenBoTuVaoFolder(
-            @Header("Authorization") String token,
-            @Path("boTuId") int boTuId,
-            @Body ChuyenBoTuRequest request
     );
 
     @DELETE("vocabulary/{boTuId}/words/{tuVungId}")
@@ -158,19 +173,28 @@ public interface ApiService {
             @Body CapNhatTrangThaiTuRequest request
     );
 
+    // ==================== LUYỆN TẬP ====================
+
+    @GET("practice/words")
+    Call<ApiResponse<DanhSachTuResponse>> layTuLuyenTap(
+            @Header("Authorization") String token,
+            @Query("bo_tu_id") int boTuId,
+            @Query("trang_thai") String trangThai,
+            @Query("thu_tu") String thuTu,
+            @Query("so_luong") int soLuong
+    );
+
+    // ==================== HOẠT ĐỘNG ====================
+
     @GET("activity/current-year")
     Call<ApiResponse<HoatDongNamResponse>> layHoatDongNamHienTai(
             @Header("Authorization") String token
     );
 
+    // ==================== THỐNG KÊ ====================
+
     @GET("user/thong-ke-hoc-tap")
     Call<ApiResponse<ThongKeHocTap>> layThongKeHocTap(
             @Header("Authorization") String token
-    );
-
-    @DELETE("vocabulary/{id}")
-    Call<ApiResponse<Object>> xoaBoTu(
-            @Header("Authorization") String token,
-            @Path("id") int boTuId
     );
 }
