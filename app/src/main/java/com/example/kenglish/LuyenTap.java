@@ -382,6 +382,12 @@ public class LuyenTap extends Fragment {
         return "Ngẫu nhiên";
     }
 
+    // ==================== ĐIỀU KIỆN SỐ TỪ ====================
+
+    private int laySoTuToiThieu(int viTriGame) {
+        return viTriGame == 0 ? 1 : 4;
+    }
+
     // ==================== TOKEN ====================
 
     private String layToken() {
@@ -794,6 +800,15 @@ public class LuyenTap extends Fragment {
                         }
 
 
+                        int soTuToiThieu = laySoTuToiThieu(viTriGameDaChon);
+
+                        if (duLieu.getTuVung().size() < soTuToiThieu) {
+                            thongBao("Trò chơi này cần tối thiểu "
+                                    + soTuToiThieu
+                                    + " từ vựng phù hợp với bộ lọc");
+                            return;
+                        }
+
                         if (viTriGameDaChon == 0) {
 
                             Flashcard flashcard = Flashcard.newInstance(
@@ -833,6 +848,7 @@ public class LuyenTap extends Fragment {
                     }
                 }
         );
+
 
 
     }
