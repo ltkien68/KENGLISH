@@ -49,7 +49,7 @@ const luuTienTrinhLuyenTap = async (req, res) => {
     const danhSachTuId = [...danhSachId];
 
     const [danhSachTu] = await connection.query(
-        `
+      `
         SELECT tv.id
         FROM tu_vung tv
         INNER JOIN bo_tu bt
@@ -102,6 +102,13 @@ const luuTienTrinhLuyenTap = async (req, res) => {
       [nguoiDungId],
     );
 
+    await connection.query(
+      `UPDATE nguoi_dung
+     SET so_luot_choi = so_luot_choi + 1
+     WHERE id = ?`,
+      [nguoiDungId],
+    );
+
     // ==============================
     // TÍNH STREAK
     // ==============================
@@ -144,6 +151,15 @@ const luuTienTrinhLuyenTap = async (req, res) => {
       ngayKiemTra.setUTCDate(ngayKiemTra.getUTCDate() - 1);
     }
 
+    const [thongTinNguoiDung] = await connection.query(
+      `SELECT so_luot_choi
+     FROM nguoi_dung
+     WHERE id = ?`,
+      [nguoiDungId],
+    );
+
+    const soLuotChoi = thongTinNguoiDung[0].so_luot_choi;
+
     await connection.commit();
 
     return res.status(200).json({
@@ -152,6 +168,7 @@ const luuTienTrinhLuyenTap = async (req, res) => {
       data: {
         so_tu_da_luu: ket_qua.length,
         current_streak: currentStreak,
+        so_luot_choi: soLuotChoi,
       },
     });
   } catch (error) {
