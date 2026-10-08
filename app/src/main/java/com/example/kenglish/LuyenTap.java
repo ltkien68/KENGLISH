@@ -1,4 +1,3 @@
-
 package com.example.kenglish;
 
 import android.content.Context;
@@ -76,6 +75,8 @@ public class LuyenTap extends Fragment {
 
     // Giới hạn tối đa số từ
     private int soLuongDaChon = 20;
+
+    private int viTriGameDaChon = -1;
 
     private boolean dangTaiTuLuyenTap = false;
 
@@ -310,6 +311,7 @@ public class LuyenTap extends Fragment {
             );
         });
 
+
         gridGame.setOnItemClickListener(
                 (parent, view, position, id) -> {
 
@@ -318,9 +320,18 @@ public class LuyenTap extends Fragment {
                         return;
                     }
 
+                    // Flashcard đang ở vị trí đầu tiên.
+                    if (position != 0) {
+                        thongBao("Chế độ này đang được phát triển");
+                        return;
+                    }
+
+                    viTriGameDaChon = position;
+
                     layTuLuyenTap();
                 }
         );
+
     }
 
     // ==================== CHUYỂN ĐỔI GIÁ TRỊ ====================
@@ -782,16 +793,27 @@ public class LuyenTap extends Fragment {
                             return;
                         }
 
-                        int soTuThucTe =
-                                duLieu.getTuVung().size();
 
-                        // Chưa có màn hình Flashcard.
-                        // Kiểm tra dữ liệu API trước.
-                        thongBao(
-                                "Đã chuẩn bị "
-                                        + soTuThucTe
-                                        + " từ luyện tập"
-                        );
+                        if (viTriGameDaChon == 0) {
+
+                            Flashcard flashcard = Flashcard.newInstance(
+                                    duLieu.getTuVung()
+                            );
+
+                            requireActivity()
+                                    .getSupportFragmentManager()
+                                    .beginTransaction()
+                                    .hide(LuyenTap.this)
+                                    .add(
+                                            R.id.khung_noi_dung,
+                                            flashcard,
+                                            "FLASHCARD"
+                                    )
+                                    .addToBackStack("FLASHCARD")
+                                    .commit();
+                        }
+
+
                     }
 
                     @Override
@@ -811,6 +833,8 @@ public class LuyenTap extends Fragment {
                     }
                 }
         );
+
+
     }
 
 

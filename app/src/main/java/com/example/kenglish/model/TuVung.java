@@ -1,6 +1,7 @@
 package com.example.kenglish.model;
+import java.io.Serializable;
 
-public class TuVung {
+public class TuVung implements Serializable {
 
     private int id;
 
