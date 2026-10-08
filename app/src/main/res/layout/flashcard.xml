@@ -153,6 +153,8 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/layout_danh_gia"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginTop="12dp"
