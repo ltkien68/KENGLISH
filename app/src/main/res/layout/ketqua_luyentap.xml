@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F6"
+    android:orientation="vertical">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/juve_headin"
+                android:text="KẾT QUẢ LUYỆN TẬP"
+                android:textColor="#111111"
+                android:textSize="17sp"/>
+
+            <TextView
+                android:id="@+id/txt_ten_game"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/juve_normal"
+                android:text="Flashcard"
+                android:textColor="#7C8492"
+                android:textSize="13sp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/nen_ketqua_card"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:padding="20dp">
+
+                <TextView
+                    android:id="@+id/txt_phan_tram"
+                    android:layout_width="84dp"
+                    android:layout_height="84dp"
+                    android:background="@drawable/nen_ketqua_phantram"
+                    android:fontFamily="@font/juve_headin"
+                    android:gravity="center"
+                    android:text="0%"
+                    android:textColor="#22A447"
+                    android:textSize="17sp"/>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/txt_danh_gia"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/juve_headin"
+                        android:text="Hoàn thành!"
+                        android:textColor="#111111"
+                        android:textSize="15sp"/>
+
+                    <TextView
+                        android:id="@+id/txt_tong_ket"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="@font/juve_normal"
+                        android:text="0 đã thuộc · 0 chưa thuộc"
+                        android:textColor="#7C8492"
+                        android:textSize="13sp"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/juve_headin"
+                android:text="ĐÃ THUỘC"
+                android:textColor="#159947"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/txt_so_tu_da_thuoc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/juve_normal"
+                android:text="0 từ"
+                android:textColor="#7C8492"
+                android:textSize="11sp"/>
+
+            <LinearLayout
+                android:id="@+id/layout_da_thuoc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/nen_ketqua_card"
+                android:orientation="vertical"
+                android:padding="12dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:fontFamily="@font/juve_headin"
+                android:text="CHƯA THUỘC"
+                android:textColor="#D83A42"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/txt_so_tu_chua_thuoc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/juve_normal"
+                android:text="0 từ"
+                android:textColor="#7C8492"
+                android:textSize="11sp"/>
+
+            <LinearLayout
+                android:id="@+id/layout_chua_thuoc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:background="@drawable/nen_ketqua_card"
+                android:orientation="vertical"
+                android:padding="12dp"/>
+
+            <TextView
+                android:id="@+id/txt_streak_ket_qua"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/juve_normal"
+                android:gravity="center"
+                android:text="Lưu tiến trình để ghi nhận ngày học và streak"
+                android:textColor="#7C8492"
+                android:textSize="11sp"/>
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/btn_luu_tien_trinh"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/nen_ketqua_nut_luu"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="@font/juve_headin"
+            android:gravity="center"
+            android:text="LƯU TIẾN TRÌNH"
+            android:textColor="#FFFFFF"
+            android:textSize="13sp"/>
+    </LinearLayout>
+
+</LinearLayout>

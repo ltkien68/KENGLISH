@@ -13,10 +13,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.kenglish.model.KetQuaTuVung;
 import com.example.kenglish.model.TuVung;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Flashcard extends Fragment {
 
@@ -41,7 +44,14 @@ public class Flashcard extends Fragment {
     private TextView txtViDu;
     private TextView txtGoiY;
 
+    private LinearLayout layoutDanhGia;
+
     private ProgressBar progressFlashcard;
+
+
+    private final Map<Integer, KetQuaTuVung> ketQuaPhienHoc =
+            new LinkedHashMap<>();
+
 
     public static Flashcard newInstance(List<TuVung> danhSach) {
 
@@ -103,6 +113,10 @@ public class Flashcard extends Fragment {
         cardFlashcard.setCameraDistance(
                 8000 * getResources().getDisplayMetrics().density
         );
+
+        layoutDanhGia = view.findViewById(
+                R.id.layout_danh_gia
+        );
     }
 
     @SuppressWarnings("unchecked")
@@ -145,16 +159,50 @@ public class Flashcard extends Fragment {
             }
         });
 
+
         btnTiep.setOnClickListener(v -> {
 
+            if (danhSachTu.isEmpty()) {
+                return;
+            }
+
             if (viTriHienTai < danhSachTu.size() - 1) {
+
                 viTriHienTai++;
                 dangHienMatSau = false;
                 hienThiThe();
+
             } else {
-                hienThiKetQua();
+
+                // Chỉ hoàn thành khi mọi từ đều đã đánh giá.
+                if (ketQuaPhienHoc.size() == danhSachTu.size()) {
+
+                    moManHinhKetQua();
+
+                } else {
+
+                    Toast.makeText(
+                            requireContext(),
+                            "Hãy đánh giá tất cả từ trước khi hoàn thành",
+                            Toast.LENGTH_SHORT
+                    ).show();
+
+                    // Quay đến từ đầu tiên chưa đánh giá.
+                    for (int i = 0; i < danhSachTu.size(); i++) {
+
+                        if (!ketQuaPhienHoc.containsKey(
+                                danhSachTu.get(i).getId())) {
+
+                            viTriHienTai = i;
+                            dangHienMatSau = false;
+                            hienThiThe();
+                            break;
+                        }
+                    }
+                }
             }
         });
+
 
         btnDaThuoc.setOnClickListener(v -> {
             danhDauTu(1);
@@ -179,6 +227,12 @@ public class Flashcard extends Fragment {
         }
 
         TuVung tu = danhSachTu.get(viTriHienTai);
+
+        hienThiTrangThaiDanhGia();
+
+        layoutDanhGia.setVisibility(
+                dangHienMatSau ? View.VISIBLE : View.GONE
+        );
 
         txtTienDo.setText(
                 (viTriHienTai + 1) + " / " + danhSachTu.size()
@@ -279,67 +333,73 @@ public class Flashcard extends Fragment {
                 .start();
     }
 
+
+
     private void danhDauTu(int trangThai) {
 
-        if (danhSachTu.isEmpty()) {
+        if (danhSachTu.isEmpty() || !dangHienMatSau) {
             return;
         }
 
         TuVung tu = danhSachTu.get(viTriHienTai);
 
-        // Chỉ cập nhật trong phiên học.
-        // Chưa gửi dữ liệu lên MySQL.
-        tu.setDa_thuoc(trangThai);
+        KetQuaTuVung ketQua = new KetQuaTuVung(
+                tu.getId(),
+                tu.getTu_goc(),
+                tu.getNghia_tieng_viet(),
+                trangThai
+        );
 
-        if (viTriHienTai < danhSachTu.size() - 1) {
+        // Lưu hoặc ghi đè kết quả của từ hiện tại
+        ketQuaPhienHoc.put(tu.getId(), ketQua);
 
-            viTriHienTai++;
-            dangHienMatSau = false;
-            hienThiThe();
+        // Cập nhật giao diện lựa chọn
+        hienThiTrangThaiDanhGia();
 
-        } else {
-
-            hienThiKetQua();
-        }
+        // Không tự chuyển thẻ, để người dùng
+        // chủ động bấm TIẾP hoặc TRƯỚC.
     }
 
-    private void hienThiKetQua() {
 
-        int soTuDaThuoc = 0;
+    private void moManHinhKetQua() {
 
+        if (!isAdded() || ketQuaPhienHoc.isEmpty()) {
+            return;
+        }
+
+        ArrayList<KetQuaTuVung> danhSachKetQua =
+                new ArrayList<>();
+
+        // Giữ đúng thứ tự từ trong phiên học.
         for (TuVung tu : danhSachTu) {
 
-            if (tu.isDa_thuoc()) {
-                soTuDaThuoc++;
+            KetQuaTuVung ketQua =
+                    ketQuaPhienHoc.get(tu.getId());
+
+            if (ketQua != null) {
+                danhSachKetQua.add(ketQua);
             }
         }
 
-        int soTuChuaThuoc =
-                danhSachTu.size() - soTuDaThuoc;
+        KetQuaLuyenTap fragment =
+                KetQuaLuyenTap.newInstance(
+                        "Flashcard",
+                        danhSachKetQua
+                );
 
-        new androidx.appcompat.app.AlertDialog.Builder(
-                requireContext()
-        )
-                .setTitle("Hoàn thành Flashcard")
-                .setMessage(
-                        "Tổng số từ: " + danhSachTu.size()
-                                + "\nĐã thuộc: " + soTuDaThuoc
-                                + "\nChưa thuộc: " + soTuChuaThuoc
+        requireActivity()
+                .getSupportFragmentManager()
+                .beginTransaction()
+                .hide(this)
+                .add(
+                        R.id.khung_noi_dung,
+                        fragment,
+                        "KET_QUA_LUYEN_TAP"
                 )
-                .setPositiveButton("Hoàn thành", (dialog, which) -> {
-
-                    requireActivity()
-                            .getSupportFragmentManager()
-                            .popBackStack();
-                })
-                .setNegativeButton("Học lại", (dialog, which) -> {
-
-                    viTriHienTai = 0;
-                    dangHienMatSau = false;
-                    hienThiThe();
-                })
-                .show();
+                .addToBackStack("KET_QUA_LUYEN_TAP")
+                .commit();
     }
+
 
     private boolean coNoiDung(String giaTri) {
 
@@ -353,4 +413,39 @@ public class Flashcard extends Fragment {
                 ? noiDung
                 : "";
     }
+
+
+    private void hienThiTrangThaiDanhGia() {
+
+        if (danhSachTu.isEmpty()) {
+            return;
+        }
+
+        TuVung tu = danhSachTu.get(viTriHienTai);
+
+        KetQuaTuVung ketQua =
+                ketQuaPhienHoc.get(tu.getId());
+
+        // Chưa đánh giá từ này
+        if (ketQua == null) {
+
+            btnDaThuoc.setAlpha(1f);
+            btnChuaThuoc.setAlpha(1f);
+
+            btnDaThuoc.setSelected(false);
+            btnChuaThuoc.setSelected(false);
+
+            return;
+        }
+
+        boolean daThuoc = ketQua.getDa_thuoc() == 1;
+
+        btnDaThuoc.setSelected(daThuoc);
+        btnChuaThuoc.setSelected(!daThuoc);
+
+        // Nút được chọn nổi bật hơn
+        btnDaThuoc.setAlpha(daThuoc ? 1f : 0.4f);
+        btnChuaThuoc.setAlpha(daThuoc ? 0.4f : 1f);
+    }
+
 }

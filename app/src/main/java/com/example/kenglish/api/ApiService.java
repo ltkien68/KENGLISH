@@ -12,6 +12,8 @@ import com.example.kenglish.model.DangNhapResponse;
 import com.example.kenglish.model.DanhSachTuResponse;
 import com.example.kenglish.model.Folder;
 import com.example.kenglish.model.HoatDongNamResponse;
+import com.example.kenglish.model.LuuTienTrinhRequest;
+import com.example.kenglish.model.LuuTienTrinhResponse;
 import com.example.kenglish.model.TaoBoTuRequest;
 import com.example.kenglish.model.TaoFolderRequest;
 import com.example.kenglish.model.ThemTuRequest;
@@ -197,4 +199,12 @@ public interface ApiService {
     Call<ApiResponse<ThongKeHocTap>> layThongKeHocTap(
             @Header("Authorization") String token
     );
+
+
+    @POST("practice/save-progress")
+    Call<ApiResponse<LuuTienTrinhResponse>> luuTienTrinhLuyenTap(
+            @Header("Authorization") String token,
+            @Body LuuTienTrinhRequest request
+    );
+
 }
