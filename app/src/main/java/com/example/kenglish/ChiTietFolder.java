@@ -480,6 +480,21 @@ public class ChiTietFolder extends Fragment {
                                         boTu
                                 );
                             }
+
+
+                            @Override
+                            public void onLuyenTapBoTu(BoTuModel boTu) {
+
+                                if (requireActivity() instanceof MainActivity) {
+
+                                    ((MainActivity) requireActivity())
+                                            .chuyenDenLuyenTap(
+                                                    boTu.getId(),
+                                                    boTu.getTenBoTu()
+                                            );
+                                }
+                            }
+
                         }
                 );
 

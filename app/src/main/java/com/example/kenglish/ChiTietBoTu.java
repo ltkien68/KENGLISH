@@ -65,6 +65,9 @@ public class ChiTietBoTu extends Fragment {
     private TextView txtDaThuoc;
     private TextView txtChuaThuoc;
 
+    private TextView btnHocNgay;
+
+
     private ListView listTuVung;
 
     private TuVungAdapter tuVungAdapter;
@@ -212,6 +215,10 @@ public class ChiTietBoTu extends Fragment {
                 view.findViewById(
                         R.id.edt_tim_tu
                 );
+
+
+        btnHocNgay = view.findViewById(R.id.btn_hoc_ngay);
+
     }
 
 
@@ -1443,6 +1450,29 @@ public class ChiTietBoTu extends Fragment {
         btnThemTu.setOnClickListener(
                 v -> moPopupThemTu()
         );
+
+
+        btnHocNgay.setOnClickListener(v -> {
+
+            if (boTuId <= 0) {
+                Toast.makeText(
+                        requireContext(),
+                        "Không xác định được bộ từ",
+                        Toast.LENGTH_SHORT
+                ).show();
+                return;
+            }
+
+            if (requireActivity() instanceof MainActivity) {
+
+                ((MainActivity) requireActivity())
+                        .chuyenDenLuyenTap(
+                                boTuId,
+                                tenBoTu
+                        );
+            }
+        });
+
 
         edtTimTu.addTextChangedListener(
                 new TextWatcher() {

@@ -1,3 +1,4 @@
+
 package com.example.kenglish.adapter;
 
 import android.view.DragEvent;
@@ -5,10 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.PopupMenu;
+import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.PopupWindow;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,118 +20,61 @@ import com.example.kenglish.model.MucBoTu;
 
 import java.util.List;
 
-
 public class BoTuAdapter
         extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-
-    /*
-     * =========================================
-     * BIẾN
-     * =========================================
-     */
-
     private final List<MucBoTu> danhSach;
-
     private final OnBoTuDragListener dragListener;
-
     private final OnXoaBoTuListener onXoaBoTuListener;
 
-
-    /*
-     * =========================================
-     * LISTENER
-     * =========================================
-     */
+    // =========================================
+    // LISTENER
+    // =========================================
 
     public interface OnXoaBoTuListener {
-
-        void onXoaBoTu(
-                BoTuModel boTu
-        );
+        void onXoaBoTu(BoTuModel boTu);
     }
-
 
     public interface OnBoTuDragListener {
 
-        /*
-         * Khi nhấn giữ Bộ từ.
-         */
-        void onBatDauKeo(
-                View view,
-                BoTuModel boTu
-        );
+        void onBatDauKeo(View view, BoTuModel boTu);
 
+        void onThaVaoFolder(BoTuModel boTu, Folder folder);
 
-        /*
-         * Khi thả Bộ từ vào Folder.
-         */
-        void onThaVaoFolder(
-                BoTuModel boTu,
-                Folder folder
-        );
+        void onMoFolder(Folder folder);
 
+        void onXemBoTu(BoTuModel boTu);
 
-        /*
-         * Khi bấm vào Folder.
-         */
-        void onMoFolder(
-                Folder folder
-        );
-
-
-        /*
-         * Khi bấm XEM BỘ TỪ.
-         */
-        void onXemBoTu(
-                BoTuModel boTu
-        );
+        // Nhấn nút LUYỆN TẬP trên card bộ từ.
+        void onLuyenTapBoTu(BoTuModel boTu);
     }
 
-
-    /*
-     * =========================================
-     * CONSTRUCTOR
-     * =========================================
-     */
+    // =========================================
+    // CONSTRUCTOR
+    // =========================================
 
     public BoTuAdapter(
             List<MucBoTu> danhSach,
             OnBoTuDragListener dragListener,
             OnXoaBoTuListener onXoaBoTuListener) {
 
-        this.danhSach =
-                danhSach;
-
-        this.dragListener =
-                dragListener;
-
-        this.onXoaBoTuListener =
-                onXoaBoTuListener;
+        this.danhSach = danhSach;
+        this.dragListener = dragListener;
+        this.onXoaBoTuListener = onXoaBoTuListener;
     }
 
-
-    /*
-     * =========================================
-     * XÁC ĐỊNH LOẠI ITEM
-     * =========================================
-     */
+    // =========================================
+    // LOẠI ITEM
+    // =========================================
 
     @Override
-    public int getItemViewType(
-            int position) {
-
-        return danhSach
-                .get(position)
-                .getLoai();
+    public int getItemViewType(int position) {
+        return danhSach.get(position).getLoai();
     }
 
-
-    /*
-     * =========================================
-     * TẠO VIEW HOLDER
-     * =========================================
-     */
+    // =========================================
+    // TẠO VIEW HOLDER
+    // =========================================
 
     @NonNull
     @Override
@@ -139,144 +82,78 @@ public class BoTuAdapter
             @NonNull ViewGroup parent,
             int viewType) {
 
+        if (viewType == MucBoTu.LOAI_FOLDER) {
 
-        /*
-         * =====================================
-         * FOLDER
-         * =====================================
-         */
+            View view = LayoutInflater
+                    .from(parent.getContext())
+                    .inflate(
+                            R.layout.botu_itemfolder,
+                            parent,
+                            false
+                    );
 
-        if (viewType
-                == MucBoTu.LOAI_FOLDER) {
-
-            View view =
-                    LayoutInflater
-                            .from(parent.getContext())
-                            .inflate(
-                                    R.layout.botu_itemfolder,
-                                    parent,
-                                    false
-                            );
-
-            return new FolderViewHolder(
-                    view
-            );
+            return new FolderViewHolder(view);
         }
 
+        View view = LayoutInflater
+                .from(parent.getContext())
+                .inflate(
+                        R.layout.botu_itembotu,
+                        parent,
+                        false
+                );
 
-        /*
-         * =====================================
-         * BỘ TỪ
-         * =====================================
-         */
-
-        View view =
-                LayoutInflater
-                        .from(parent.getContext())
-                        .inflate(
-                                R.layout.botu_itembotu,
-                                parent,
-                                false
-                        );
-
-        return new BoTuViewHolder(
-                view
-        );
+        return new BoTuViewHolder(view);
     }
 
-
-    /*
-     * =========================================
-     * ĐỔ DỮ LIỆU
-     * =========================================
-     */
+    // =========================================
+    // HIỂN THỊ DỮ LIỆU
+    // =========================================
 
     @Override
     public void onBindViewHolder(
             @NonNull RecyclerView.ViewHolder holder,
             int position) {
 
-        MucBoTu muc =
-                danhSach.get(position);
+        MucBoTu muc = danhSach.get(position);
 
-
-        /*
-         * =====================================
-         * FOLDER
-         * =====================================
-         */
+        // =====================================
+        // FOLDER
+        // =====================================
 
         if (holder instanceof FolderViewHolder) {
 
             FolderViewHolder folderHolder =
                     (FolderViewHolder) holder;
 
-            Folder folder =
-                    muc.getFolder();
+            Folder folder = muc.getFolder();
 
-
-            /*
-             * Tên Folder.
-             */
             folderHolder.txtTenFolder.setText(
                     folder.getTenFolder()
             );
 
-
-            /*
-             * Số Bộ từ trong Folder.
-             */
             folderHolder.txtSoBoTu.setText(
-                    folder.getSoBoTu()
-                            + " bộ từ"
+                    folder.getSoBoTu() + " bộ từ"
             );
 
+            // Mở folder.
+            folderHolder.itemView.setOnClickListener(view -> {
 
-            /*
-             * Bấm Folder để mở ChiTietFolder.
-             */
-            folderHolder.itemView.setOnClickListener(
-                    view -> {
+                if (dragListener != null) {
+                    dragListener.onMoFolder(folder);
+                }
+            });
 
-                        if (dragListener != null) {
-
-                            dragListener.onMoFolder(
-                                    folder
-                            );
-                        }
-                    }
-            );
-
-
-            /*
-             * Folder không kéo được.
-             *
-             * Folder chỉ nhận Bộ từ
-             * đang được kéo vào.
-             */
+            // Nhận bộ từ được kéo vào folder.
             folderHolder.itemView.setOnDragListener(
                     (view, event) -> {
 
                         switch (event.getAction()) {
 
-
-                            /*
-                             * =========================
-                             * DRAG BẮT ĐẦU
-                             * =========================
-                             */
-
                             case DragEvent.ACTION_DRAG_STARTED:
 
                                 return event.getLocalState()
                                         instanceof BoTuModel;
-
-
-                            /*
-                             * =========================
-                             * BỘ TỪ ĐI VÀO FOLDER
-                             * =========================
-                             */
 
                             case DragEvent.ACTION_DRAG_ENTERED:
 
@@ -288,13 +165,6 @@ public class BoTuAdapter
 
                                 return true;
 
-
-                            /*
-                             * =========================
-                             * BỘ TỪ RỜI FOLDER
-                             * =========================
-                             */
-
                             case DragEvent.ACTION_DRAG_EXITED:
 
                                 view.animate()
@@ -305,36 +175,20 @@ public class BoTuAdapter
 
                                 return true;
 
-
-                            /*
-                             * =========================
-                             * THẢ BỘ TỪ VÀO FOLDER
-                             * =========================
-                             */
-
                             case DragEvent.ACTION_DROP:
 
-
-                                /*
-                                 * Trả Folder về kích thước cũ.
-                                 */
                                 view.animate()
                                         .scaleX(1f)
                                         .scaleY(1f)
                                         .setDuration(120)
                                         .start();
 
+                                Object duLieu = event.getLocalState();
 
-                                Object duLieu =
-                                        event.getLocalState();
-
-
-                                if (duLieu
-                                        instanceof BoTuModel) {
+                                if (duLieu instanceof BoTuModel) {
 
                                     BoTuModel boTu =
                                             (BoTuModel) duLieu;
-
 
                                     if (dragListener != null) {
 
@@ -345,15 +199,7 @@ public class BoTuAdapter
                                     }
                                 }
 
-
                                 return true;
-
-
-                            /*
-                             * =========================
-                             * DRAG KẾT THÚC
-                             * =========================
-                             */
 
                             case DragEvent.ACTION_DRAG_ENDED:
 
@@ -366,335 +212,219 @@ public class BoTuAdapter
                                 return true;
                         }
 
-
                         return false;
                     }
             );
+
         }
 
-
-        /*
-         * =====================================
-         * BỘ TỪ
-         * =====================================
-         */
+        // =====================================
+        // BỘ TỪ
+        // =====================================
 
         else if (holder instanceof BoTuViewHolder) {
 
             BoTuViewHolder boTuHolder =
                     (BoTuViewHolder) holder;
 
-            BoTuModel boTu =
-                    muc.getBoTu();
+            BoTuModel boTu = muc.getBoTu();
 
+            // =================================
+            // THÔNG TIN BỘ TỪ
+            // =================================
 
-            /*
-             * =====================================
-             * HIỂN THỊ DỮ LIỆU
-             * =====================================
-             */
+            int tongSoTu = boTu.getSoLuongTu();
+            int soTuDaThuoc = boTu.getSoTuDaThuoc();
 
-            int tongSoTu =
-                    boTu.getSoLuongTu();
-
-            int soTuDaThuoc =
-                    boTu.getSoTuDaThuoc();
-
-
-            /*
-             * Tên Bộ từ.
-             */
             boTuHolder.txtTenBoTu.setText(
                     boTu.getTenBoTu()
             );
 
-
-            /*
-             * Tổng số từ.
-             */
             boTuHolder.txtSoLuongTu.setText(
-                    tongSoTu
-                            + " từ"
+                    tongSoTu + " từ"
             );
 
-
-            /*
-             * Tiến độ.
-             */
             boTuHolder.txtTienDo.setText(
-                    soTuDaThuoc
-                            + "/"
-                            + tongSoTu
+                    soTuDaThuoc + "/" + tongSoTu
             );
 
-
-            /*
-             * Tính phần trăm tiến độ.
-             */
-            int phanTram =
-                    0;
-
+            int phanTram = 0;
 
             if (tongSoTu > 0) {
-
-                phanTram =
-                        soTuDaThuoc
-                                * 100
-                                / tongSoTu;
+                phanTram = soTuDaThuoc * 100 / tongSoTu;
             }
 
+            boTuHolder.progressBoTu.setProgress(phanTram);
 
-            boTuHolder.progressBoTu.setProgress(
-                    phanTram
-            );
+            // =================================
+            // MENU XÓA BỘ TỪ
+            // =================================
 
+            boTuHolder.btnMenuBoTu.setOnClickListener(view -> {
 
-            /*
-             * =====================================
-             * MENU BỘ TỪ
-             * =====================================
-             */
-
-
-            boTuHolder.btnMenuBoTu.setOnClickListener(
-                    view -> {
-
-                        View popupView =
-                                LayoutInflater
-                                        .from(view.getContext())
-                                        .inflate(
-                                                R.layout.botu_popup_menu,
-                                                null
-                                        );
-
-
-                        PopupWindow popupWindow =
-                                new PopupWindow(
-                                        popupView,
-                                        (int) (
-                                                150
-                                                        * view.getResources()
-                                                        .getDisplayMetrics()
-                                                        .density
-                                        ),
-                                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                                        true
-                                );
-
-
-                        popupWindow.setOutsideTouchable(
-                                true
+                View popupView = LayoutInflater
+                        .from(view.getContext())
+                        .inflate(
+                                R.layout.botu_popup_menu,
+                                null
                         );
 
+                PopupWindow popupWindow = new PopupWindow(
+                        popupView,
+                        (int) (
+                                150 * view.getResources()
+                                        .getDisplayMetrics()
+                                        .density
+                        ),
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        true
+                );
 
-                        LinearLayout btnXoaBoTu =
-                                popupView.findViewById(
-                                        R.id.btn_xoa_bo_tu
-                                );
+                popupWindow.setOutsideTouchable(true);
 
-
-                        btnXoaBoTu.setOnClickListener(
-                                v -> {
-
-                                    popupWindow.dismiss();
-
-
-                                    if (onXoaBoTuListener != null) {
-
-                                        onXoaBoTuListener.onXoaBoTu(
-                                                boTu
-                                        );
-                                    }
-                                }
+                LinearLayout btnXoaBoTu =
+                        popupView.findViewById(
+                                R.id.btn_xoa_bo_tu
                         );
 
+                btnXoaBoTu.setOnClickListener(v -> {
 
-                        popupWindow.showAsDropDown(
-                                boTuHolder.btnMenuBoTu,
-                                -120,
-                                -5
-                        );
+                    popupWindow.dismiss();
+
+                    if (onXoaBoTuListener != null) {
+                        onXoaBoTuListener.onXoaBoTu(boTu);
                     }
-            );
+                });
 
+                popupWindow.showAsDropDown(
+                        boTuHolder.btnMenuBoTu,
+                        -120,
+                        -5
+                );
+            });
 
-            /*
-             * =====================================
-             * XEM CHI TIẾT BỘ TỪ
-             * =====================================
-             *
-             * Adapter chỉ gửi BoTuModel
-             * về Fragment BoTu.
-             *
-             * Việc mở ChiTietBoTu
-             * sẽ được xử lý ở BoTu.java.
-             */
+            // =================================
+            // NÚT XEM
+            // =================================
 
-            boTuHolder.btnXemBoTu.setOnClickListener(
-                    view -> {
+            boTuHolder.btnXemBoTu.setOnClickListener(view -> {
 
-                        if (dragListener != null) {
+                if (dragListener != null) {
+                    dragListener.onXemBoTu(boTu);
+                }
+            });
 
-                            dragListener.onXemBoTu(
-                                    boTu
-                            );
-                        }
-                    }
-            );
+            // =================================
+            // NÚT LUYỆN TẬP
+            // =================================
 
+            boTuHolder.btnLuyenTapBoTu.setOnClickListener(view -> {
 
-            /*
-             * =====================================
-             * NHẤN GIỮ ĐỂ KÉO
-             * =====================================
-             */
+                if (dragListener != null) {
+                    dragListener.onLuyenTapBoTu(boTu);
+                }
+            });
 
-            boTuHolder.itemView.setOnLongClickListener(
-                    view -> {
+            // =================================
+            // NHẤN GIỮ ĐỂ KÉO BỘ TỪ
+            // =================================
 
-                        if (dragListener != null) {
+            boTuHolder.itemView.setOnLongClickListener(view -> {
 
-                            dragListener.onBatDauKeo(
-                                    view,
-                                    boTu
-                            );
-                        }
+                if (dragListener != null) {
+                    dragListener.onBatDauKeo(
+                            view,
+                            boTu
+                    );
+                }
 
+                return true;
+            });
 
-                        return true;
-                    }
-            );
-
-
-            /*
-             * Bộ từ không phải Drop Target.
-             */
-            boTuHolder.itemView.setOnDragListener(
-                    null
-            );
+            // Bộ từ không nhận sự kiện thả.
+            boTuHolder.itemView.setOnDragListener(null);
         }
     }
 
-
-    /*
-     * =========================================
-     * SỐ LƯỢNG ITEM
-     * =========================================
-     */
+    // =========================================
+    // SỐ LƯỢNG ITEM
+    // =========================================
 
     @Override
     public int getItemCount() {
-
         return danhSach.size();
     }
 
-
-    /*
-     * =========================================
-     * VIEW HOLDER FOLDER
-     * =========================================
-     */
+    // =========================================
+    // VIEW HOLDER FOLDER
+    // =========================================
 
     public static class FolderViewHolder
             extends RecyclerView.ViewHolder {
 
         TextView txtTenFolder;
-
         TextView txtSoBoTu;
 
-
-        public FolderViewHolder(
-                @NonNull View itemView) {
-
+        public FolderViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            txtTenFolder = itemView.findViewById(
+                    R.id.txt_ten_folder
+            );
 
-            txtTenFolder =
-                    itemView.findViewById(
-                            R.id.txt_ten_folder
-                    );
-
-
-            txtSoBoTu =
-                    itemView.findViewById(
-                            R.id.txt_so_bo_tu
-                    );
+            txtSoBoTu = itemView.findViewById(
+                    R.id.txt_so_bo_tu
+            );
         }
     }
 
-
-    /*
-     * =========================================
-     * VIEW HOLDER BỘ TỪ
-     * =========================================
-     */
+    // =========================================
+    // VIEW HOLDER BỘ TỪ
+    // =========================================
 
     public static class BoTuViewHolder
             extends RecyclerView.ViewHolder {
 
         TextView txtTenBoTu;
-
         TextView txtSoLuongTu;
-
         TextView txtTienDo;
 
         TextView btnMenuBoTu;
-
         TextView btnXemBoTu;
-
         TextView btnLuyenTapBoTu;
 
         ProgressBar progressBoTu;
 
-
-        public BoTuViewHolder(
-                @NonNull View itemView) {
-
+        public BoTuViewHolder(@NonNull View itemView) {
             super(itemView);
 
+            txtTenBoTu = itemView.findViewById(
+                    R.id.txt_ten_bo_tu
+            );
 
-            txtTenBoTu =
-                    itemView.findViewById(
-                            R.id.txt_ten_bo_tu
-                    );
+            txtSoLuongTu = itemView.findViewById(
+                    R.id.txt_so_luong_tu
+            );
 
+            txtTienDo = itemView.findViewById(
+                    R.id.txt_tien_do
+            );
 
-            txtSoLuongTu =
-                    itemView.findViewById(
-                            R.id.txt_so_luong_tu
-                    );
+            progressBoTu = itemView.findViewById(
+                    R.id.progress_bo_tu
+            );
 
+            btnMenuBoTu = itemView.findViewById(
+                    R.id.btn_menu_bo_tu
+            );
 
-            txtTienDo =
-                    itemView.findViewById(
-                            R.id.txt_tien_do
-                    );
+            btnXemBoTu = itemView.findViewById(
+                    R.id.btn_xem_bo_tu
+            );
 
-
-            progressBoTu =
-                    itemView.findViewById(
-                            R.id.progress_bo_tu
-                    );
-
-
-            btnMenuBoTu =
-                    itemView.findViewById(
-                            R.id.btn_menu_bo_tu
-                    );
-
-
-            btnXemBoTu =
-                    itemView.findViewById(
-                            R.id.btn_xem_bo_tu
-                    );
-
-
-            btnLuyenTapBoTu =
-                    itemView.findViewById(
-                            R.id.btn_luyen_tap_bo_tu
-                    );
+            btnLuyenTapBoTu = itemView.findViewById(
+                    R.id.btn_luyen_tap_bo_tu
+            );
         }
     }
-
-
 }

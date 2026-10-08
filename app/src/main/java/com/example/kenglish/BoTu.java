@@ -242,6 +242,21 @@ public class BoTu extends Fragment {
                                         boTu
                                 );
                             }
+
+
+                            @Override
+                            public void onLuyenTapBoTu(BoTuModel boTu) {
+
+                                if (requireActivity() instanceof MainActivity) {
+
+                                    ((MainActivity) requireActivity())
+                                            .chuyenDenLuyenTap(
+                                                    boTu.getId(),
+                                                    boTu.getTenBoTu()
+                                            );
+                                }
+                            }
+
                         },
 
 
@@ -1529,6 +1544,7 @@ public class BoTu extends Fragment {
     }
 
 
+
     /*
      * =========================================
      * TẠO FOLDER
@@ -1675,4 +1691,6 @@ public class BoTu extends Fragment {
                         }
                 );
     }
+
+
 }

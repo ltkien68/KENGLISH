@@ -343,4 +343,33 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
+
+    public void chuyenDenLuyenTap(int boTuId, String tenBoTu) {
+
+        if (!(luyenTap instanceof LuyenTap) || boTuId <= 0) {
+            return;
+        }
+
+        // Truyền bộ từ vào Fragment Luyện tập đang tồn tại.
+        ((LuyenTap) luyenTap).chonBoTuTuManHinhKhac(
+                boTuId,
+                tenBoTu
+        );
+
+        // Chuyển tab thông qua BottomNavigationView.
+        // Listener hiện tại sẽ tự đóng màn con trong back stack.
+        if (thanhDieuHuong.getSelectedItemId()
+                == R.id.menu_luyen_tap) {
+
+            chuyenManHinh(luyenTap);
+
+        } else {
+
+            thanhDieuHuong.setSelectedItemId(
+                    R.id.menu_luyen_tap
+            );
+        }
+    }
+
+
 }

@@ -813,6 +813,29 @@ public class LuyenTap extends Fragment {
         );
     }
 
+
+    public void chonBoTuTuManHinhKhac(
+            int boTuId,
+            String tenBoTu) {
+
+        if (boTuId <= 0) {
+            return;
+        }
+
+        boTuIdDaChon = boTuId;
+
+        tenBoTuDaChon =
+                tenBoTu != null && !tenBoTu.trim().isEmpty()
+                        ? tenBoTu
+                        : "Bộ từ";
+
+        // Nếu giao diện đã được tạo thì cập nhật ngay.
+        if (txtBoTu != null) {
+            txtBoTu.setText(tenBoTuDaChon);
+        }
+    }
+
+
     // ==================== THÔNG BÁO ====================
 
     private void thongBao(String noiDung) {

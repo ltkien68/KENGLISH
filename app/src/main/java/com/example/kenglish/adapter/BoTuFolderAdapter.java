@@ -313,6 +313,20 @@ public class BoTuFolderAdapter
                     }
                 }
         );
+
+
+        /*
+         * =====================================
+         * LUYỆN TẬP BỘ TỪ TRONG FOLDER
+         * =====================================
+         */
+        holder.btnLuyenTapBoTu.setOnClickListener(view -> {
+
+            if (listener != null) {
+                listener.onLuyenTapBoTu(boTu);
+            }
+        });
+
     }
 
 
@@ -411,15 +425,14 @@ public class BoTuFolderAdapter
      * =========================================
      */
 
+
     public interface OnBoTuClickListener {
 
-        void onXemBoTu(
-                BoTuModel boTu
-        );
+        void onXemBoTu(BoTuModel boTu);
 
+        void onXoaBoTu(BoTuModel boTu);
 
-        void onXoaBoTu(
-                BoTuModel boTu
-        );
+        void onLuyenTapBoTu(BoTuModel boTu);
     }
+
 }
