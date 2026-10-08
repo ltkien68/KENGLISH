@@ -1,3 +1,4 @@
+
 const ketNoi = require("../../config/database");
 
 const layDanhSachBoTu = async (req, res) => {
@@ -7,6 +8,17 @@ const layDanhSachBoTu = async (req, res) => {
         const nguoiDungId =
             req.nguoiDung.id;
 
+        const layTatCa =
+            req.query.tat_ca === "true";
+
+        let dieuKienFolder = "";
+
+        // Mặc định chỉ lấy bộ từ ngoài folder.
+        // Luyện tập truyền tat_ca=true để lấy toàn bộ.
+        if (!layTatCa) {
+            dieuKienFolder =
+                "AND bt.folder_id IS NULL";
+        }
 
         const [boTu] =
             await ketNoi.query(
@@ -34,7 +46,8 @@ const layDanhSachBoTu = async (req, res) => {
                     ON tv.bo_tu_id = bt.id
 
                 WHERE bt.nguoi_dung_id = ?
-                AND bt.folder_id IS NULL
+
+                ${dieuKienFolder}
 
                 GROUP BY
                     bt.id,
@@ -47,7 +60,6 @@ const layDanhSachBoTu = async (req, res) => {
                 `,
                 [nguoiDungId]
             );
-
 
         return res.status(200).json({
             thanh_cong: true,
