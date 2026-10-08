@@ -2,6 +2,7 @@ package com.example.kenglish;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -27,6 +28,7 @@ import androidx.fragment.app.Fragment;
 import com.example.kenglish.api.ApiService;
 import com.example.kenglish.api.RetrofitClient;
 import com.example.kenglish.model.ApiResponse;
+import com.example.kenglish.model.HoatDongNamResponse;
 import com.example.kenglish.model.LichSuTraTu;
 import com.example.kenglish.model.LichSuTraTuResponse;
 import com.example.kenglish.model.SuggestionResponse;
@@ -76,6 +78,7 @@ public class TrangChu extends Fragment {
     private LinearLayout btnLuyenTapNhanh;
     private  LinearLayout btnTaoBoTuNhanh;
     private LinearLayout btnCongDongNhanh;
+    private LinearLayout layoutChuoiHoc;
 
     private ImageView btnXoaLichSu;
     private View khungLichSuTraTu;
@@ -108,6 +111,8 @@ public class TrangChu extends Fragment {
 
         anhXa(view);
 
+        layThongTinStreak();
+
         layThongKeHocTap();
 
         thietLapSuKienAnhDaiDien();
@@ -117,8 +122,6 @@ public class TrangChu extends Fragment {
         thietLapSuKienTaoBoTu();
 
         thietLapTraTu();
-
-        hienThiChuoiHoc();
 
         layLichSuTraTu();
 
@@ -233,6 +236,8 @@ public class TrangChu extends Fragment {
                 view.findViewById(
                         R.id.txt_tudenhan
                 );
+
+        layoutChuoiHoc = view.findViewById(R.id.khung_chuoi_hoc);
     }
 
 
@@ -242,13 +247,72 @@ public class TrangChu extends Fragment {
      * Hiện tại đang dùng dữ liệu mẫu.
      * Sau này sẽ lấy dữ liệu từ Backend.
      */
-    private void hienThiChuoiHoc() {
+    private void layThongTinStreak() {
 
-        int chuoiHoc = 32;
+        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("Kenglish", Context.MODE_PRIVATE);
 
-        txtChuoiHoc.setText(
-                String.valueOf(chuoiHoc)
-        );
+        String token = sharedPreferences.getString("token", null);
+        if (token == null) {
+            return;
+        }
+
+        apiService
+                .layHoatDongNamHienTai(
+                        "Bearer " + token
+                )
+                .enqueue(
+                        new Callback<ApiResponse<HoatDongNamResponse>>() {
+
+                            @Override
+                            public void onResponse(
+                                    @NonNull Call<ApiResponse<HoatDongNamResponse>> call,
+                                    @NonNull Response<ApiResponse<HoatDongNamResponse>> response) {
+
+                                if (!isAdded()) {
+                                    return;
+                                }
+
+
+                                if (response.isSuccessful()
+                                        && response.body() != null
+                                        && response.body().isThanhCong()
+                                        && response.body().getData() != null) {
+
+                                    HoatDongNamResponse duLieu =
+                                            response.body()
+                                                    .getData();
+
+                                    int streak = duLieu.getCurrentStreak();
+
+                                    txtChuoiHoc.setText(String.valueOf(streak));
+
+                                    if (streak == 0) {
+                                        layoutChuoiHoc.setBackgroundTintList(
+                                                ColorStateList.valueOf(
+                                                        Color.parseColor("#F5F5F6")
+                                                )
+                                        );
+                                    } else {
+                                        layoutChuoiHoc.setBackgroundTintList(null);
+                                    }
+                                }
+                            }
+
+
+                            @Override
+                            public void onFailure(
+                                    @NonNull Call<ApiResponse<HoatDongNamResponse>> call,
+                                    @NonNull Throwable t) {
+
+                                /*
+                                 * Không cần Toast.
+                                 *
+                                 * Nếu mất mạng thì graph xám
+                                 * ban đầu vẫn được giữ lại.
+                                 */
+                            }
+                        }
+                );
     }
 
     private void layThongKeHocTap() {
