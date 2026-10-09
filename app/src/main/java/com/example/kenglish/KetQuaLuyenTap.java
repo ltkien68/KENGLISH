@@ -25,12 +25,18 @@ import com.example.kenglish.model.LuuTienTrinhResponse;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class KetQuaLuyenTap extends Fragment {
+
+    private static final String KEY_TEN_GAME = "ten_game";
+    private static final String KEY_KET_QUA = "ket_qua";
+    private static final String KEY_MA_PHIEN = "ma_phien_choi";
+    private static final String KEY_DA_LUU = "da_luu_thanh_cong";
 
     private final List<KetQuaTuVung> danhSachKetQua =
             new ArrayList<>();
@@ -50,22 +56,35 @@ public class KetQuaLuyenTap extends Fragment {
     private ApiService apiService;
 
     private String tenGame = "Luyện tập";
+    private String maPhienChoi;
+
     private boolean dangLuu = false;
     private boolean daLuuThanhCong = false;
+
+    private Call<ApiResponse<LuuTienTrinhResponse>> callLuu;
 
     public static KetQuaLuyenTap newInstance(
             String tenGame,
             List<KetQuaTuVung> ketQua) {
 
-        KetQuaLuyenTap fragment = new KetQuaLuyenTap();
+        KetQuaLuyenTap fragment =
+                new KetQuaLuyenTap();
 
         Bundle bundle = new Bundle();
 
-        bundle.putString("ten_game", tenGame);
+        bundle.putString(
+                KEY_TEN_GAME,
+                tenGame
+        );
 
         bundle.putSerializable(
-                "ket_qua",
+                KEY_KET_QUA,
                 new ArrayList<>(ketQua)
+        );
+
+        bundle.putString(
+                KEY_MA_PHIEN,
+                UUID.randomUUID().toString()
         );
 
         fragment.setArguments(bundle);
@@ -88,18 +107,38 @@ public class KetQuaLuyenTap extends Fragment {
 
         anhXa(view);
         layDuLieu();
+
+        if (savedInstanceState != null) {
+            daLuuThanhCong = savedInstanceState.getBoolean(
+                    KEY_DA_LUU,
+                    false
+            );
+        }
+
         hienThiKetQua();
         xuLySuKien();
+        capNhatNutLuu();
 
         return view;
     }
 
     private void anhXa(View view) {
 
-        txtTenGame = view.findViewById(R.id.txt_ten_game);
-        txtPhanTram = view.findViewById(R.id.txt_phan_tram);
-        txtDanhGia = view.findViewById(R.id.txt_danh_gia);
-        txtTongKet = view.findViewById(R.id.txt_tong_ket);
+        txtTenGame = view.findViewById(
+                R.id.txt_ten_game
+        );
+
+        txtPhanTram = view.findViewById(
+                R.id.txt_phan_tram
+        );
+
+        txtDanhGia = view.findViewById(
+                R.id.txt_danh_gia
+        );
+
+        txtTongKet = view.findViewById(
+                R.id.txt_tong_ket
+        );
 
         txtSoTuDaThuoc = view.findViewById(
                 R.id.txt_so_tu_da_thuoc
@@ -139,11 +178,29 @@ public class KetQuaLuyenTap extends Fragment {
         }
 
         tenGame = bundle.getString(
-                "ten_game",
+                KEY_TEN_GAME,
                 "Luyện tập"
         );
 
-        Object duLieu = bundle.getSerializable("ket_qua");
+        maPhienChoi = bundle.getString(
+                KEY_MA_PHIEN
+        );
+
+        if (maPhienChoi == null ||
+                maPhienChoi.trim().isEmpty()) {
+
+            maPhienChoi =
+                    UUID.randomUUID().toString();
+
+            bundle.putString(
+                    KEY_MA_PHIEN,
+                    maPhienChoi
+            );
+        }
+
+        Object duLieu = bundle.getSerializable(
+                KEY_KET_QUA
+        );
 
         if (duLieu instanceof ArrayList) {
 
@@ -195,7 +252,9 @@ public class KetQuaLuyenTap extends Fragment {
                 ? 0
                 : soDaThuoc * 100 / tongSoTu;
 
-        txtPhanTram.setText(phanTram + "%");
+        txtPhanTram.setText(
+                phanTram + "%"
+        );
 
         txtTongKet.setText(
                 soDaThuoc + " đã thuộc · "
@@ -211,13 +270,28 @@ public class KetQuaLuyenTap extends Fragment {
         );
 
         if (tongSoTu == 0) {
-            txtDanhGia.setText("Chưa có kết quả");
+
+            txtDanhGia.setText(
+                    "Chưa có kết quả"
+            );
+
         } else if (phanTram == 100) {
-            txtDanhGia.setText("Xuất sắc!");
+
+            txtDanhGia.setText(
+                    "Xuất sắc!"
+            );
+
         } else if (phanTram >= 70) {
-            txtDanhGia.setText("Làm tốt lắm!");
+
+            txtDanhGia.setText(
+                    "Làm tốt lắm!"
+            );
+
         } else {
-            txtDanhGia.setText("Tiếp tục cố gắng!");
+
+            txtDanhGia.setText(
+                    "Tiếp tục cố gắng!"
+            );
         }
     }
 
@@ -234,27 +308,36 @@ public class KetQuaLuyenTap extends Fragment {
                         false
                 );
 
-        TextView txtTrangThai = item.findViewById(
-                R.id.txt_trang_thai_item
-        );
+        TextView txtTrangThai =
+                item.findViewById(
+                        R.id.txt_trang_thai_item
+                );
 
-        TextView txtTu = item.findViewById(
-                R.id.txt_tu_item
-        );
+        TextView txtTu =
+                item.findViewById(
+                        R.id.txt_tu_item
+                );
 
-        TextView txtNghia = item.findViewById(
-                R.id.txt_nghia_item
-        );
+        TextView txtNghia =
+                item.findViewById(
+                        R.id.txt_nghia_item
+                );
 
-        txtTrangThai.setText(daThuoc ? "✓" : "✕");
+        txtTrangThai.setText(
+                daThuoc ? "✓" : "✕"
+        );
 
         txtTrangThai.setTextColor(
                 Color.parseColor(
-                        daThuoc ? "#159947" : "#D83A42"
+                        daThuoc
+                                ? "#159947"
+                                : "#D83A42"
                 )
         );
 
-        txtTu.setText(ketQua.getTu_goc());
+        txtTu.setText(
+                ketQua.getTu_goc()
+        );
 
         txtNghia.setText(
                 ketQua.getNghia_tieng_viet()
@@ -281,13 +364,52 @@ public class KetQuaLuyenTap extends Fragment {
                         Context.MODE_PRIVATE
                 );
 
-        return preferences.getString("token", null);
+        return preferences.getString(
+                "token",
+                null
+        );
+    }
+
+    private String layMaCheDo() {
+
+        if ("Flashcard".equalsIgnoreCase(tenGame)) {
+            return "flashcard";
+        }
+
+        if ("Trắc nghiệm".equalsIgnoreCase(tenGame)) {
+            return "trac_nghiem";
+        }
+
+        if ("Nối từ với nghĩa".equalsIgnoreCase(tenGame)) {
+            return "noi_tu";
+        }
+
+        if ("Gõ từ vựng".equalsIgnoreCase(tenGame)) {
+            return "go_tu";
+        }
+
+        if ("Nghe viết".equalsIgnoreCase(tenGame)) {
+            return "nghe_viet";
+        }
+
+        if ("Đặc biệt".equalsIgnoreCase(tenGame)) {
+            return "dac_biet";
+        }
+
+        return null;
     }
 
     private void luuTienTrinh() {
 
         if (danhSachKetQua.isEmpty()) {
             thongBao("Không có kết quả để lưu");
+            return;
+        }
+
+        String cheDo = layMaCheDo();
+
+        if (cheDo == null) {
+            thongBao("Chế độ luyện tập không hợp lệ");
             return;
         }
 
@@ -298,18 +420,29 @@ public class KetQuaLuyenTap extends Fragment {
             return;
         }
 
-        dangLuu = true;
+        if (maPhienChoi == null ||
+                maPhienChoi.trim().isEmpty()) {
 
-        btnLuuTienTrinh.setEnabled(false);
-        btnLuuTienTrinh.setText("ĐANG LƯU...");
+            thongBao("Mã phiên luyện tập không hợp lệ");
+            return;
+        }
+
+        dangLuu = true;
+        capNhatNutLuu();
 
         LuuTienTrinhRequest request =
-                new LuuTienTrinhRequest(danhSachKetQua);
+                new LuuTienTrinhRequest(
+                        maPhienChoi,
+                        cheDo,
+                        danhSachKetQua
+                );
 
-        apiService.luuTienTrinhLuyenTap(
+        callLuu = apiService.luuTienTrinhLuyenTap(
                 "Bearer " + token,
                 request
-        ).enqueue(
+        );
+
+        callLuu.enqueue(
                 new Callback<ApiResponse<LuuTienTrinhResponse>>() {
 
                     @Override
@@ -342,14 +475,12 @@ public class KetQuaLuyenTap extends Fragment {
                                         + " ngày"
                         );
 
-                        btnLuuTienTrinh.setText(
-                                "ĐÃ LƯU THÀNH CÔNG"
+                        capNhatNutLuu();
+
+                        thongBao(
+                                "Đã lưu tiến trình luyện tập"
                         );
 
-                        thongBao("Đã lưu tiến trình luyện tập");
-
-                        // Quay về tab Luyện tập,
-                        // đóng cả màn hình kết quả và Flashcard.
                         requireActivity()
                                 .getSupportFragmentManager()
                                 .popBackStack(
@@ -368,6 +499,7 @@ public class KetQuaLuyenTap extends Fragment {
                         }
 
                         dangLuu = false;
+
                         xuLyLuuThatBai();
                     }
                 }
@@ -376,19 +508,85 @@ public class KetQuaLuyenTap extends Fragment {
 
     private void xuLyLuuThatBai() {
 
-        btnLuuTienTrinh.setEnabled(true);
+        daLuuThanhCong = false;
 
-        btnLuuTienTrinh.setText("THỬ LƯU LẠI");
+        capNhatNutLuu();
 
-        thongBao("Không thể lưu tiến trình");
+        btnLuuTienTrinh.setText(
+                "THỬ LƯU LẠI"
+        );
+
+        thongBao(
+                "Không thể lưu tiến trình"
+        );
+    }
+
+    private void capNhatNutLuu() {
+
+        if (btnLuuTienTrinh == null) {
+            return;
+        }
+
+        if (dangLuu) {
+
+            btnLuuTienTrinh.setEnabled(false);
+
+            btnLuuTienTrinh.setText(
+                    "ĐANG LƯU..."
+            );
+
+        } else if (daLuuThanhCong) {
+
+            btnLuuTienTrinh.setEnabled(false);
+
+            btnLuuTienTrinh.setText(
+                    "ĐÃ LƯU THÀNH CÔNG"
+            );
+
+        } else {
+
+            btnLuuTienTrinh.setEnabled(true);
+
+            btnLuuTienTrinh.setText(
+                    "LƯU TIẾN TRÌNH"
+            );
+        }
     }
 
     private void thongBao(String noiDung) {
+
+        if (!isAdded()) {
+            return;
+        }
 
         Toast.makeText(
                 requireContext(),
                 noiDung,
                 Toast.LENGTH_SHORT
         ).show();
+    }
+
+    @Override
+    public void onSaveInstanceState(
+            @NonNull Bundle outState) {
+
+        super.onSaveInstanceState(outState);
+
+        outState.putBoolean(
+                KEY_DA_LUU,
+                daLuuThanhCong
+        );
+    }
+
+    @Override
+    public void onDestroyView() {
+
+        if (callLuu != null && !callLuu.isCanceled()) {
+            callLuu.cancel();
+        }
+
+        dangLuu = false;
+
+        super.onDestroyView();
     }
 }
