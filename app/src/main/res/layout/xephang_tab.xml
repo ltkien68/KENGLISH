@@ -1,67 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!-- Thanh chuyển chức năng màn Xếp hạng -->
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/khung_tab_xep_hang"
     android:layout_width="match_parent"
     android:layout_height="48dp"
     android:background="@drawable/nen_xephang_tab"
     android:padding="4dp">
-
-
-    <!-- Nền của tab đang chọn -->
     <View
         android:id="@+id/thanh_chon_xep_hang"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:background="@drawable/nen_xephang_tabchon" />
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal">
-
-
-        <!-- Lượt chơi -->
         <TextView
             android:id="@+id/tab_luot_choi"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:fontFamily="@font/juve_normal"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="@font/juve_headin"
             android:gravity="center"
             android:text="Lượt chơi"
             android:textColor="#37659C"
             android:textSize="13sp" />
-
-
-        <!-- Streak -->
         <TextView
             android:id="@+id/tab_streak"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:fontFamily="@font/juve_normal"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="@font/juve_headin"
             android:gravity="center"
             android:text="Streak"
             android:textColor="#7C8492"
             android:textSize="13sp" />
-
-
-        <!-- Cộng đồng -->
         <TextView
             android:id="@+id/tab_cong_dong"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:fontFamily="@font/juve_normal"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="@font/juve_headin"
             android:gravity="center"
             android:text="Cộng đồng"
             android:textColor="#7C8492"
             android:textSize="13sp" />
-
     </LinearLayout>
-
 </FrameLayout>

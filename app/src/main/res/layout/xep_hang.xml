@@ -30,7 +30,7 @@
         android:fontFamily="@font/juve_headin"
         android:text="XẾP HẠNG"
         android:textColor="#111111"
-        android:textSize="17sp" />
+        android:textSize="20sp" />
 
     <TextView
         android:layout_width="wrap_content"

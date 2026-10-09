@@ -18,10 +18,7 @@
         android:paddingEnd="16dp"
         android:paddingBottom="24dp">
 
-
-        <!-- ================================================= -->
-        <!-- Tiêu đề trang -->
-        <!-- ================================================= -->
+        <!-- TIÊU ĐỀ -->
 
         <TextView
             android:layout_width="wrap_content"
@@ -31,8 +28,6 @@
             android:textColor="#111111"
             android:textSize="20sp" />
 
-
-        <!-- Mô tả -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -42,10 +37,7 @@
             android:textColor="#7C8492"
             android:textSize="13sp" />
 
-
-        <!-- ================================================= -->
-        <!-- Bộ lọc luyện tập -->
-        <!-- ================================================= -->
+        <!-- BỘ LỌC -->
 
         <include
             layout="@layout/luyentap_boloc"
@@ -53,15 +45,20 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp" />
 
-
-        <!-- ================================================= -->
-        <!-- Danh sách game -->
-        <!-- ================================================= -->
+        <!-- DANH SÁCH GAME -->
 
         <include
             layout="@layout/luyentap_chongame"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+        <!-- LỊCH SỬ LUYỆN TẬP -->
+
+        <include
+            layout="@layout/luyentap_lichsu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp" />
 
     </LinearLayout>
 

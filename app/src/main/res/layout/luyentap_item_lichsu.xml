@@ -1,57 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="68dp"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@drawable/nen_luyentap_item_lichsu"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:background="@drawable/nen_luyentap_lichsu_item"
+    android:clickable="false"
+    android:focusable="false"
     android:gravity="center_vertical"
     android:orientation="horizontal"
     android:padding="12dp">
 
+    <!-- ICON GAME -->
+
     <ImageView
-        android:id="@+id/txt_icon_lich_su"
-        android:layout_width="44dp"
-        android:layout_height="44dp"
-        android:gravity="center"
-        android:padding="12dp"
-        android:src="@drawable/ic_lichsu"
-        app:tint="#A855F7" />
+        android:id="@+id/img_game_lich_su"
+        android:layout_width="38dp"
+        android:layout_height="38dp"
+        android:background="@drawable/nen_luyentap_lichsu_icon"
+        android:contentDescription="Chế độ luyện tập"
+        android:padding="9dp"
+        android:src="@drawable/ic_flashcard"
+        android:tint="#37659C" />
+
+    <!-- NỘI DUNG -->
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
+        android:layout_marginStart="12dp"
         android:layout_weight="1"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/txt_ten_game_lich_su"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Trắc nghiệm"
-            android:textColor="#FFFFFF"
-            android:textSize="13sp"
-            android:textStyle="bold" />
+            android:fontFamily="@font/juve_headin"
+            android:text="Flashcard"
+            android:textColor="#111111"
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/txt_ket_qua_lich_su"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
-            android:text="9/10 đúng · 90%"
-            android:textColor="#D0D5DD"
-            android:textSize="10sp" />
+            android:fontFamily="@font/juve_normal"
+            android:text="3/5 đã thuộc · 60%"
+            android:textColor="#7C8492"
+            android:textSize="11sp" />
+
+        <TextView
+            android:id="@+id/txt_ngay_lich_su"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:fontFamily="@font/juve_normal"
+            android:text="09/10/2026 · 11:41"
+            android:textColor="#7C8492"
+            android:textSize="11sp" />
 
     </LinearLayout>
-
-    <TextView
-        android:id="@+id/txt_coin_lich_su"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="+119 🪙"
-        android:textColor="#FFFFFF"
-        android:textSize="13sp"
-        android:textStyle="bold" />
 
 </LinearLayout>

@@ -23,11 +23,18 @@ import com.example.kenglish.model.ApiResponse;
 import com.example.kenglish.model.BoTuModel;
 import com.example.kenglish.model.DanhSachTuResponse;
 import com.example.kenglish.model.GameLuyenTap;
+import com.example.kenglish.model.HoatDongNamResponse;
+import com.example.kenglish.model.LichSuLuyenTapResponse;
+import com.example.kenglish.model.ThongKeLuyenTapResponse;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
+import java.util.Date;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,6 +56,28 @@ public class LuyenTap extends Fragment {
     private ImageView imgMuiTenTrangThai;
     private ImageView imgMuiTenThuTu;
     private ImageView imgMuiTenSoLuong;
+
+
+    // ==================== LỊCH SỬ LUYỆN TẬP ====================
+
+    private ImageView btnChuyenCheDoLichSu;
+
+    private LinearLayout layoutDanhSachLichSu;
+    private LinearLayout layoutThongKeLichSu;
+    private LinearLayout khungDanhSachLichSu;
+
+    private TextView txtTrangThaiLichSu;
+    private TextView txtSoLanLuyenTap;
+    private TextView txtDoChinhXacTb;
+    private TextView txtSoLuotChoiLichSu;
+    private TextView txtStreakLichSu;
+
+    private boolean dangXemThongKe = false;
+
+    private Call<ApiResponse<LichSuLuyenTapResponse>> callLichSu;
+    private Call<ApiResponse<ThongKeLuyenTapResponse>> callThongKe;
+    private Call<ApiResponse<HoatDongNamResponse>> callStreak;
+
 
     private GridView gridGame;
 
@@ -147,6 +176,35 @@ public class LuyenTap extends Fragment {
         apiService =
                 RetrofitClient.getClient()
                         .create(ApiService.class);
+
+
+        btnChuyenCheDoLichSu =
+                view.findViewById(R.id.btn_chuyen_che_do_lich_su);
+
+        layoutDanhSachLichSu =
+                view.findViewById(R.id.layout_danh_sach_lich_su);
+
+        layoutThongKeLichSu =
+                view.findViewById(R.id.layout_thong_ke_lich_su);
+
+        khungDanhSachLichSu =
+                view.findViewById(R.id.khung_danh_sach_lich_su);
+
+        txtTrangThaiLichSu =
+                view.findViewById(R.id.txt_trang_thai_lich_su);
+
+        txtSoLanLuyenTap =
+                view.findViewById(R.id.txt_so_lan_luyen_tap);
+
+        txtDoChinhXacTb =
+                view.findViewById(R.id.txt_do_chinh_xac_tb);
+
+        txtSoLuotChoiLichSu =
+                view.findViewById(R.id.txt_so_luot_choi_lich_su);
+
+        txtStreakLichSu =
+                view.findViewById(R.id.txt_streak_lich_su);
+
 
         hienThiBoLoc();
     }
@@ -332,7 +390,436 @@ public class LuyenTap extends Fragment {
                 }
         );
 
+
+        btnChuyenCheDoLichSu.setOnClickListener(v -> {
+            dangXemThongKe = !dangXemThongKe;
+            hienThiCheDoLichSu();
+
+            if (dangXemThongKe) {
+                layThongKeLichSu();
+                layStreakLichSu();
+            }
+        });
+
     }
+
+
+    private void hienThiCheDoLichSu() {
+        layoutDanhSachLichSu.setVisibility(
+                dangXemThongKe ? View.GONE : View.VISIBLE
+        );
+
+        layoutThongKeLichSu.setVisibility(
+                dangXemThongKe ? View.VISIBLE : View.GONE
+        );
+
+        btnChuyenCheDoLichSu.setImageResource(
+                dangXemThongKe
+                        ? R.drawable.ic_danhsach_lichsu
+                        : R.drawable.ic_thongke
+        );
+
+        btnChuyenCheDoLichSu.setContentDescription(
+                dangXemThongKe
+                        ? "Chuyển sang danh sách"
+                        : "Chuyển sang thống kê"
+        );
+    }
+
+
+    private void layLichSuLuyenTap() {
+        String token = layToken();
+
+        if (token == null || token.isEmpty()) {
+            hienThiTrangThaiLichSu("Vui lòng đăng nhập lại");
+            return;
+        }
+
+        if (callLichSu != null) {
+            callLichSu.cancel();
+        }
+
+        khungDanhSachLichSu.removeAllViews();
+        hienThiTrangThaiLichSu("Đang tải lịch sử...");
+
+        callLichSu = apiService.layLichSuLuyenTap(
+                "Bearer " + token,
+                1,
+                10
+        );
+
+        callLichSu.enqueue(
+                new Callback<ApiResponse<LichSuLuyenTapResponse>>() {
+                    @Override
+                    public void onResponse(
+                            @NonNull Call<ApiResponse<LichSuLuyenTapResponse>> call,
+                            @NonNull Response<ApiResponse<LichSuLuyenTapResponse>> response) {
+
+                        if (!isAdded() || getView() == null || call != callLichSu) {
+                            return;
+                        }
+
+                        if (!response.isSuccessful()
+                                || response.body() == null
+                                || response.body().getData() == null) {
+                            hienThiTrangThaiLichSu("Không tải được lịch sử");
+                            return;
+                        }
+
+                        LichSuLuyenTapResponse duLieu =
+                                response.body().getData();
+
+                        if (duLieu.getDanhSach() == null
+                                || duLieu.getDanhSach().isEmpty()) {
+                            hienThiTrangThaiLichSu("Bạn chưa có phiên luyện tập nào");
+                            return;
+                        }
+
+                        txtTrangThaiLichSu.setVisibility(View.GONE);
+                        khungDanhSachLichSu.removeAllViews();
+
+                        for (LichSuLuyenTapResponse.PhienLuyenTap phien
+                                : duLieu.getDanhSach()) {
+                            themItemLichSu(phien);
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(
+                            @NonNull Call<ApiResponse<LichSuLuyenTapResponse>> call,
+                            @NonNull Throwable t) {
+
+                        if (call.isCanceled()
+                                || !isAdded()
+                                || getView() == null
+                                || call != callLichSu) {
+                            return;
+                        }
+
+                        hienThiTrangThaiLichSu("Không thể kết nối đến server");
+                    }
+                }
+        );
+    }
+
+    private void hienThiTrangThaiLichSu(String noiDung) {
+        txtTrangThaiLichSu.setText(noiDung);
+        txtTrangThaiLichSu.setVisibility(View.VISIBLE);
+    }
+
+    private void themItemLichSu(
+            LichSuLuyenTapResponse.PhienLuyenTap phien) {
+
+        View itemView = LayoutInflater.from(requireContext())
+                .inflate(
+                        R.layout.luyentap_item_lichsu,
+                        khungDanhSachLichSu,
+                        false
+                );
+
+        ImageView imgGame =
+                itemView.findViewById(R.id.img_game_lich_su);
+
+        TextView txtTenGame =
+                itemView.findViewById(R.id.txt_ten_game_lich_su);
+
+        TextView txtKetQua =
+                itemView.findViewById(R.id.txt_ket_qua_lich_su);
+
+        TextView txtNgay =
+                itemView.findViewById(R.id.txt_ngay_lich_su);
+
+        String cheDo = phien.getCheDo();
+
+        txtTenGame.setText(layTenGameLichSu(cheDo));
+
+        if ("flashcard".equals(cheDo)) {
+            imgGame.setImageResource(R.drawable.ic_flashcard);
+        } else if ("trac_nghiem".equals(cheDo)) {
+            imgGame.setImageResource(R.drawable.ic_tracnghiem);
+        } else if ("noi_tu".equals(cheDo)) {
+            imgGame.setImageResource(R.drawable.ic_noitu);
+        } else if ("go_tu".equals(cheDo)) {
+            imgGame.setImageResource(R.drawable.ic_gotu);
+        } else if ("nghe_viet".equals(cheDo)) {
+            imgGame.setImageResource(R.drawable.ic_ngheviet);
+        } else {
+            imgGame.setImageResource(R.drawable.ic_game_dacbiet);
+        }
+
+        String nhanKetQua = "flashcard".equals(cheDo)
+                ? " đã thuộc"
+                : " câu đúng";
+
+        String ketQua = phien.getSoDung()
+                + "/" + phien.getTongSoCau()
+                + nhanKetQua
+                + " · " + phien.getPhanTram() + "%";
+
+        txtKetQua.setText(ketQua);
+        txtNgay.setText(dinhDangNgayLichSu(phien.getNgayLuyenTap()));
+
+        khungDanhSachLichSu.addView(itemView);
+    }
+
+    private String layTenGameLichSu(String cheDo) {
+        if (cheDo == null) {
+            return "Luyện tập";
+        }
+
+        switch (cheDo) {
+            case "flashcard":
+                return "Flashcard";
+            case "trac_nghiem":
+                return "Trắc nghiệm";
+            case "noi_tu":
+                return "Nối từ với nghĩa";
+            case "go_tu":
+                return "Gõ từ vựng";
+            case "nghe_viet":
+                return "Nghe viết";
+            case "dac_biet":
+                return "Đặc biệt";
+            default:
+                return "Luyện tập";
+        }
+    }
+
+    private String dinhDangNgayLichSu(String ngay) {
+        if (ngay == null || ngay.trim().isEmpty()) {
+            return "";
+        }
+
+        try {
+            SimpleDateFormat dauVao = new SimpleDateFormat(
+                    "yyyy-MM-dd HH:mm:ss",
+                    Locale.getDefault()
+            );
+
+            SimpleDateFormat dauRa = new SimpleDateFormat(
+                    "dd/MM/yyyy · HH:mm",
+                    Locale.getDefault()
+            );
+
+            Date date = dauVao.parse(ngay);
+
+            return date != null
+                    ? dauRa.format(date)
+                    : ngay;
+
+        } catch (ParseException e) {
+            return ngay;
+        }
+    }
+
+
+    private void layThongKeLichSu() {
+        String token = layToken();
+
+        if (token == null || token.isEmpty()) {
+            txtSoLanLuyenTap.setText("—");
+            txtDoChinhXacTb.setText("—");
+            txtSoLuotChoiLichSu.setText("—");
+            hienThiLoiThongKe("Vui lòng đăng nhập lại");
+            return;
+        }
+
+        if (callThongKe != null) {
+            callThongKe.cancel();
+        }
+
+        txtSoLanLuyenTap.setText("…");
+        txtDoChinhXacTb.setText("…");
+        txtSoLuotChoiLichSu.setText("…");
+
+        callThongKe = apiService.layThongKeLuyenTap(
+                "Bearer " + token
+        );
+
+        callThongKe.enqueue(
+                new Callback<ApiResponse<ThongKeLuyenTapResponse>>() {
+                    @Override
+                    public void onResponse(
+                            @NonNull Call<ApiResponse<ThongKeLuyenTapResponse>> call,
+                            @NonNull Response<ApiResponse<ThongKeLuyenTapResponse>> response) {
+
+                        if (!isAdded() || getView() == null || call != callThongKe) {
+                            return;
+                        }
+
+                        if (!response.isSuccessful()
+                                || response.body() == null
+                                || response.body().getData() == null) {
+                            hienThiLoiThongKe("Không tải được thống kê");
+                            return;
+                        }
+
+                        ThongKeLuyenTapResponse duLieu =
+                                response.body().getData();
+
+                        txtSoLanLuyenTap.setText(
+                                String.valueOf(duLieu.getSoLanLuyenTap())
+                        );
+
+                        txtDoChinhXacTb.setText(
+                                duLieu.getDoChinhXacTb() + "%"
+                        );
+
+                        txtSoLuotChoiLichSu.setText(
+                                String.valueOf(duLieu.getSoLuotChoi())
+                        );
+
+                        if (duLieu.getTheoCheDo() == null
+                                || duLieu.getTheoCheDo().isEmpty()) {
+                            themDongThongKe("Chưa có dữ liệu", "");
+                            return;
+                        }
+
+                        for (ThongKeLuyenTapResponse.ThongKeTheoCheDo item
+                                : duLieu.getTheoCheDo()) {
+                            themDongThongKe(
+                                    layTenGameLichSu(item.getCheDo()),
+                                    item.getSoLan() + " lần"
+                            );
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(
+                            @NonNull Call<ApiResponse<ThongKeLuyenTapResponse>> call,
+                            @NonNull Throwable t) {
+
+                        if (call.isCanceled()
+                                || !isAdded()
+                                || getView() == null
+                                || call != callThongKe) {
+                            return;
+                        }
+
+                        hienThiLoiThongKe("Không thể tải thống kê");
+                    }
+                }
+        );
+    }
+
+    private void hienThiLoiThongKe(String thongBao) {
+        txtSoLanLuyenTap.setText("—");
+        txtDoChinhXacTb.setText("—");
+        txtSoLuotChoiLichSu.setText("—");
+        themDongThongKe(thongBao, "");
+    }
+
+    private void themDongThongKe(String tenGame, String soLan) {
+        LinearLayout dong = new LinearLayout(requireContext());
+        dong.setOrientation(LinearLayout.HORIZONTAL);
+        dong.setGravity(android.view.Gravity.CENTER_VERTICAL);
+
+        int padding = (int) (10 * getResources().getDisplayMetrics().density);
+        dong.setPadding(0, padding, 0, padding);
+
+        TextView txtTen = new TextView(requireContext());
+        txtTen.setText(tenGame);
+        txtTen.setTextSize(13);
+        txtTen.setTextColor(0xFF7C8492);
+        txtTen.setFontFeatureSettings("kern");
+
+        LinearLayout.LayoutParams tenParams =
+                new LinearLayout.LayoutParams(
+                        0,
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        1
+                );
+
+        dong.addView(txtTen, tenParams);
+
+        TextView txtSoLan = new TextView(requireContext());
+        txtSoLan.setText(soLan);
+        txtSoLan.setTextSize(13);
+        txtSoLan.setTextColor(0xFF111111);
+
+        dong.addView(txtSoLan);
+
+    }
+
+
+    private void layStreakLichSu() {
+        String token = layToken();
+
+        if (token == null || token.isEmpty()) {
+            txtStreakLichSu.setText("—");
+            return;
+        }
+
+        if (callStreak != null) {
+            callStreak.cancel();
+        }
+
+        txtStreakLichSu.setText("…");
+
+        callStreak = apiService.layHoatDongNamHienTai(
+                "Bearer " + token
+        );
+
+        callStreak.enqueue(
+                new Callback<ApiResponse<HoatDongNamResponse>>() {
+                    @Override
+                    public void onResponse(
+                            @NonNull Call<ApiResponse<HoatDongNamResponse>> call,
+                            @NonNull Response<ApiResponse<HoatDongNamResponse>> response) {
+
+                        if (!isAdded() || getView() == null || call != callStreak) {
+                            return;
+                        }
+
+                        if (!response.isSuccessful()
+                                || response.body() == null
+                                || response.body().getData() == null) {
+                            txtStreakLichSu.setText("—");
+                            return;
+                        }
+
+                        int streak = response.body()
+                                .getData()
+                                .getCurrentStreak();
+
+                        txtStreakLichSu.setText(streak + " ngày");
+                    }
+
+                    @Override
+                    public void onFailure(
+                            @NonNull Call<ApiResponse<HoatDongNamResponse>> call,
+                            @NonNull Throwable t) {
+
+                        if (call.isCanceled()
+                                || !isAdded()
+                                || getView() == null
+                                || call != callStreak) {
+                            return;
+                        }
+
+                        txtStreakLichSu.setText("—");
+                    }
+                }
+        );
+    }
+
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+
+        if (!hidden && isAdded() && getView() != null && apiService != null) {
+            layLichSuLuyenTap();
+
+            if (dangXemThongKe) {
+                layThongKeLichSu();
+                layStreakLichSu();
+            }
+        }
+    }
+
+
+
 
     // ==================== CHUYỂN ĐỔI GIÁ TRỊ ====================
 

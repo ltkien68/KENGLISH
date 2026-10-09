@@ -167,9 +167,12 @@ public class XepHangAdapter extends BaseAdapter {
          * có thể dùng Glide để load
          * nguoiDung.getAnhDaiDien().
          */
+
         holder.imgAnhDaiDien.setImageResource(
-                android.R.drawable.sym_def_app_icon
+                android.R.drawable.ic_menu_myplaces
         );
+        holder.imgAnhDaiDien.setColorFilter(0xFF37659C);
+
 
 
         /*

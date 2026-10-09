@@ -12,6 +12,8 @@ const boTuRoutes = require("./routes/boTuRoutes");
 const folderRoutes = require("./routes/folderRoutes");
 const activityRoutes = require("./routes/activityRoutes");
 const practiceRoutes = require("./routes/practiceRoutes");
+const leaderboardRoutes = require("./routes/leaderboardRoutes");
+
 
 // Middleware
 app.use(cors());
@@ -24,6 +26,8 @@ app.use("/vocabulary", boTuRoutes);
 app.use("/folder", folderRoutes);
 app.use("/activity", activityRoutes);
 app.use("/practice", practiceRoutes);
+app.use("/leaderboard", leaderboardRoutes);
+
 
 // API kiểm tra server
 app.get("/", (req, res) => {

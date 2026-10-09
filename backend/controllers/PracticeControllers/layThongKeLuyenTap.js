@@ -1,9 +1,17 @@
-
 const db = require("../../config/database");
 
 const layThongKeLuyenTap = async (req, res) => {
   try {
     const nguoiDungId = req.nguoiDung.id;
+
+    const [nguoiDungRows] = await db.query(
+      `
+    SELECT so_luot_choi
+    FROM nguoi_dung
+    WHERE id = ?
+    `,
+      [nguoiDungId],
+    );
 
     const [tongQuanRows] = await db.query(
       `
@@ -37,7 +45,7 @@ const layThongKeLuyenTap = async (req, res) => {
       FROM lich_su_luyen_tap
       WHERE nguoi_dung_id = ?
       `,
-      [nguoiDungId]
+      [nguoiDungId],
     );
 
     const [theoCheDo] = await db.query(
@@ -52,7 +60,7 @@ const layThongKeLuyenTap = async (req, res) => {
       GROUP BY che_do
       ORDER BY so_lan DESC, che_do ASC
       `,
-      [nguoiDungId]
+      [nguoiDungId],
     );
 
     return res.status(200).json({
@@ -60,16 +68,16 @@ const layThongKeLuyenTap = async (req, res) => {
       thong_bao: "Lấy thống kê luyện tập thành công",
       data: {
         ...tongQuanRows[0],
-        theo_che_do: theoCheDo
-      }
+        theo_che_do: theoCheDo,
+        so_luot_choi: nguoiDungRows[0]?.so_luot_choi ?? 0,
+      },
     });
-
   } catch (error) {
     console.error("Lỗi thống kê luyện tập:", error);
 
     return res.status(500).json({
       thanh_cong: false,
-      thong_bao: "Không thể lấy thống kê luyện tập"
+      thong_bao: "Không thể lấy thống kê luyện tập",
     });
   }
 };

@@ -1,47 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<!-- Tiêu đề bảng xếp hạng -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="44dp"
     android:background="#EEF4FB"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingStart="14dp"
-    android:paddingEnd="14dp">
-
-
-    <!-- Hạng -->
+    android:paddingStart="12dp"
+    android:paddingEnd="12dp">
     <TextView
         android:layout_width="48dp"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/juve_normal"
+        android:fontFamily="@font/juve_headin"
         android:text="HẠNG"
         android:textColor="#7C8492"
         android:textSize="11sp" />
-
-
-    <!-- Người dùng -->
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:fontFamily="@font/juve_normal"
+        android:fontFamily="@font/juve_headin"
+        android:gravity="start"
+        android:paddingStart="50dp"
         android:text="NGƯỜI DÙNG"
         android:textColor="#7C8492"
         android:textSize="11sp" />
-
-
-    <!-- Điểm -->
     <TextView
         android:id="@+id/txt_tieu_de_diem"
         android:layout_width="70dp"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/juve_normal"
+        android:fontFamily="@font/juve_headin"
         android:gravity="end"
         android:text="LƯỢT"
         android:textColor="#7C8492"
         android:textSize="11sp" />
-
 </LinearLayout>

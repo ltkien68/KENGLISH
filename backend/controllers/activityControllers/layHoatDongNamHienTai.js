@@ -1,95 +1,105 @@
 const db = require("../../config/database");
 
 const layHoatDongNamHienTai = async (req, res) => {
-  try {
-    const nguoiDungId = req.nguoiDung.id;
+    try {
+        const nguoiDungId = req.nguoiDung.id;
 
-    const [rows] = await db.query(
-      `
-                    SELECT
-                        DATE_FORMAT(
-                            ngay,
-                            '%Y-%m-%d'
-                        ) AS ngay
+        // Lấy ngày hiện tại theo múi giờ Việt Nam.
+        const [ngayRows] = await db.query(`
+            SELECT
+                DATE_FORMAT(
+                    CONVERT_TZ(UTC_TIMESTAMP(), '+00:00', '+07:00'),
+                    '%Y-%m-%d'
+                ) AS hom_nay,
+                YEAR(
+                    CONVERT_TZ(UTC_TIMESTAMP(), '+00:00', '+07:00')
+                ) AS nam
+        `);
 
-                    FROM ngay_hoat_dong
+        const homNay = ngayRows[0].hom_nay;
+        const namHienTai = Number(ngayRows[0].nam);
 
-                    WHERE nguoi_dung_id = ?
+        // Lấy toàn bộ ngày hoạt động để tính streak
+        // xuyên năm, không chỉ trong năm hiện tại.
+        const [rows] = await db.query(
+            `
+            SELECT
+                DATE_FORMAT(ngay, '%Y-%m-%d') AS ngay
+            FROM ngay_hoat_dong
+            WHERE nguoi_dung_id = ?
+            ORDER BY ngay DESC
+            `,
+            [nguoiDungId]
+        );
 
-                    AND YEAR(ngay) =
-                        YEAR(CURDATE())
+        const danhSachNgay = rows.map(item => item.ngay);
+        const tapNgay = new Set(danhSachNgay);
 
-                    ORDER BY ngay ASC
-                    `,
-      [nguoiDungId],
-    );
+        // Chuyển ngày YYYY-MM-DD thành số ngày UTC
+        // để cộng/trừ ngày không phụ thuộc timezone server.
+        const chuyenThanhSoNgay = (chuoiNgay) => {
+            const [nam, thang, ngay] = chuoiNgay
+                .split("-")
+                .map(Number);
 
-    const danhSachNgay = rows.map((item) => item.ngay);
+            return Math.floor(
+                Date.UTC(nam, thang - 1, ngay) / 86400000
+            );
+        };
 
-    /*
-     * ===============================
-     * TÍNH CURRENT STREAK
-     * ===============================
-     */
+        const chuyenThanhChuoiNgay = (soNgay) => {
+            return new Date(soNgay * 86400000)
+                .toISOString()
+                .slice(0, 10);
+        };
 
-    const tapNgay = new Set(danhSachNgay);
+        const soNgayHomNay = chuyenThanhSoNgay(homNay);
 
-    let streak = 0;
+        let ngayBatDau = soNgayHomNay;
+        let streak = 0;
 
-    const ngayKiemTra = new Date();
+        // Nếu hôm nay chưa học, bắt đầu kiểm tra hôm qua.
+        if (!tapNgay.has(homNay)) {
+            ngayBatDau = soNgayHomNay - 1;
+        }
 
-    /*
-     * Nếu hôm nay chưa hoạt động,
-     * kiểm tra từ hôm qua.
-     *
-     * Như vậy streak hôm qua không
-     * biến thành 0 ngay đầu ngày.
-     */
-    const homNay = ngayKiemTra.toISOString().slice(0, 10);
+        // Đếm ngược các ngày học liên tiếp.
+        while (true) {
+            const ngayKiemTra =
+                chuyenThanhChuoiNgay(ngayBatDau);
 
-    if (!tapNgay.has(homNay)) {
-      return res.status(200).json({
-        thanh_cong: true,
+            if (!tapNgay.has(ngayKiemTra)) {
+                break;
+            }
 
-        data: {
-          nam: new Date().getFullYear(),
-          current_streak: 0,
-          ngay_hoat_dong: danhSachNgay,
-        },
-      });
+            streak++;
+            ngayBatDau--;
+        }
+
+        // Danh sách hoạt động trả về vẫn chỉ thuộc
+        // năm hiện tại, phục vụ biểu đồ lịch học.
+        const danhSachNgayNamHienTai =
+            danhSachNgay
+                .filter(ngay => ngay.startsWith(namHienTai + "-"))
+                .reverse();
+
+        return res.status(200).json({
+            thanh_cong: true,
+            data: {
+                nam: namHienTai,
+                current_streak: streak,
+                ngay_hoat_dong: danhSachNgayNamHienTai
+            }
+        });
+
+    } catch (error) {
+        console.error("Lỗi lấy hoạt động:", error);
+
+        return res.status(500).json({
+            thanh_cong: false,
+            thong_bao: "Lỗi server"
+        });
     }
-
-    while (true) {
-      const ngay = ngayKiemTra.toISOString().slice(0, 10);
-
-      if (!tapNgay.has(ngay)) {
-        break;
-      }
-
-      streak++;
-
-      ngayKiemTra.setDate(ngayKiemTra.getDate() - 1);
-    }
-
-    return res.status(200).json({
-      thanh_cong: true,
-
-      data: {
-        nam: new Date().getFullYear(),
-
-        current_streak: streak,
-
-        ngay_hoat_dong: danhSachNgay,
-      },
-    });
-  } catch (error) {
-    console.error("Lỗi lấy hoạt động:", error);
-
-    return res.status(500).json({
-      thanh_cong: false,
-      thong_bao: "Lỗi server",
-    });
-  }
 };
 
 module.exports = layHoatDongNamHienTai;

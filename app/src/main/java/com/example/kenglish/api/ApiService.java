@@ -2,6 +2,7 @@
 package com.example.kenglish.api;
 
 import com.example.kenglish.model.ApiResponse;
+import com.example.kenglish.model.BangXepHangResponse;
 import com.example.kenglish.model.BoTuModel;
 import com.example.kenglish.model.CapNhatTrangThaiTuRequest;
 import com.example.kenglish.model.ChiTietFolderResponse;
@@ -12,12 +13,14 @@ import com.example.kenglish.model.DangNhapResponse;
 import com.example.kenglish.model.DanhSachTuResponse;
 import com.example.kenglish.model.Folder;
 import com.example.kenglish.model.HoatDongNamResponse;
+import com.example.kenglish.model.LichSuLuyenTapResponse;
 import com.example.kenglish.model.LuuTienTrinhRequest;
 import com.example.kenglish.model.LuuTienTrinhResponse;
 import com.example.kenglish.model.TaoBoTuRequest;
 import com.example.kenglish.model.TaoFolderRequest;
 import com.example.kenglish.model.ThemTuRequest;
 import com.example.kenglish.model.ThongKeHocTap;
+import com.example.kenglish.model.ThongKeLuyenTapResponse;
 import com.example.kenglish.model.TuVung;
 import com.example.kenglish.model.XacThucEmailRequest;
 import com.example.kenglish.model.DictionaryResponse;
@@ -206,5 +209,28 @@ public interface ApiService {
             @Header("Authorization") String token,
             @Body LuuTienTrinhRequest request
     );
+
+    // ==================== LỊCH SỬ LUYỆN TẬP ====================
+
+    @GET("practice/history")
+    Call<ApiResponse<LichSuLuyenTapResponse>> layLichSuLuyenTap(
+            @Header("Authorization") String token,
+            @Query("page") int page,
+            @Query("limit") int limit
+    );
+
+    @GET("practice/statistics")
+    Call<ApiResponse<ThongKeLuyenTapResponse>> layThongKeLuyenTap(
+            @Header("Authorization") String token
+    );
+
+
+    // ==================== BẢNG XẾP HẠNG ====================
+    @GET("leaderboard")
+    Call<ApiResponse<BangXepHangResponse>> layBangXepHang(
+            @Header("Authorization") String token,
+            @Query("loai") String loai
+    );
+
 
 }
