@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card_lich_su_luyen_tap"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/nen_luyentap_lichsu"
+    android:orientation="vertical"
+    android:padding="14dp">
+
+    <!-- HEADER -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:contentDescription="Lịch sử luyện tập"
+            android:src="@drawable/ic_lichsu"
+            android:tint="#37659C" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/juve_headin"
+            android:text="LỊCH SỬ LUYỆN TẬP"
+            android:textColor="#111111"
+            android:textSize="15sp" />
+
+        <ImageView
+            android:id="@+id/btn_chuyen_che_do_lich_su"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:background="@drawable/nen_luyentap_lichsu_icon"
+            android:clickable="true"
+            android:contentDescription="Chuyển sang thống kê"
+            android:focusable="true"
+            android:padding="9dp"
+            android:src="@drawable/ic_thongke"
+            android:tint="#37659C" />
+
+    </LinearLayout>
+
+    <!-- DANH SÁCH LỊCH SỬ -->
+
+    <LinearLayout
+        android:id="@+id/layout_danh_sach_lich_su"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <TextView
+            android:id="@+id/txt_trang_thai_lich_su"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/juve_normal"
+            android:gravity="center"
+            android:padding="18dp"
+            android:text="Đang tải lịch sử..."
+            android:textColor="#7C8492"
+            android:textSize="13sp" />
+
+        <LinearLayout
+            android:id="@+id/khung_danh_sach_lich_su"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+    </LinearLayout>
+
+    <!-- THỐNG KÊ -->
+
+    <LinearLayout
+        android:id="@+id/layout_thong_ke_lich_su"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alignmentMode="alignMargins"
+            android:columnCount="2"
+            android:useDefaultMargins="false">
+
+            <!-- SỐ LẦN LUYỆN TẬP -->
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_marginEnd="4dp"
+                android:layout_marginBottom="8dp"
+                android:background="#F5F5F6"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/juve_normal"
+                    android:text="Số lần luyện tập"
+                    android:textColor="#7C8492"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/txt_so_lan_luyen_tap"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:fontFamily="@font/juve_headin"
+                    android:text="0"
+                    android:textColor="#111111"
+                    android:textSize="17sp" />
+
+            </LinearLayout>
+
+            <!-- ĐỘ CHÍNH XÁC -->
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_marginStart="4dp"
+                android:layout_marginBottom="8dp"
+                android:background="#F5F5F6"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/juve_normal"
+                    android:text="Độ chính xác TB"
+                    android:textColor="#7C8492"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/txt_do_chinh_xac_tb"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:fontFamily="@font/juve_headin"
+                    android:text="0%"
+                    android:textColor="#111111"
+                    android:textSize="17sp" />
+
+            </LinearLayout>
+
+            <!-- SỐ LƯỢT CHƠI -->
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_marginEnd="4dp"
+                android:background="#F5F5F6"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/juve_normal"
+                    android:text="Số lượt chơi"
+                    android:textColor="#7C8492"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/txt_so_luot_choi_lich_su"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:fontFamily="@font/juve_headin"
+                    android:text="0"
+                    android:textColor="#111111"
+                    android:textSize="17sp" />
+
+            </LinearLayout>
+
+            <!-- STREAK -->
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_marginStart="4dp"
+                android:background="#F5F5F6"
+                android:orientation="vertical"
+                android:padding="12dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/juve_normal"
+                    android:text="Streak"
+                    android:textColor="#7C8492"
+                    android:textSize="11sp" />
+
+                <TextView
+                    android:id="@+id/txt_streak_lich_su"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
+                    android:fontFamily="@font/juve_headin"
+                    android:text="0 ngày"
+                    android:textColor="#111111"
+                    android:textSize="17sp" />
+
+            </LinearLayout>
+
+        </GridLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

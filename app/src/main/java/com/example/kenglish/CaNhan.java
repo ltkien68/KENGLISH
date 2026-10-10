@@ -124,6 +124,15 @@ public class CaNhan extends Fragment {
                 view.findViewById(R.id.scroll_hoat_dong);
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+
+        if (!hidden) {
+            layHoatDongNamHienTai();
+        }
+    }
+
     private void layHoatDongNamHienTai() {
 
         SharedPreferences sharedPreferences =

@@ -142,6 +142,8 @@ public class TrangChu extends Fragment {
 
         if (!hidden) {
             layThongKeHocTap();
+
+            layThongTinStreak();
         }
     }
 
