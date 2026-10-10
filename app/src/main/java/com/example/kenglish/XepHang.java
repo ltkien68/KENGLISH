@@ -89,6 +89,29 @@ public class XepHang extends Fragment {
         btnLamMoiCongDong = view.findViewById(R.id.btn_lam_moi_cong_dong);
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+
+        if (hidden) {
+            huyRequestBangXepHang();
+            return;
+        }
+
+        if (!isAdded() || getView() == null || xepHangAdapter == null) {
+            return;
+        }
+
+        capNhatMauTab();
+
+        if (TAB_CONG_DONG.equals(tabDangChon)) {
+            hienThiCongDong();
+        } else {
+            hienThiBangXepHang(tabDangChon);
+            layBangXepHang(tabDangChon);
+        }
+    }
+
     private void khoiTaoAdapter() {
         xepHangAdapter = new XepHangAdapter(
                 requireContext(),

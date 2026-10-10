@@ -370,25 +370,21 @@ public class LuyenTap extends Fragment {
         });
 
 
-        gridGame.setOnItemClickListener(
-                (parent, view, position, id) -> {
 
-                    if (position < 0 ||
-                            position >= danhSachGame.size()) {
-                        return;
-                    }
+        gridGame.setOnItemClickListener((parent, view, position, id) -> {
+            if (position < 0 || position >= danhSachGame.size()) {
+                return;
+            }
 
-                    // Flashcard đang ở vị trí đầu tiên.
-                    if (position != 0) {
-                        thongBao("Chế độ này đang được phát triển");
-                        return;
-                    }
+            if (position != 0 && position != 1) {
+                thongBao("Chế độ này đang được phát triển");
+                return;
+            }
 
-                    viTriGameDaChon = position;
+            viTriGameDaChon = position;
+            layTuLuyenTap();
+        });
 
-                    layTuLuyenTap();
-                }
-        );
 
 
         btnChuyenCheDoLichSu.setOnClickListener(v -> {
@@ -1296,24 +1292,28 @@ public class LuyenTap extends Fragment {
                             return;
                         }
 
+
+                        Fragment fragment;
+                        String tag;
+
                         if (viTriGameDaChon == 0) {
-
-                            Flashcard flashcard = Flashcard.newInstance(
-                                    duLieu.getTuVung()
-                            );
-
-                            requireActivity()
-                                    .getSupportFragmentManager()
-                                    .beginTransaction()
-                                    .hide(LuyenTap.this)
-                                    .add(
-                                            R.id.khung_noi_dung,
-                                            flashcard,
-                                            "FLASHCARD"
-                                    )
-                                    .addToBackStack("FLASHCARD")
-                                    .commit();
+                            fragment = Flashcard.newInstance(duLieu.getTuVung());
+                            tag = "FLASHCARD";
+                        } else if (viTriGameDaChon == 1) {
+                            fragment = TracNghiem.newInstance(duLieu.getTuVung());
+                            tag = "TRAC_NGHIEM";
+                        } else {
+                            return;
                         }
+
+                        requireActivity()
+                                .getSupportFragmentManager()
+                                .beginTransaction()
+                                .hide(LuyenTap.this)
+                                .add(R.id.khung_noi_dung, fragment, tag)
+                                .addToBackStack(tag)
+                                .commit();
+
 
 
                     }

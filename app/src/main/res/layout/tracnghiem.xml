@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F6"
+    android:fillViewport="true">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/btn_choi_lai_trac_nghiem"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/juve_headin"
+                android:gravity="center"
+                android:text="↻  CHƠI LẠI"
+                android:textColor="#37659C"
+                android:textSize="13sp" />
+            <TextView
+                android:id="@+id/btn_tam_dung_trac_nghiem"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/juve_headin"
+                android:gravity="center"
+                android:text="TẠM DỪNG"
+                android:textColor="#37659C"
+                android:textSize="13sp" />
+            <TextView
+                android:id="@+id/btn_thoat_trac_nghiem"
+                android:layout_width="0dp"
+                android:layout_height="48dp"
+                android:layout_weight="1"
+                android:fontFamily="@font/juve_headin"
+                android:gravity="center"
+                android:text="THOÁT"
+                android:textColor="#E55454"
+                android:textSize="13sp" />
+        </LinearLayout>
+        <TextView
+            android:id="@+id/txt_cau_trac_nghiem"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/juve_headin"
+            android:text="Câu 1 / 10"
+            android:textColor="#111111"
+            android:textSize="15sp" />
+        <ProgressBar
+            android:id="@+id/progress_cau_trac_nghiem"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:layout_marginTop="10dp"
+            android:max="100"
+            android:progress="0"
+            android:progressTint="#37659C"
+            android:progressBackgroundTint="#DCE8F7" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/txt_diem_trac_nghiem"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/juve_headin"
+                android:text="Đúng: 0"
+                android:textColor="#37659C"
+                android:textSize="13sp" />
+            <TextView
+                android:id="@+id/txt_gio_trac_nghiem"
+                android:layout_width="70dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="18dp"
+                android:fontFamily="@font/juve_headin"
+                android:text="30s"
+                android:textColor="#37659C"
+                android:textSize="13sp" />
+            <ProgressBar
+                android:id="@+id/progress_gio_trac_nghiem"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="0dp"
+                android:layout_height="8dp"
+                android:layout_weight="1"
+                android:max="30"
+                android:progress="30"
+                android:progressTint="#37659C"
+                android:progressBackgroundTint="#DCE8F7" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/nen_tracnghiem_card"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="18dp">
+            <TextView
+                android:id="@+id/txt_tu_trac_nghiem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="@font/juve_headin"
+                android:gravity="center"
+                android:text="executive"
+                android:textColor="#111111"
+                android:textSize="17sp" />
+            <TextView
+                android:id="@+id/txt_phien_am_trac_nghiem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:fontFamily="@font/juve_normal"
+                android:gravity="center"
+                android:text="/ɪɡˈzekjətɪv/"
+                android:textColor="#7C8492"
+                android:textSize="13sp" />
+            <TextView
+                android:id="@+id/txt_loai_tu_trac_nghiem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:fontFamily="@font/juve_normal"
+                android:gravity="center"
+                android:text="noun"
+                android:textColor="#37659C"
+                android:textSize="11sp" />
+            <TextView
+                android:id="@+id/btn_nghe_trac_nghiem"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/juve_normal"
+                android:gravity="center"
+                android:paddingStart="20dp"
+                android:paddingEnd="20dp"
+                android:text="🔊  Nghe phát âm"
+                android:textColor="#37659C"
+                android:textSize="13sp" />
+            <LinearLayout
+                android:id="@+id/layout_dap_an_trac_nghiem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical" />
+            <TextView
+                android:id="@+id/txt_phan_hoi_trac_nghiem"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/juve_headin"
+                android:gravity="center"
+                android:textColor="#37659C"
+                android:textSize="13sp"
+                android:visibility="gone" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>
