@@ -27,7 +27,7 @@
         android:layout_marginTop="24dp"
         android:fontFamily="@font/juve_headin"
         android:text="TẠO THƯ MỤC"
-        android:textColor="#111111"
+        android:textColor="#0B3475"
         android:textSize="20sp" />
 
 

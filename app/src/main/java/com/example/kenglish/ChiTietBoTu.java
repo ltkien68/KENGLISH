@@ -3,6 +3,7 @@ package com.example.kenglish;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.DataSetObserver;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -136,6 +138,16 @@ public class ChiTietBoTu extends Fragment {
         hienThiThongTinBoTu();
 
 
+        androidx.core.widget.NestedScrollView scrollChiTiet =
+                view.findViewById(R.id.scroll_chi_tiet_bo_tu);
+
+        scrollChiTiet.setDescendantFocusability(
+                ViewGroup.FOCUS_BEFORE_DESCENDANTS
+        );
+
+        scrollChiTiet.setFocusableInTouchMode(true);
+        scrollChiTiet.requestFocus();
+
         /*
          * Lấy dữ liệu thật từ database.
          */
@@ -219,6 +231,16 @@ public class ChiTietBoTu extends Fragment {
 
         btnHocNgay = view.findViewById(R.id.btn_hoc_ngay);
 
+        View layoutTimKiem = (View) edtTimTu.getParent();
+
+        edtTimTu.setOnFocusChangeListener((v, hasFocus) -> {
+            layoutTimKiem.setBackgroundResource(
+                    hasFocus
+                            ? R.drawable.nen_botu_timkiem_focus
+                            : R.drawable.nen_botu_timkiem
+            );
+        });
+
     }
 
 
@@ -227,6 +249,85 @@ public class ChiTietBoTu extends Fragment {
      * NHẬN DỮ LIỆU TỪ MÀN HÌNH TRƯỚC
      * =========================================
      */
+
+
+    private void capNhatChieuCaoDanhSach() {
+        if (listTuVung == null) {
+            return;
+        }
+
+        ListAdapter adapter = listTuVung.getAdapter();
+
+        if (adapter == null) {
+            return;
+        }
+
+        int soLuong = adapter.getCount();
+
+        if (soLuong == 0) {
+            ViewGroup.LayoutParams params = listTuVung.getLayoutParams();
+            params.height = 0;
+            listTuVung.setLayoutParams(params);
+            return;
+        }
+
+        int chieuRong = listTuVung.getWidth();
+
+        if (chieuRong <= 0) {
+            listTuVung.post(this::capNhatChieuCaoDanhSach);
+            return;
+        }
+
+        int widthSpec = View.MeasureSpec.makeMeasureSpec(
+                chieuRong,
+                View.MeasureSpec.EXACTLY
+        );
+
+        int heightSpec = View.MeasureSpec.makeMeasureSpec(
+                0,
+                View.MeasureSpec.UNSPECIFIED
+        );
+
+        int tongChieuCao = 0;
+
+        View itemCu = null;
+        int loaiItemCu = -1;
+
+        for (int i = 0; i < soLuong; i++) {
+            int loaiItem = adapter.getItemViewType(i);
+
+            if (loaiItem != loaiItemCu) {
+                itemCu = null;
+                loaiItemCu = loaiItem;
+            }
+
+            View item = adapter.getView(
+                    i,
+                    itemCu,
+                    listTuVung
+            );
+
+            item.measure(widthSpec, heightSpec);
+
+            tongChieuCao += item.getMeasuredHeight();
+
+            itemCu = item;
+        }
+
+        tongChieuCao += listTuVung.getDividerHeight()
+                * Math.max(0, soLuong - 1);
+
+        tongChieuCao += listTuVung.getPaddingTop()
+                + listTuVung.getPaddingBottom();
+
+        ViewGroup.LayoutParams params = listTuVung.getLayoutParams();
+
+        if (params.height != tongChieuCao) {
+            params.height = tongChieuCao;
+            listTuVung.setLayoutParams(params);
+        }
+    }
+
 
     private void layDuLieuTruyenSang() {
 
@@ -587,33 +688,46 @@ public class ChiTietBoTu extends Fragment {
         );
 
         filterDangChon.setTextColor(
-                android.graphics.Color.parseColor("#37659C")
+                android.graphics.Color.parseColor("#087CFF")
         );
     }
+
 
     private void khoiTaoDanhSachTu() {
-
-        tuVungAdapter =
-                new TuVungAdapter(
-                        requireContext(),
-                        danhSachHienThi,
-
-                        // Swipe / bấm X
-                        tuVung -> xoaTu(
-                                tuVung
-                        ),
-
-                        // Bấm Đã thuộc / Chưa thuộc
-                        tuVung -> capNhatTrangThaiTu(
-                                tuVung
-                        )
-                );
-
-
-        listTuVung.setAdapter(
-                tuVungAdapter
+        tuVungAdapter = new TuVungAdapter(
+                requireContext(),
+                danhSachHienThi,
+                tuVung -> xoaTu(tuVung),
+                tuVung -> capNhatTrangThaiTu(tuVung)
         );
+
+        listTuVung.setAdapter(tuVungAdapter);
+
+        listTuVung.setNestedScrollingEnabled(false);
+
+        tuVungAdapter.registerDataSetObserver(
+                new DataSetObserver() {
+                    @Override
+                    public void onChanged() {
+                        listTuVung.post(
+                                () -> {
+                                    if (isAdded() && getView() != null) {
+                                        capNhatChieuCaoDanhSach();
+                                    }
+                                }
+                        );
+                    }
+
+                    @Override
+                    public void onInvalidated() {
+                        onChanged();
+                    }
+                }
+        );
+
+        listTuVung.post(this::capNhatChieuCaoDanhSach);
     }
+
 
     private void xoaTu(
             TuVung tuVung) {

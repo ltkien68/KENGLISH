@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<TextView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/btn_tao_bo_tu"
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/nen_nuttaobotu"
+    android:background="@drawable/nen_botu_taomoi"
     android:clickable="true"
     android:focusable="true"
-    android:fontFamily="@font/juve_headin"
+    android:fontFamily="sans-serif-medium"
     android:gravity="center"
+    android:paddingStart="12dp"
+    android:paddingEnd="12dp"
     android:text="+  TẠO BỘ TỪ"
     android:textColor="#FFFFFF"
-    android:textSize="15sp" />
+    android:textSize="13sp"/>

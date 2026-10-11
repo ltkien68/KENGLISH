@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <androidx.core.widget.NestedScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -18,43 +17,46 @@
         android:paddingEnd="16dp"
         android:paddingBottom="30dp">
 
-
-        <!-- Thanh trên -->
+        <!-- Thanh điều hướng -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="44dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/btn_quay_lai"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:clickable="true"
+                android:focusable="true"
                 android:contentDescription="Quay lại"
-                android:padding="7dp"
+                android:padding="8dp"
                 android:src="@drawable/ic_back"
-                app:tint="#111111" />
+                app:tint="#082F70" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_weight="1"
-                android:fontFamily="@font/juve_headin"
+                android:textStyle="bold"
                 android:text="CHI TIẾT TỪ"
-                android:textColor="#111111"
-                android:textSize="20sp" />
+                android:textColor="#082F70"
+                android:textSize="17sp" />
 
         </LinearLayout>
 
-
-        <!-- Từ vựng -->
+        <!-- Card thông tin từ vựng -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="28dp"
+            android:background="@drawable/nen_chitiettu_thongtin"
             android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:minHeight="118dp"
+            android:orientation="horizontal"
+            android:padding="18dp">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -64,63 +66,59 @@
 
                 <TextView
                     android:id="@+id/txt_tu_vung"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/juve_headin"
-                    android:text="apple"
-                    android:textColor="#111111"
+                    android:maxLines="2"
+                    android:text="abandon"
+                    android:textColor="#082F70"
                     android:textSize="24sp" />
 
                 <TextView
                     android:id="@+id/txt_ipa"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="8dp"
                     android:fontFamily="@font/juve_normal"
-                    android:text="/ˈæpəl/"
-                    android:textColor="#7C8492"
+                    android:text="/əˈbæn.dən/"
+                    android:textColor="#8294AD"
                     android:textSize="15sp" />
 
             </LinearLayout>
 
-
-            <!-- Phát âm -->
             <ImageView
                 android:id="@+id/btn_phat_am"
-                android:layout_width="38dp"
-                android:layout_height="38dp"
-                android:background="@drawable/nen_icon_xanh"
+                android:layout_width="52dp"
+                android:layout_height="52dp"
+                android:layout_marginStart="12dp"
+                android:background="@drawable/nen_chitiettu_phatam"
+                android:clickable="true"
+                android:focusable="true"
                 android:contentDescription="Phát âm"
-                android:padding="10dp"
+                android:padding="14dp"
                 android:src="@drawable/ic_volume"
-                app:tint="#37659C" />
+                app:tint="#087CFF" />
 
         </LinearLayout>
 
-
-        <!-- Divider -->
+        <!-- Đường phân cách -->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginTop="24dp"
-            android:background="#E2E3E3" />
-
+            android:background="#E3EAF4" />
 
         <!-- Tiêu đề nghĩa -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="22dp"
-            android:fontFamily="@font/juve_headin"
+            android:textStyle="bold"
             android:text="NGHĨA CỦA TỪ"
-            android:textColor="#111111"
+            android:textColor="#082F70"
             android:textSize="17sp" />
 
-
-        <!--
-            Các nghĩa lấy từ API sẽ được
-            thêm động vào LinearLayout này.
-        -->
+        <!-- Java thêm các card nghĩa vào đây -->
         <LinearLayout
             android:id="@+id/layout_danh_sach_nghia"
             android:layout_width="match_parent"
@@ -128,85 +126,99 @@
             android:layout_marginTop="16dp"
             android:orientation="vertical">
 
-
-            <!-- Dữ liệu mẫu để preview -->
+            <!-- Dữ liệu mẫu, Java có thể xóa khi đổ API -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/nen_chitiettu_nghia"
                 android:orientation="vertical"
-                android:paddingBottom="18dp">
+                android:padding="14dp">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/juve_normal"
-                    android:text="Danh từ"
-                    android:textColor="#37659C"
+                    android:background="@drawable/nen_chitiettu_loaitu"
+                    android:fontFamily="@font/juve_headin"
+                    android:paddingStart="12dp"
+                    android:paddingTop="6dp"
+                    android:paddingEnd="12dp"
+                    android:paddingBottom="6dp"
+                    android:text="Động từ"
+                    android:textColor="#087CFF"
                     android:textSize="13sp" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginTop="12dp"
                     android:fontFamily="@font/juve_normal"
-                    android:lineSpacingExtra="3dp"
-                    android:text="1. Quả táo, quả táo tây."
-                    android:textColor="#4F4F4F"
+                    android:lineSpacingExtra="5dp"
+                    android:text="1. Bỏ rơi, từ bỏ, ruồng bỏ."
+                    android:textColor="#243B55"
                     android:textSize="15sp" />
 
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingBottom="18dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/juve_normal"
-                    android:text="Danh từ"
-                    android:textColor="#37659C"
-                    android:textSize="13sp" />
-
-                <TextView
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:fontFamily="@font/juve_normal"
-                    android:lineSpacingExtra="3dp"
-                    android:text="2. Cây táo, cây táo tây."
-                    android:textColor="#4F4F4F"
-                    android:textSize="15sp" />
+                    android:layout_marginTop="12dp"
+                    android:background="@drawable/nen_chitiettu_vidu"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="12dp">
+
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:contentDescription="Ví dụ"
+                        android:src="@drawable/ic_tailieu"
+                        app:tint="#087CFF" />
+
+                    <LinearLayout
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:layout_weight="1"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/juve_normal"
+                            android:text="to abandon a hope"
+                            android:textColor="#087CFF"
+                            android:textSize="13sp" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:fontFamily="@font/juve_normal"
+                            android:text="từ bỏ một hy vọng"
+                            android:textColor="#8294AD"
+                            android:textSize="11sp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
 
             </LinearLayout>
 
         </LinearLayout>
 
-
-        <!-- Divider -->
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginTop="4dp"
-            android:background="#E2E3E3" />
-
-
-        <!-- Lưu từ -->
+        <!-- Nút lưu từ dạng pill -->
         <TextView
             android:id="@+id/btn_luu_tu"
             android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/nen_nuttaobotu"
+            android:layout_height="54dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/nen_chitiettu_luutu"
+            android:clickable="true"
+            android:focusable="true"
             android:fontFamily="@font/juve_headin"
             android:gravity="center"
             android:text="+  LƯU VÀO BỘ TỪ"
             android:textColor="#FFFFFF"
             android:textSize="15sp" />
-
 
     </LinearLayout>
 

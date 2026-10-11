@@ -228,39 +228,85 @@ public class TracNghiem extends Fragment {
         return false;
     }
 
+
     private void hienThiDapAn() {
         layoutDapAn.removeAllViews();
         viewDapAn.clear();
 
         for (int i = 0; i < dapAn.size(); i++) {
             final int viTriDapAn = i;
+
+            LinearLayout card = new LinearLayout(requireContext());
+            card.setOrientation(LinearLayout.HORIZONTAL);
+            card.setGravity(Gravity.CENTER_VERTICAL);
+            card.setPadding(dp(10), dp(8), dp(10), dp(8));
+            card.setMinimumHeight(dp(56));
+            card.setBackground(taoNen("#FFFFFF", "#E5EDF5"));
+
+            TextView txtSo = new TextView(requireContext());
+            txtSo.setText(String.valueOf(i + 1));
+            txtSo.setTextSize(13);
+            txtSo.setTypeface(
+                    android.graphics.Typeface.DEFAULT,
+                    android.graphics.Typeface.BOLD
+            );
+            txtSo.setTextColor(Color.parseColor("#087CFF"));
+            txtSo.setGravity(Gravity.CENTER);
+            txtSo.setBackground(taoNenKhongVien("#EAF3FF", 10));
+
+            LinearLayout.LayoutParams soParams =
+                    new LinearLayout.LayoutParams(dp(30), dp(30));
+
+            soParams.rightMargin = dp(10);
+            card.addView(txtSo, soParams);
+
             TextView txt = new TextView(requireContext());
-            txt.setText((i + 1) + ".   " + dapAn.get(i));
+            txt.setText(dapAn.get(i));
             txt.setTextSize(13);
             txt.setTextColor(Color.parseColor("#111111"));
-            txt.setTypeface(getResources().getFont(R.font.juve_normal));
+            txt.setTypeface(android.graphics.Typeface.DEFAULT);
             txt.setGravity(Gravity.CENTER_VERTICAL);
-            txt.setPadding(dp(16), dp(14), dp(16), dp(14));
-            txt.setMinHeight(dp(72));
-            txt.setBackground(taoNen("#FFFFFF", "#DCE8F7"));
+            txt.setMinHeight(dp(36));
 
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.topMargin = dp(10);
-            layoutDapAn.addView(txt, params);
+            LinearLayout.LayoutParams txtParams =
+                    new LinearLayout.LayoutParams(
+                            0,
+                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                            1f
+                    );
+            card.addView(txt, txtParams);
+
+            LinearLayout.LayoutParams cardParams =
+                    new LinearLayout.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT
+                    );
+            cardParams.topMargin = dp(8);
+            layoutDapAn.addView(card, cardParams);
+
             viewDapAn.add(txt);
-            txt.setOnClickListener(v -> chonDapAn(viTriDapAn));
+
+            card.setOnClickListener(v -> chonDapAn(viTriDapAn));
         }
     }
+
+
 
     private GradientDrawable taoNen(String mauNen, String mauVien) {
         GradientDrawable drawable = new GradientDrawable();
         drawable.setColor(Color.parseColor(mauNen));
-        drawable.setCornerRadius(dp(6));
-        drawable.setStroke(dp(2), Color.parseColor(mauVien));
+        drawable.setCornerRadius(dp(14));
+        drawable.setStroke(dp(1), Color.parseColor(mauVien));
         return drawable;
     }
+
+    private GradientDrawable taoNenKhongVien(String mauNen, int boGoc) {
+        GradientDrawable drawable = new GradientDrawable();
+        drawable.setColor(Color.parseColor(mauNen));
+        drawable.setCornerRadius(dp(boGoc));
+        return drawable;
+    }
+
 
     private int dp(int giaTri) {
         return Math.round(giaTri * getResources().getDisplayMetrics().density);
@@ -318,16 +364,22 @@ public class TracNghiem extends Fragment {
                 dung ? 1 : 0
         ));
 
+
         for (int i = 0; i < viewDapAn.size(); i++) {
             TextView txt = viewDapAn.get(i);
+            View card = (View) txt.getParent();
+
             if (i == dapAnDung) {
-                txt.setBackground(taoNen("#EEF8F1", "#2E9E60"));
-                txt.setTextColor(Color.parseColor("#2E9E60"));
+                card.setBackground(taoNen("#EEF8F1", "#2E9E60"));
+                txt.setTextColor(Color.parseColor("#238755"));
             } else if (i == viTriChon) {
-                txt.setBackground(taoNen("#FFF0F0", "#E55454"));
+                card.setBackground(taoNen("#FFF0F0", "#E55454"));
                 txt.setTextColor(Color.parseColor("#E55454"));
             }
+
+            card.setEnabled(false);
         }
+
 
         txtDiem.setText("Đúng: " + soCauDung);
         txtPhanHoi.setVisibility(View.VISIBLE);

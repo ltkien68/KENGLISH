@@ -1,65 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="78dp"
+    android:layout_width="156dp"
+    android:layout_height="90dp"
     android:background="@drawable/nen_botu_itemfolder"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingStart="16dp"
-    android:paddingEnd="16dp"
-    android:paddingBottom="8dp">
-
+    android:paddingStart="10dp"
+    android:paddingEnd="8dp">
 
     <!-- Icon folder -->
     <ImageView
-        android:layout_width="42dp"
-        android:layout_height="42dp"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
         android:background="@drawable/nen_icon_folder"
         android:contentDescription="Thư mục"
-        android:padding="10dp"
+        android:padding="7dp"
         android:src="@drawable/ic_themfolder"
         app:tint="#B98524" />
-
 
     <!-- Thông tin folder -->
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="8dp"
         android:layout_weight="1"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/txt_ten_folder"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/juve_headin"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-medium"
+            android:maxLines="1"
             android:text="TOEIC"
-            android:textColor="#111111"
-            android:textSize="17sp" />
+            android:textColor="#0B3475"
+            android:textSize="13sp" />
 
         <TextView
             android:id="@+id/txt_so_bo_tu"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:fontFamily="@font/juve_normal"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif"
+            android:maxLines="1"
             android:text="3 bộ từ"
-            android:textColor="#7C8492"
-            android:textSize="15sp" />
+            android:textColor="#8A713F"
+            android:textStyle="bold"
+            android:textSize="11sp" />
 
     </LinearLayout>
 
-
     <!-- Mũi tên -->
     <ImageView
-        android:layout_width="20dp"
-        android:layout_height="20dp"
+        android:layout_width="14dp"
+        android:layout_height="14dp"
         android:contentDescription="Mở thư mục"
         android:src="@drawable/ic_arrowright"
-        app:tint="#7C8492" />
+        app:tint="#B98524" />
 
 </LinearLayout>

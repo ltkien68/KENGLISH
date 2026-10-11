@@ -199,6 +199,14 @@ public class ChiTietFolder extends Fragment {
                 view.findViewById(
                         R.id.btn_dong_tim_kiem
                 );
+
+        edtTimBoTu.setOnFocusChangeListener((v, hasFocus) -> {
+            layoutTimKiem.setBackgroundResource(
+                    hasFocus
+                            ? R.drawable.nen_folder_input_focus
+                            : R.drawable.nen_folder_input_timkiem
+            );
+        });
     }
 
 

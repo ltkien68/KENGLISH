@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#F5F5F6"
+    android:layout_marginTop="50dp"
     android:orientation="vertical">
 
     <androidx.core.widget.NestedScrollView
@@ -24,7 +25,8 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/juve_headin"
                 android:text="KẾT QUẢ LUYỆN TẬP"
-                android:textColor="#111111"
+                android:textColor="#0B3475"
+                android:textStyle="bold"
                 android:textSize="17sp"/>
 
             <TextView
@@ -92,6 +94,7 @@
                 android:fontFamily="@font/juve_headin"
                 android:text="ĐÃ THUỘC"
                 android:textColor="#159947"
+                android:textStyle="bold"
                 android:textSize="15sp"/>
 
             <TextView
@@ -120,6 +123,7 @@
                 android:fontFamily="@font/juve_headin"
                 android:text="CHƯA THUỘC"
                 android:textColor="#D83A42"
+                android:textStyle="bold"
                 android:textSize="15sp"/>
 
             <TextView

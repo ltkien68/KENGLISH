@@ -1,21 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="20dp"
+    android:layout_marginTop="16dp"
     android:orientation="vertical">
 
-
-    <!-- ================================================= -->
-    <!-- Tiêu đề -->
-    <!-- ================================================= -->
-
+    <!-- TIÊU ĐỀ -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="44dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -23,56 +17,52 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:fontFamily="@font/juve_headin"
+            android:fontFamily="sans-serif-medium"
             android:text="CHỌN DẠNG BÀI TẬP"
-            android:textColor="#111111"
-            android:textSize="17sp" />
+            android:textColor="#0B3475"
+            android:textStyle="bold"
+            android:textSize="15sp" />
 
-
-        <!-- Tùy chỉnh -->
         <LinearLayout
             android:id="@+id/btn_cai_dat_luyen_tap"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
+            android:clickable="true"
+            android:focusable="true"
             android:gravity="center"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingStart="8dp">
 
             <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
                 android:contentDescription="Tùy chỉnh"
                 android:src="@drawable/ic_settings"
-                app:tint="#37659C" />
+                android:tint="#087CFF" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
-                android:fontFamily="@font/juve_normal"
+                android:fontFamily="sans-serif-medium"
                 android:text="Tùy chỉnh"
-                android:textColor="#37659C"
+                android:textColor="#087CFF"
                 android:textSize="13sp" />
-
         </LinearLayout>
-
     </LinearLayout>
 
-
-    <!-- ================================================= -->
-    <!-- Danh sách game -->
-    <!-- ================================================= -->
-
+    <!-- GRID GAME -->
     <GridView
         android:id="@+id/grid_game"
         android:layout_width="match_parent"
-        android:layout_height="510dp"
+        android:layout_height="390dp"
         android:layout_marginTop="8dp"
         android:columnWidth="150dp"
-        android:horizontalSpacing="8dp"
+        android:horizontalSpacing="10dp"
         android:listSelector="@android:color/transparent"
         android:numColumns="2"
+        android:overScrollMode="never"
         android:scrollbars="none"
         android:stretchMode="columnWidth"
-        android:verticalSpacing="8dp" />
-
+        android:verticalSpacing="10dp" />
 </LinearLayout>

@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/nen_nutcardbotu"
     android:orientation="vertical"
-    android:padding="14dp"
-    android:paddingBottom="8dp">
+    android:padding="16dp">
 
-
-    <!-- Tên + menu -->
+    <!-- Tên bộ từ + menu -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="32dp"
@@ -22,43 +19,43 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:fontFamily="@font/juve_headin"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-medium"
+            android:maxLines="1"
             android:text="TOEIC Part 5"
             android:textColor="#111111"
             android:textSize="15sp" />
 
         <TextView
             android:id="@+id/btn_menu_bo_tu"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:clickable="true"
             android:focusable="true"
-            android:fontFamily="@font/juve_normal"
+            android:fontFamily="sans-serif"
             android:gravity="center"
             android:text="⋮"
             android:textColor="#7C8492"
-            android:textSize="17sp" />
+            android:textSize="20sp" />
 
     </LinearLayout>
-
 
     <!-- Số lượng từ -->
     <TextView
         android:id="@+id/txt_so_luong_tu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:fontFamily="@font/juve_normal"
+        android:layout_marginTop="4dp"
+        android:fontFamily="sans-serif"
         android:text="30 từ"
         android:textColor="#7C8492"
         android:textSize="13sp" />
 
-
-    <!-- Tiến độ -->
+    <!-- Thông tin tiến độ -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="16dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
@@ -66,43 +63,41 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:fontFamily="@font/juve_normal"
+            android:fontFamily="sans-serif"
             android:text="Đã thuộc"
-            android:textColor="#4F4F4F"
+            android:textColor="#7C8492"
             android:textSize="13sp" />
 
         <TextView
             android:id="@+id/txt_tien_do"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/juve_normal"
+            android:fontFamily="sans-serif-medium"
             android:text="12/30"
-            android:textColor="#37659C"
+            android:textColor="#087CFF"
             android:textSize="13sp" />
 
     </LinearLayout>
-
 
     <!-- Thanh tiến độ -->
     <ProgressBar
         android:id="@+id/progress_bo_tu"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
-        android:layout_height="5dp"
-        android:layout_marginTop="6dp"
+        android:layout_height="6dp"
+        android:layout_marginTop="8dp"
         android:max="100"
         android:progress="40"
-        android:progressBackgroundTint="#E2E3E3"
-        android:progressTint="#37659C" />
+        android:progressDrawable="@drawable/nen_botu_progress" />
 
-
-    <!-- Nút -->
+    <!-- Các nút thao tác -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:layout_marginTop="12dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="18dp"
         android:orientation="horizontal">
 
+        <!-- Xem -->
         <TextView
             android:id="@+id/btn_xem_bo_tu"
             android:layout_width="0dp"
@@ -110,12 +105,15 @@
             android:layout_marginEnd="6dp"
             android:layout_weight="1"
             android:background="@drawable/nen_botu_nutphu"
-            android:fontFamily="@font/juve_headin"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="sans-serif-medium"
             android:gravity="center"
             android:text="XEM"
-            android:textColor="#37659C"
-            android:textSize="11sp" />
+            android:textColor="#087CFF"
+            android:textSize="13sp" />
 
+        <!-- Luyện tập -->
         <TextView
             android:id="@+id/btn_luyen_tap_bo_tu"
             android:layout_width="0dp"
@@ -123,11 +121,13 @@
             android:layout_marginStart="6dp"
             android:layout_weight="1"
             android:background="@drawable/nen_nuttaobotu"
-            android:fontFamily="@font/juve_headin"
+            android:clickable="true"
+            android:focusable="true"
+            android:fontFamily="sans-serif-medium"
             android:gravity="center"
             android:text="LUYỆN TẬP"
             android:textColor="#FFFFFF"
-            android:textSize="11sp" />
+            android:textSize="13sp" />
 
     </LinearLayout>
 

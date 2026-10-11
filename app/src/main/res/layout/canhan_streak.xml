@@ -36,7 +36,7 @@
             android:contentDescription="Hoạt động học tập"
             android:padding="8dp"
             android:src="@drawable/ic_streak"
-            app:tint="#37659C" />
+            app:tint="#087CFF" />
 
 
         <!-- Tiêu đề -->
@@ -52,7 +52,8 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/juve_headin"
                 android:text="HOẠT ĐỘNG HỌC TẬP"
-                android:textColor="#111111"
+                android:textColor="#0B3475"
+                android:textStyle="bold"
                 android:textSize="17sp" />
 
             <TextView
@@ -161,7 +162,7 @@
             android:layout_marginStart="5dp"
             android:fontFamily="@font/juve_normal"
             android:text="Có hoạt động"
-            android:textColor="#7C8492"
+            android:textColor="#087CFF"
             android:textSize="13sp" />
 
     </LinearLayout>

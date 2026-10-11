@@ -1,29 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/khung_game"
     android:layout_width="match_parent"
-    android:layout_height="160dp"
+    android:layout_height="184dp"
     android:background="@drawable/nen_luyentap_game"
     android:padding="14dp">
 
-
-    <!-- ================================================= -->
-    <!-- Nội dung -->
-    <!-- ================================================= -->
-
+    <!-- NỘI DUNG GAME -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
-
-        <!-- Icon game -->
+        <!-- ICON -->
         <FrameLayout
-            android:layout_width="46dp"
-            android:layout_height="46dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:background="@drawable/nen_luyentap_icon_game">
 
             <ImageView
@@ -34,47 +28,40 @@
                 android:contentDescription="Icon game"
                 android:scaleType="centerInside"
                 android:src="@drawable/ic_flashcard"
-                app:tint="#37659C" />
-
+                app:tint="#087CFF" />
         </FrameLayout>
 
-
-        <!-- Tên game -->
+        <!-- TÊN GAME -->
         <TextView
             android:id="@+id/txt_ten_game"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:fontFamily="@font/juve_headin"
+            android:layout_marginTop="12dp"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-medium"
             android:maxLines="1"
             android:text="Flashcard"
             android:textColor="#111111"
             android:textSize="15sp" />
 
-
-        <!-- Mô tả -->
+        <!-- MÔ TẢ -->
         <TextView
             android:id="@+id/txt_mo_ta_game"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
+            android:layout_marginTop="4dp"
             android:ellipsize="end"
-            android:fontFamily="@font/juve_normal"
+            android:fontFamily="sans-serif"
             android:maxLines="1"
             android:text="Lật thẻ và ghi nhớ"
             android:textColor="#7C8492"
-            android:textSize="13sp" />
-
+            android:textSize="11sp" />
     </LinearLayout>
 
-
-    <!-- ================================================= -->
-    <!-- Phần thưởng -->
-    <!-- ================================================= -->
-
+    <!-- PHẦN THƯỞNG -->
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="28dp"
+        android:layout_height="30dp"
         android:layout_gravity="bottom|start"
         android:background="@drawable/nen_luyentap_thuong"
         android:gravity="center"
@@ -86,9 +73,9 @@
             android:id="@+id/txt_thuong_game"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/juve_headin"
+            android:fontFamily="sans-serif-medium"
             android:text="+5"
-            android:textColor="#111111"
+            android:textColor="#087CFF"
             android:textSize="11sp" />
 
         <ImageView
@@ -96,31 +83,24 @@
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_marginStart="5dp"
-            android:contentDescription="Xu"
+            android:contentDescription="Xu thưởng"
             android:scaleType="centerInside"
             android:src="@drawable/ic_coin" />
-
     </LinearLayout>
 
-
-    <!-- ================================================= -->
-    <!-- Nút mở game -->
-    <!-- ================================================= -->
-
+    <!-- NÚT MỞ GAME -->
     <FrameLayout
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
         android:layout_gravity="bottom|end"
         android:background="@drawable/nen_luyentap_nut_game">
 
         <ImageView
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="17dp"
+            android:layout_height="17dp"
             android:layout_gravity="center"
             android:contentDescription="Bắt đầu"
             android:src="@drawable/ic_arrowright"
-            app:tint="#4F4F4F" />
-
+            app:tint="#FFFFFF" />
     </FrameLayout>
-
 </FrameLayout>

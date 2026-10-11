@@ -1,10 +1,16 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
     <style name="Base.Theme.Kenglish" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+        <item name="colorPrimary">#1877F2</item>
+        <item name="colorOnPrimary">#FFFFFF</item>
+        <item name="colorSecondary">#0B3475</item>
+        <item name="colorSurface">#FFFFFF</item>
+        <item name="colorOnSurface">#0B3475</item>
+        <item name="colorOutline">#DDEEFF</item>
+        <item name="android:fontFamily">sans</item>
+        <item name="fontFamily">sans</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:statusBarColor">#FFFFFF</item>
+        <item name="android:navigationBarColor">#FFFFFF</item>
     </style>
-
     <style name="Theme.Kenglish" parent="Base.Theme.Kenglish" />
-
 </resources>

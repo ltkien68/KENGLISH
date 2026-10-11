@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- Khi EditText được focus -->
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#F5F5F6" />
+            <corners android:radius="14dp" />
+            <stroke
+                android:width="1.5dp"
+                android:color="#087CFF" />
+        </shape>
+    </item>
+
+    <!-- Trạng thái bình thường -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#F5F5F6" />
+            <corners android:radius="14dp" />
+            <stroke
+                android:width="1dp"
+                android:color="#E4E7EC" />
+        </shape>
+    </item>
+
+</selector>

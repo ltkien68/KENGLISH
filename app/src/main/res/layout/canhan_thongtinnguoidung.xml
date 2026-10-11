@@ -57,8 +57,9 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/juve_headin"
                     android:text="Lê Trung Kiên"
-                    android:textColor="#111111"
-                    android:textSize="17sp" />
+                    android:textColor="#0B3475"
+                    android:textStyle="bold"
+                    android:textSize="20sp" />
 
 
                 <!-- Loại tài khoản -->

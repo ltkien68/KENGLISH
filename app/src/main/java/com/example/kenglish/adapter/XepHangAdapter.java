@@ -1,11 +1,14 @@
 package com.example.kenglish.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.kenglish.R;
@@ -13,29 +16,14 @@ import com.example.kenglish.model.NguoiDungXepHang;
 
 import java.util.List;
 
-
-/**
- * Adapter hiển thị người dùng trong bảng xếp hạng.
- *
- * Adapter có thể hiển thị:
- * - Xếp hạng theo lượt chơi.
- * - Xếp hạng theo streak.
- */
 public class XepHangAdapter extends BaseAdapter {
 
-    public static final String LOAI_LUOT_CHOI =
-            "luot_choi";
-
-    public static final String LOAI_STREAK =
-            "streak";
-
+    public static final String LOAI_LUOT_CHOI = "luot_choi";
+    public static final String LOAI_STREAK = "streak";
 
     private final Context context;
-
     private List<NguoiDungXepHang> danhSach;
-
     private String loaiXepHang;
-
 
     public XepHangAdapter(
             Context context,
@@ -47,24 +35,20 @@ public class XepHangAdapter extends BaseAdapter {
         this.loaiXepHang = loaiXepHang;
     }
 
-
     @Override
     public int getCount() {
-        return danhSach.size();
+        return danhSach == null ? 0 : danhSach.size();
     }
-
 
     @Override
     public Object getItem(int position) {
         return danhSach.get(position);
     }
 
-
     @Override
     public long getItemId(int position) {
         return danhSach.get(position).getId();
     }
-
 
     @Override
     public View getView(
@@ -74,14 +58,9 @@ public class XepHangAdapter extends BaseAdapter {
 
         ViewHolder holder;
 
-
-        /*
-         * Nếu chưa có View thì tạo mới.
-         */
         if (convertView == null) {
 
-            convertView = LayoutInflater
-                    .from(context)
+            convertView = LayoutInflater.from(context)
                     .inflate(
                             R.layout.xephang_itemnguoidung,
                             parent,
@@ -90,10 +69,11 @@ public class XepHangAdapter extends BaseAdapter {
 
             holder = new ViewHolder();
 
+            holder.cardXepHang =
+                    convertView.findViewById(
+                            R.id.card_xep_hang
+                    );
 
-            /*
-             * Ánh xạ các View.
-             */
             holder.txtHang =
                     convertView.findViewById(
                             R.id.txt_hang
@@ -119,124 +99,81 @@ public class XepHangAdapter extends BaseAdapter {
                             R.id.img_icon_diem
                     );
 
-
-            /*
-             * Lưu ViewHolder để tái sử dụng.
-             */
             convertView.setTag(holder);
 
         } else {
 
-            holder =
-                    (ViewHolder) convertView.getTag();
+            holder = (ViewHolder) convertView.getTag();
         }
 
-
-        /*
-         * Lấy người dùng tại vị trí hiện tại.
-         */
         NguoiDungXepHang nguoiDung =
                 danhSach.get(position);
 
+        // Danh sách đã được sắp xếp theo bảng tương ứng.
+        int hang = position + 1;
 
-        /*
-         * Hạng bắt đầu từ 1.
-         */
-        int hang =
-                position + 1;
+        // Hiển thị huy chương hoặc số thứ hạng.
+        hienThiHang(holder.txtHang, hang);
 
+        // Đổi nền theo Top 1, 2, 3.
+        capNhatMauXepHang(holder.cardXepHang, hang);
 
-        hienThiHang(
-                holder.txtHang,
-                hang
-        );
-
-
-        /*
-         * Hiển thị tên người dùng.
-         */
+        // Tên người dùng.
         holder.txtTenNguoiDung.setText(
                 nguoiDung.getTenNguoiDung()
         );
 
-
-        /*
-         * Hiện tại dùng avatar mặc định.
-         *
-         * Sau này khi Backend trả URL ảnh,
-         * có thể dùng Glide để load
-         * nguoiDung.getAnhDaiDien().
-         */
-
+        // Avatar mặc định.
         holder.imgAnhDaiDien.setImageResource(
                 android.R.drawable.ic_menu_myplaces
         );
-        holder.imgAnhDaiDien.setColorFilter(0xFF37659C);
 
+        holder.imgAnhDaiDien.setColorFilter(
+                Color.parseColor("#087CFF")
+        );
 
-
-        /*
-         * Hiển thị điểm và icon
-         * tùy theo loại bảng xếp hạng.
-         */
+        // Đổi điểm và icon theo loại bảng.
         if (LOAI_STREAK.equals(loaiXepHang)) {
 
-            /*
-             * Bảng xếp hạng Streak.
-             */
             holder.txtDiemXepHang.setText(
-                    String.valueOf(
-                            nguoiDung.getStreak()
-                    )
+                    String.valueOf(nguoiDung.getStreak())
             );
 
             holder.imgIconDiem.setImageResource(
                     R.drawable.ic_streak
             );
 
-            /*
-             * Màu cam đỏ cho icon streak.
-             */
             holder.imgIconDiem.setColorFilter(
-                    0xFFFF7043
+                    Color.parseColor("#FF7043")
             );
 
         } else {
 
-            /*
-             * Bảng xếp hạng lượt chơi.
-             */
             holder.txtDiemXepHang.setText(
-                    String.valueOf(
-                            nguoiDung.getLuotChoi()
-                    )
+                    String.valueOf(nguoiDung.getLuotChoi())
             );
 
             holder.imgIconDiem.setImageResource(
                     R.drawable.ic_tiaset
             );
 
-            /*
-             * Màu vàng cho icon lượt chơi.
-             */
             holder.imgIconDiem.setColorFilter(
-                    0xFFFFD43B
+                    Color.parseColor("#FFD43B")
             );
         }
 
+        holder.txtDiemXepHang.setTextColor(
+                Color.parseColor("#087CFF")
+        );
 
         return convertView;
     }
 
-
     /**
-     * Hiển thị hạng.
-     *
-     * Top 3 sử dụng biểu tượng huy chương.
+     * Hiển thị huy chương cho Top 3.
+     * Các hạng còn lại hiển thị số.
      */
-    private void hienThiHang(
-            TextView txtHang,
-            int hang) {
+    private void hienThiHang(TextView txtHang, int hang) {
 
         if (hang == 1) {
 
@@ -252,46 +189,113 @@ public class XepHangAdapter extends BaseAdapter {
 
         } else {
 
-            txtHang.setText(
-                    String.valueOf(hang)
-            );
+            txtHang.setText(String.valueOf(hang));
         }
     }
 
+    /**
+     * Đổi màu nền và viền card theo thứ hạng.
+     *
+     * Luôn được gọi trong getView() để tránh
+     * ListView tái sử dụng màu của item trước.
+     */
+    private void capNhatMauXepHang(
+            LinearLayout card,
+            int hang) {
+
+        if (card == null) {
+            return;
+        }
+
+        String mauNen;
+        String mauVien;
+
+        switch (hang) {
+
+            case 1:
+                mauNen = "#FFF5E5";
+                mauVien = "#F4D9A6";
+                break;
+
+            case 2:
+                mauNen = "#F0F5FA";
+                mauVien = "#DCE5EF";
+                break;
+
+            case 3:
+                mauNen = "#FFF0E9";
+                mauVien = "#F3D9CC";
+                break;
+
+            default:
+                mauNen = "#FFFFFF";
+                mauVien = "#E5EDF5";
+                break;
+        }
+
+        GradientDrawable background =
+                new GradientDrawable();
+
+        background.setShape(
+                GradientDrawable.RECTANGLE
+        );
+
+        background.setColor(
+                Color.parseColor(mauNen)
+        );
+
+        background.setCornerRadius(
+                dp(14)
+        );
+
+        background.setStroke(
+                dp(1),
+                Color.parseColor(mauVien)
+        );
+
+        card.setBackground(background);
+    }
 
     /**
-     * Chuyển loại bảng xếp hạng.
+     * Chuyển dp sang px.
      */
-    public void setLoaiXepHang(
-            String loaiXepHang) {
+    private int dp(float giaTri) {
 
-        this.loaiXepHang =
-                loaiXepHang;
+        return Math.round(
+                giaTri *
+                        context.getResources()
+                                .getDisplayMetrics()
+                                .density
+        );
+    }
+
+    /**
+     * Chuyển giữa bảng lượt chơi và streak.
+     */
+    public void setLoaiXepHang(String loaiXepHang) {
+
+        this.loaiXepHang = loaiXepHang;
 
         notifyDataSetChanged();
     }
 
-
     /**
-     * Cập nhật dữ liệu mới.
-     *
-     * Sau này Backend trả danh sách mới
-     * chỉ cần gọi method này.
+     * Cập nhật danh sách từ API.
      */
     public void capNhatDanhSach(
             List<NguoiDungXepHang> danhSachMoi) {
 
-        this.danhSach =
-                danhSachMoi;
+        this.danhSach = danhSachMoi;
 
         notifyDataSetChanged();
     }
 
-
     /**
-     * ViewHolder giúp tái sử dụng View.
+     * Lưu các View để tối ưu ListView.
      */
     private static class ViewHolder {
+
+        LinearLayout cardXepHang;
 
         TextView txtHang;
 

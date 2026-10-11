@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -14,7 +15,9 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -34,68 +37,57 @@ import com.example.kenglish.model.LichSuTraTuResponse;
 import com.example.kenglish.model.SuggestionResponse;
 import com.example.kenglish.model.ThongKeHocTap;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.textfield.TextInputLayout;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
-/**
- * Fragment hiển thị màn hình Trang chủ.
- */
 public class TrangChu extends Fragment {
 
-    /*
-     * Khu vực từ đến hạn.
-     */
-    private LinearLayout layoutTuDenHan;
-
-    /*
-     * Thông tin người dùng.
-     */
+    // Thông tin người dùng và thống kê
     private TextView txtAnhDaiDien;
     private TextView txtChuoiHoc;
+    private TextView txtChuoiHocTuan;
+    private TextView txtTenNguoiDung;
     private TextView btnBoTu;
-
     private TextView txtTongTu;
     private TextView txtDaThuoc;
     private TextView txtTienDo;
     private TextView txtTuDenHan;
 
+    // Bảy ngày trong tuần
+    private TextView[] cacNgayTrongTuan;
 
-    /*
-     * Tra từ.
-     */
+    // Tra từ
     private EditText edtTraTu;
-
     private PopupWindow popupGoiY;
+    private final Handler handlerTimKiem = new Handler(Looper.getMainLooper());
+    private Runnable runnableTimKiem;
 
+    // API
     private ApiService apiService;
 
+    // Các thành phần Trang chủ
+    private LinearLayout layoutTuDenHan;
     private LinearLayout layoutLichSuTraTu;
     private LinearLayout btnLuyenTapNhanh;
-    private  LinearLayout btnTaoBoTuNhanh;
+    private LinearLayout btnTaoBoTuNhanh;
     private LinearLayout btnCongDongNhanh;
     private LinearLayout layoutChuoiHoc;
-
+    private LinearLayout btnXemChuoiHoc;
+    private FrameLayout taobotu;
     private ImageView btnXoaLichSu;
     private View khungLichSuTraTu;
 
-
-    /*
-     * Dùng để debounce tìm kiếm.
-     */
-    private final Handler handlerTimKiem =
-            new Handler(Looper.getMainLooper());
-
-    private Runnable runnableTimKiem;
-
-
-    /**
-     * Khởi tạo giao diện Trang chủ.
-     */
     @Nullable
     @Override
     public View onCreateView(
@@ -111,26 +103,22 @@ public class TrangChu extends Fragment {
 
         anhXa(view);
 
+        // Hiển thị trạng thái chờ dữ liệu
+        hienThiChuoiHoc7Ngay(null);
+
         layThongTinStreak();
-
         layThongKeHocTap();
-
         thietLapSuKienAnhDaiDien();
-
         thietLapSuKienTuDenHan();
-
         thietLapSuKienTaoBoTu();
-
         thietLapTraTu();
-
         layLichSuTraTu();
-
+        thietLapSuKienXemChuoiHoc();
         thietLapXoaLichSu();
-
         thietLapSuKienLuyenTapNhanh();
-
+        boFocusKhiChamNgoai(view, edtTraTu);
+        layTenNguoiDung();
         thietLapSuKienTaoBoTuNhanh();
-
         thietLapSuKienCongDongNhanh();
 
         return view;
@@ -140,181 +128,273 @@ public class TrangChu extends Fragment {
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
 
-        if (!hidden) {
+        if (!hidden && getView() != null) {
             layThongKeHocTap();
-
             layThongTinStreak();
         }
     }
 
-
-    /**
-     * Ánh xạ các thành phần giao diện.
-     */
     private void anhXa(View view) {
 
-        /*
-         * Thông tin người dùng.
-         */
-        txtAnhDaiDien =
-                view.findViewById(
-                        R.id.txt_anh_dai_dien
-                );
+        txtAnhDaiDien = view.findViewById(R.id.txt_anh_dai_dien);
+        txtChuoiHoc = view.findViewById(R.id.txt_chuoi_hoc);
+        txtTenNguoiDung = view.findViewById(R.id.txt_ten_nguoi_dung);
 
-        txtChuoiHoc =
-                view.findViewById(
-                        R.id.txt_chuoi_hoc
-                );
+        taobotu = view.findViewById(R.id.tao_bo_tu);
+        btnBoTu = view.findViewById(R.id.btn_tao_bo_tu);
 
-        btnBoTu =
-                view.findViewById(
-                        R.id.btn_tao_bo_tu
-                );
+        layoutTuDenHan = view.findViewById(R.id.layout_tudenhan);
+        edtTraTu = view.findViewById(R.id.edt_tra_tu);
 
+        apiService = RetrofitClient
+                .getClient()
+                .create(ApiService.class);
 
-        /*
-         * Khu vực từ đến hạn.
-         */
-        layoutTuDenHan =
-                view.findViewById(
-                        R.id.layout_tudenhan
-                );
-
-
-        /*
-         * Tra từ.
-         */
-        edtTraTu =
-                view.findViewById(
-                        R.id.edt_tra_tu
-                );
-
-
-        /*
-         * Retrofit.
-         */
-        apiService =
-                RetrofitClient
-                        .getClient()
-                        .create(ApiService.class);
-
-        layoutLichSuTraTu =
-                view.findViewById(
-                        R.id.layout_lich_su_tra_tu
-                );
-
-        btnXoaLichSu =
-                view.findViewById(
-                        R.id.btn_xoa_lich_su
-                );
-
-        khungLichSuTraTu =
-                view.findViewById(
-                        R.id.khung_lich_su_tra_tu
-                );
+        layoutLichSuTraTu = view.findViewById(R.id.layout_lich_su_tra_tu);
+        btnXoaLichSu = view.findViewById(R.id.btn_xoa_lich_su);
+        khungLichSuTraTu = view.findViewById(R.id.khung_lich_su_tra_tu);
 
         btnLuyenTapNhanh = view.findViewById(R.id.btn_luyen_tap_nhanh);
-
         btnTaoBoTuNhanh = view.findViewById(R.id.btn_tao_bo_tu_nhanh);
-
         btnCongDongNhanh = view.findViewById(R.id.btn_cong_dong);
+        btnXemChuoiHoc = view.findViewById(R.id.btn_xem_chuoi_hoc);
 
-        txtTongTu =
-                view.findViewById(
-                        R.id.txt_tong_tu
-                );
-
-        txtDaThuoc =
-                view.findViewById(
-                        R.id.txt_da_thuoc
-                );
-
-        txtTienDo =
-                view.findViewById(
-                        R.id.txt_tien_do
-                );
-
-        txtTuDenHan =
-                view.findViewById(
-                        R.id.txt_tudenhan
-                );
+        txtTongTu = view.findViewById(R.id.txt_tong_tu);
+        txtDaThuoc = view.findViewById(R.id.txt_da_thuoc);
+        txtTienDo = view.findViewById(R.id.txt_tien_do);
+        txtTuDenHan = view.findViewById(R.id.txt_tudenhan);
 
         layoutChuoiHoc = view.findViewById(R.id.khung_chuoi_hoc);
+
+        // Các thành phần mới của lịch học tập
+        txtChuoiHocTuan = view.findViewById(R.id.txt_chuoi_hoc_tuan);
+
+        cacNgayTrongTuan = new TextView[]{
+                view.findViewById(R.id.ngay_t2),
+                view.findViewById(R.id.ngay_t3),
+                view.findViewById(R.id.ngay_t4),
+                view.findViewById(R.id.ngay_t5),
+                view.findViewById(R.id.ngay_t6),
+                view.findViewById(R.id.ngay_t7),
+                view.findViewById(R.id.ngay_cn)
+        };
     }
 
+    // ==================================================
+    // CHUỖI HỌC TẬP - BACKEND VÀ LỊCH 7 NGÀY
+    // ==================================================
 
-    /**
-     * Hiển thị chuỗi học hiện tại.
-     *
-     * Hiện tại đang dùng dữ liệu mẫu.
-     * Sau này sẽ lấy dữ liệu từ Backend.
-     */
     private void layThongTinStreak() {
 
-        SharedPreferences sharedPreferences = requireContext().getSharedPreferences("Kenglish", Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences =
+                requireContext().getSharedPreferences(
+                        "Kenglish",
+                        Context.MODE_PRIVATE
+                );
 
         String token = sharedPreferences.getString("token", null);
+
         if (token == null) {
             return;
         }
 
-        apiService
-                .layHoatDongNamHienTai(
-                        "Bearer " + token
-                )
-                .enqueue(
-                        new Callback<ApiResponse<HoatDongNamResponse>>() {
+        apiService.layHoatDongNamHienTai("Bearer " + token)
+                .enqueue(new Callback<ApiResponse<HoatDongNamResponse>>() {
 
-                            @Override
-                            public void onResponse(
-                                    @NonNull Call<ApiResponse<HoatDongNamResponse>> call,
-                                    @NonNull Response<ApiResponse<HoatDongNamResponse>> response) {
+                    @Override
+                    public void onResponse(
+                            @NonNull Call<ApiResponse<HoatDongNamResponse>> call,
+                            @NonNull Response<ApiResponse<HoatDongNamResponse>> response) {
 
-                                if (!isAdded()) {
-                                    return;
-                                }
-
-
-                                if (response.isSuccessful()
-                                        && response.body() != null
-                                        && response.body().isThanhCong()
-                                        && response.body().getData() != null) {
-
-                                    HoatDongNamResponse duLieu =
-                                            response.body()
-                                                    .getData();
-
-                                    int streak = duLieu.getCurrentStreak();
-
-                                    txtChuoiHoc.setText(String.valueOf(streak));
-
-                                    if (streak == 0) {
-                                        layoutChuoiHoc.setBackgroundTintList(
-                                                ColorStateList.valueOf(
-                                                        Color.parseColor("#F5F5F6")
-                                                )
-                                        );
-                                    } else {
-                                        layoutChuoiHoc.setBackgroundTintList(null);
-                                    }
-                                }
-                            }
-
-
-                            @Override
-                            public void onFailure(
-                                    @NonNull Call<ApiResponse<HoatDongNamResponse>> call,
-                                    @NonNull Throwable t) {
-
-                                /*
-                                 * Không cần Toast.
-                                 *
-                                 * Nếu mất mạng thì graph xám
-                                 * ban đầu vẫn được giữ lại.
-                                 */
-                            }
+                        if (!isAdded() || getView() == null) {
+                            return;
                         }
+
+                        if (response.isSuccessful()
+                                && response.body() != null
+                                && response.body().isThanhCong()
+                                && response.body().getData() != null) {
+
+                            HoatDongNamResponse duLieu =
+                                    response.body().getData();
+
+                            int streak = duLieu.getCurrentStreak();
+
+                            // Streak ở header
+                            txtChuoiHoc.setText(String.valueOf(streak));
+
+                            if (streak == 0) {
+                                layoutChuoiHoc.setBackgroundTintList(
+                                        ColorStateList.valueOf(
+                                                Color.parseColor("#F5F5F6")
+                                        )
+                                );
+                            } else {
+                                layoutChuoiHoc.setBackgroundTintList(null);
+                            }
+
+                            // Streak trong card tuần
+                            txtChuoiHocTuan.setText(
+                                    streak + " ngày liên tiếp"
+                            );
+
+                            // Lấy dữ liệu ngày từ cùng response
+                            hienThiChuoiHoc7Ngay(
+                                    duLieu.getNgayHoatDong()
+                            );
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(
+                            @NonNull Call<ApiResponse<HoatDongNamResponse>> call,
+                            @NonNull Throwable t) {
+                        // Giữ trạng thái cũ khi mất kết nối.
+                    }
+                });
+    }
+
+    /**
+     * Hiển thị thứ Hai đến Chủ nhật của tuần hiện tại.
+     *
+     * ngayHoatDong:
+     * Danh sách ngày yyyy-MM-dd từ backend.
+     */
+    private void hienThiChuoiHoc7Ngay(List<String> ngayHoatDong) {
+
+        if (cacNgayTrongTuan == null) {
+            return;
+        }
+
+        Set<String> tapNgayHoatDong = new HashSet<>();
+
+        if (ngayHoatDong != null) {
+            tapNgayHoatDong.addAll(ngayHoatDong);
+        }
+
+        Calendar homNay = Calendar.getInstance();
+
+        // Clone để không thay đổi đối tượng hôm nay.
+        Calendar thuHai = (Calendar) homNay.clone();
+
+        // Calendar: CN = 1, T2 = 2, ..., T7 = 7
+        int thuTrongTuan = thuHai.get(Calendar.DAY_OF_WEEK);
+
+        int soNgayLui = (thuTrongTuan + 5) % 7;
+
+        thuHai.add(Calendar.DAY_OF_MONTH, -soNgayLui);
+
+        SimpleDateFormat dinhDangNgay =
+                new SimpleDateFormat(
+                        "yyyy-MM-dd",
+                        Locale.US
                 );
+
+        String ngayHomNay = dinhDangNgay.format(
+                homNay.getTime()
+        );
+
+        for (int i = 0; i < 7; i++) {
+
+            Calendar ngayDangXet = (Calendar) thuHai.clone();
+
+            ngayDangXet.add(Calendar.DAY_OF_MONTH, i);
+
+            String ngay = dinhDangNgay.format(
+                    ngayDangXet.getTime()
+            );
+
+            boolean daHoc = tapNgayHoatDong.contains(ngay);
+
+            boolean laHomNay = ngay.equals(ngayHomNay);
+
+            boolean laNgayTuongLai =
+                    ngayDangXet.after(homNay);
+
+            capNhatOTheoNgay(
+                    cacNgayTrongTuan[i],
+                    ngayDangXet.get(Calendar.DAY_OF_MONTH),
+                    daHoc,
+                    laHomNay,
+                    laNgayTuongLai
+            );
+        }
+    }
+
+    /**
+     * Cập nhật giao diện của từng ô ngày.
+     *
+     * Đã học: nền xanh, tick trắng.
+     * Chưa học: nền xanh nhạt, hiện ngày.
+     * Hôm nay: có viền xanh.
+     * Tương lai: màu xám nhạt.
+     */
+    private void capNhatOTheoNgay(
+            TextView oNgay,
+            int soNgay,
+            boolean daHoc,
+            boolean laHomNay,
+            boolean laNgayTuongLai) {
+
+        if (oNgay == null) {
+            return;
+        }
+
+        int mauNen;
+        int mauChu;
+
+        if (daHoc) {
+            mauNen = Color.parseColor("#087CFF");
+            mauChu = Color.WHITE;
+            oNgay.setText("✓");
+        } else {
+            oNgay.setText(String.valueOf(soNgay));
+
+            if (laNgayTuongLai) {
+                mauNen = Color.parseColor("#F1F4F8");
+                mauChu = Color.parseColor("#A7B1BF");
+            } else {
+                mauNen = Color.parseColor("#EDF6FF");
+                mauChu = Color.parseColor("#7185A3");
+            }
+        }
+
+        GradientDrawable nen = new GradientDrawable();
+
+        nen.setShape(GradientDrawable.RECTANGLE);
+        nen.setColor(mauNen);
+        nen.setCornerRadius(dpToPx(18));
+
+        if (laHomNay) {
+            nen.setStroke(
+                    dpToPx(2),
+                    Color.parseColor("#082F70")
+            );
+        }
+
+        oNgay.setBackground(nen);
+        oNgay.setTextColor(mauChu);
+    }
+
+    // ==================================================
+    // THÔNG TIN NGƯỜI DÙNG VÀ THỐNG KÊ
+    // ==================================================
+
+    private void layTenNguoiDung() {
+
+        SharedPreferences sharedPreferences =
+                requireContext().getSharedPreferences(
+                        "Kenglish",
+                        Context.MODE_PRIVATE
+                );
+
+        String tenHienThi =
+                sharedPreferences.getString(
+                        "ten_hien_thi",
+                        "Người dùng"
+                );
+
+        txtTenNguoiDung.setText(tenHienThi);
     }
 
     private void layThongKeHocTap() {
@@ -325,396 +405,277 @@ public class TrangChu extends Fragment {
                         Context.MODE_PRIVATE
                 );
 
-        String token =
-                sharedPreferences.getString(
-                        "token",
-                        null
-                );
-
+        String token = sharedPreferences.getString("token", null);
 
         if (token == null) {
             return;
         }
 
-
-        apiService
-                .layThongKeHocTap(
-                        "Bearer " + token
-                )
-                .enqueue(
-                        new Callback<ApiResponse<ThongKeHocTap>>() {
-
-                            @Override
-                            public void onResponse(
-                                    @NonNull Call<ApiResponse<ThongKeHocTap>> call,
-                                    @NonNull Response<ApiResponse<ThongKeHocTap>> response) {
-
-                                if (!isAdded()) {
-                                    return;
-                                }
-
-
-                                if (response.isSuccessful()
-                                        && response.body() != null
-                                        && response.body().getData() != null) {
-
-                                    ThongKeHocTap thongKe =
-                                            response.body().getData();
-
-
-                                    txtTongTu.setText(
-                                            String.valueOf(
-                                                    thongKe.getTongTu()
-                                            )
-                                    );
-
-                                    txtDaThuoc.setText(
-                                            String.valueOf(
-                                                    thongKe.getDaThuoc()
-                                            )
-                                    );
-
-                                    txtTienDo.setText(
-                                            thongKe.getTienDo() + "%"
-                                    );
-
-                                    txtTuDenHan.setText(
-                                            String.valueOf(
-                                                    thongKe.getTuDenHan()
-                                            )
-                                    );
-                                }
-                            }
-
-
-                            @Override
-                            public void onFailure(
-                                    @NonNull Call<ApiResponse<ThongKeHocTap>> call,
-                                    @NonNull Throwable t) {
-
-                            }
-                        }
-                );
-    }
-
-
-    /**
-     * Khi nhấn ảnh đại diện
-     * sẽ chuyển sang tab Cá nhân.
-     */
-    private void thietLapSuKienAnhDaiDien() {
-
-        txtAnhDaiDien.setOnClickListener(v -> {
-
-            BottomNavigationView thanhDieuHuong =
-                    requireActivity().findViewById(
-                            R.id.thanh_dieu_huong
-                    );
-
-            thanhDieuHuong.setSelectedItemId(
-                    R.id.menu_ca_nhan
-            );
-        });
-    }
-
-
-    /**
-     * Khi nhấn vào khu vực từ đến hạn
-     * sẽ chuyển sang tab Luyện tập.
-     */
-    private void thietLapSuKienTuDenHan() {
-
-        layoutTuDenHan.setOnClickListener(v -> {
-
-            BottomNavigationView thanhDieuHuong =
-                    requireActivity().findViewById(
-                            R.id.thanh_dieu_huong
-                    );
-
-            thanhDieuHuong.setSelectedItemId(
-                    R.id.menu_luyen_tap
-            );
-        });
-    }
-
-    private void thietLapSuKienLuyenTapNhanh() {
-        btnLuyenTapNhanh.setOnClickListener(v -> {
-            BottomNavigationView thanhDieuHuong = requireActivity().findViewById(R.id.thanh_dieu_huong);
-            thanhDieuHuong.setSelectedItemId(R.id.menu_luyen_tap);
-        });
-    }
-
-    private void thietLapSuKienTaoBoTuNhanh() {
-        btnTaoBoTuNhanh.setOnClickListener(v -> {
-            BottomNavigationView thanhDieuHuong = requireActivity().findViewById(R.id.thanh_dieu_huong);
-            thanhDieuHuong.setSelectedItemId(R.id.menu_bo_tu);
-        });
-    }
-
-    private void thietLapSuKienCongDongNhanh() {
-        btnCongDongNhanh.setOnClickListener(v -> {
-            BottomNavigationView bottomNavigationView = requireActivity().findViewById(R.id.thanh_dieu_huong);
-            bottomNavigationView.setSelectedItemId(R.id.menu_xep_hang);
-        });
-    }
-
-
-    /**
-     * Khi nhấn Tạo bộ từ
-     * sẽ chuyển sang tab Bộ từ.
-     */
-    private void thietLapSuKienTaoBoTu() {
-
-        btnBoTu.setOnClickListener(v -> {
-
-            BottomNavigationView thanhDieuHuong =
-                    requireActivity().findViewById(
-                            R.id.thanh_dieu_huong
-                    );
-
-            thanhDieuHuong.setSelectedItemId(
-                    R.id.menu_bo_tu
-            );
-        });
-    }
-
-
-    /**
-     * Theo dõi nội dung người dùng nhập
-     * trong ô tra từ.
-     */
-    private void thietLapTraTu() {
-
-        edtTraTu.addTextChangedListener(
-                new TextWatcher() {
+        apiService.layThongKeHocTap("Bearer " + token)
+                .enqueue(new Callback<ApiResponse<ThongKeHocTap>>() {
 
                     @Override
-                    public void beforeTextChanged(
-                            CharSequence s,
-                            int start,
-                            int count,
-                            int after) {
-                    }
+                    public void onResponse(
+                            @NonNull Call<ApiResponse<ThongKeHocTap>> call,
+                            @NonNull Response<ApiResponse<ThongKeHocTap>> response) {
 
-
-                    @Override
-                    public void onTextChanged(
-                            CharSequence s,
-                            int start,
-                            int before,
-                            int count) {
-
-                        /*
-                         * Nếu người dùng vẫn đang gõ
-                         * thì hủy lần tìm kiếm trước.
-                         */
-                        if (runnableTimKiem != null) {
-
-                            handlerTimKiem.removeCallbacks(
-                                    runnableTimKiem
-                            );
-                        }
-
-
-                        String tuKhoa =
-                                s.toString().trim();
-
-
-                        /*
-                         * Không có từ khóa thì đóng gợi ý.
-                         */
-                        if (tuKhoa.isEmpty()) {
-
-                            dongGoiY();
-
+                        if (!isAdded() || getView() == null) {
                             return;
                         }
 
+                        if (response.isSuccessful()
+                                && response.body() != null
+                                && response.body().getData() != null) {
 
-                        /*
-                         * Chờ 400ms sau khi người dùng
-                         * ngừng gõ rồi mới gọi API.
-                         */
-                        runnableTimKiem =
-                                () -> timKiemTu(tuKhoa);
+                            ThongKeHocTap thongKe =
+                                    response.body().getData();
 
-                        handlerTimKiem.postDelayed(
-                                runnableTimKiem,
-                                400
-                        );
+                            txtTongTu.setText(
+                                    String.valueOf(thongKe.getTongTu())
+                            );
+
+                            txtDaThuoc.setText(
+                                    String.valueOf(thongKe.getDaThuoc())
+                            );
+
+                            txtTienDo.setText(
+                                    thongKe.getTienDo() + "%"
+                            );
+
+                            txtTuDenHan.setText(
+                                    String.valueOf(thongKe.getTuDenHan())
+                            );
+                        }
                     }
-
 
                     @Override
-                    public void afterTextChanged(
-                            Editable s) {
+                    public void onFailure(
+                            @NonNull Call<ApiResponse<ThongKeHocTap>> call,
+                            @NonNull Throwable t) {
                     }
-                }
+                });
+    }
+
+    // ==================================================
+    // ĐIỀU HƯỚNG
+    // ==================================================
+
+    private void chuyenDenTab(int menuId) {
+
+        BottomNavigationView thanhDieuHuong =
+                requireActivity().findViewById(
+                        R.id.thanh_dieu_huong
+                );
+
+        thanhDieuHuong.setSelectedItemId(menuId);
+    }
+
+    private void thietLapSuKienAnhDaiDien() {
+
+        txtAnhDaiDien.setOnClickListener(v ->
+                chuyenDenTab(R.id.menu_ca_nhan)
         );
     }
 
-
-    /**
-     * Gọi API lấy danh sách từ gợi ý.
-     */
-    private void timKiemTu(String tuKhoa) {
-
-        apiService
-                .timKiemTu(tuKhoa)
-                .enqueue(
-                        new Callback<SuggestionResponse>() {
-
-                            @Override
-                            public void onResponse(
-                                    @NonNull Call<SuggestionResponse> call,
-                                    @NonNull Response<SuggestionResponse> response) {
-
-                                /*
-                                 * Fragment không còn gắn với Activity
-                                 * thì không cập nhật giao diện.
-                                 */
-                                if (!isAdded()) {
-                                    return;
-                                }
-
-
-                                if (response.isSuccessful()
-                                        && response.body() != null) {
-
-                                    hienThiGoiY(
-                                            response.body()
-                                                    .getSuggestions()
-                                    );
-
-                                } else {
-
-                                    dongGoiY();
-                                }
-                            }
-
-
-                            @Override
-                            public void onFailure(
-                                    @NonNull Call<SuggestionResponse> call,
-                                    @NonNull Throwable t) {
-
-                                if (!isAdded()) {
-                                    return;
-                                }
-
-                                dongGoiY();
-                            }
-                        }
-                );
+    private void thietLapSuKienXemChuoiHoc() {
+        btnXemChuoiHoc.setOnClickListener(v -> chuyenDenTab(R.id.menu_ca_nhan));
     }
 
+    private void thietLapSuKienTuDenHan() {
 
-    /**
-     * Hiển thị danh sách gợi ý bằng PopupWindow.
-     *
-     * PopupWindow nổi trên giao diện nên không làm
-     * các component phía dưới bị đẩy xuống.
-     */
+        layoutTuDenHan.setOnClickListener(v ->
+                chuyenDenTab(R.id.menu_luyen_tap)
+        );
+    }
+
+    private void thietLapSuKienLuyenTapNhanh() {
+
+        btnLuyenTapNhanh.setOnClickListener(v ->
+                chuyenDenTab(R.id.menu_luyen_tap)
+        );
+    }
+
+    private void thietLapSuKienTaoBoTuNhanh() {
+
+        btnTaoBoTuNhanh.setOnClickListener(v ->
+                chuyenDenTab(R.id.menu_bo_tu)
+        );
+    }
+
+    private void thietLapSuKienCongDongNhanh() {
+
+        btnCongDongNhanh.setOnClickListener(v ->
+                chuyenDenTab(R.id.menu_xep_hang)
+        );
+    }
+
+    private void thietLapSuKienTaoBoTu() {
+
+        taobotu.setOnClickListener(v ->
+                chuyenDenTab(R.id.menu_bo_tu)
+        );
+    }
+
+    // ==================================================
+    // TRA TỪ VÀ GỢI Ý
+    // ==================================================
+
+    private void thietLapTraTu() {
+
+        edtTraTu.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(
+                    CharSequence s,
+                    int start,
+                    int count,
+                    int after) {
+            }
+
+            @Override
+            public void onTextChanged(
+                    CharSequence s,
+                    int start,
+                    int before,
+                    int count) {
+
+                if (runnableTimKiem != null) {
+                    handlerTimKiem.removeCallbacks(runnableTimKiem);
+                }
+
+                String tuKhoa = s.toString().trim();
+
+                if (tuKhoa.isEmpty()) {
+                    dongGoiY();
+                    return;
+                }
+
+                runnableTimKiem = () -> timKiemTu(tuKhoa);
+
+                handlerTimKiem.postDelayed(
+                        runnableTimKiem,
+                        400
+                );
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+    }
+
+    private void timKiemTu(String tuKhoa) {
+
+        apiService.timKiemTu(tuKhoa)
+                .enqueue(new Callback<SuggestionResponse>() {
+
+                    @Override
+                    public void onResponse(
+                            @NonNull Call<SuggestionResponse> call,
+                            @NonNull Response<SuggestionResponse> response) {
+
+                        if (!isAdded() || getView() == null) {
+                            return;
+                        }
+
+                        // Bỏ response cũ nếu người dùng đã đổi từ khóa.
+                        String tuHienTai =
+                                edtTraTu.getText().toString().trim();
+
+                        if (!tuKhoa.equals(tuHienTai)) {
+                            return;
+                        }
+
+                        if (response.isSuccessful()
+                                && response.body() != null) {
+
+                            hienThiGoiY(
+                                    response.body().getSuggestions()
+                            );
+                        } else {
+                            dongGoiY();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(
+                            @NonNull Call<SuggestionResponse> call,
+                            @NonNull Throwable t) {
+
+                        if (!isAdded() || getView() == null) {
+                            return;
+                        }
+
+                        if (tuKhoa.equals(
+                                edtTraTu.getText().toString().trim()
+                        )) {
+                            dongGoiY();
+                        }
+                    }
+                });
+    }
+
     private void hienThiGoiY(List<String> danhSachTu) {
 
         if (danhSachTu == null || danhSachTu.isEmpty()) {
-
             dongGoiY();
-
             return;
         }
 
-
         dongGoiY();
 
-
-        /*
-         * Inflate giao diện popup.
-         */
-        View viewPopup =
-                LayoutInflater
-                        .from(requireContext())
-                        .inflate(
-                                R.layout.trangchu_tratu_popup_goiytu,
-                                null
-                        );
-
+        View viewPopup = LayoutInflater
+                .from(requireContext())
+                .inflate(
+                        R.layout.trangchu_tratu_popup_goiytu,
+                        null
+                );
 
         LinearLayout layoutDanhSach =
                 viewPopup.findViewById(
                         R.id.layout_danh_sach_goi_y
                 );
 
-
-        /*
-         * Tạo từng item gợi ý.
-         */
         for (String tu : danhSachTu) {
 
-            View item =
-                    LayoutInflater
-                            .from(requireContext())
-                            .inflate(
-                                    R.layout.trangchu_tratu_goiytu,
-                                    layoutDanhSach,
-                                    false
-                            );
-
-
-            TextView txtTu =
-                    item.findViewById(
-                            R.id.txt_tu_goi_y
+            View item = LayoutInflater
+                    .from(requireContext())
+                    .inflate(
+                            R.layout.trangchu_tratu_goiytu,
+                            layoutDanhSach,
+                            false
                     );
 
+            TextView txtTu = item.findViewById(
+                    R.id.txt_tu_goi_y
+            );
 
             txtTu.setText(tu);
 
-
-            item.setOnClickListener(v -> {
-                moChiTietTu(tu);
-            });
-
+            item.setOnClickListener(v -> moChiTietTu(tu));
 
             layoutDanhSach.addView(item);
         }
 
-
-        /*
-         * Popup có chiều rộng bằng toàn bộ
-         * khung tra từ.
-         */
-        View khungTraTu =
+        TextInputLayout khungTraTu =
                 requireView().findViewById(
                         R.id.khung_tra_tu
                 );
 
-
-        popupGoiY =
-                new PopupWindow(
-                        viewPopup,
-                        khungTraTu.getWidth(),
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        false
-                );
-
+        popupGoiY = new PopupWindow(
+                viewPopup,
+                khungTraTu.getWidth(),
+                ViewGroup.LayoutParams.WRAP_CONTENT,
+                false
+        );
 
         popupGoiY.setBackgroundDrawable(
-                new ColorDrawable(
-                        Color.TRANSPARENT
-                )
+                new ColorDrawable(Color.TRANSPARENT)
         );
-
 
         popupGoiY.setOutsideTouchable(true);
+        popupGoiY.setElevation(dpToPx(6));
 
-        popupGoiY.setElevation(
-                dpToPx(6)
-        );
-
-
-        /*
-         * Hiện ngay dưới toàn bộ khung tìm kiếm.
-         */
         popupGoiY.showAsDropDown(
                 khungTraTu,
                 0,
@@ -722,51 +683,62 @@ public class TrangChu extends Fragment {
         );
     }
 
-
-    /**
-     * Đóng danh sách gợi ý.
-     */
     private void dongGoiY() {
 
-        if (popupGoiY != null
-                && popupGoiY.isShowing()) {
-
+        if (popupGoiY != null && popupGoiY.isShowing()) {
             popupGoiY.dismiss();
         }
     }
 
+    private void boFocusKhiChamNgoai(View viewGoc, EditText edtTraTu) {
+        viewGoc.setFocusableInTouchMode(true);
 
-    /**
-     * Chuyển dp sang pixel.
-     */
+        viewGoc.setOnTouchListener((v, event) -> {
+            if (event.getAction() == android.view.MotionEvent.ACTION_DOWN
+                    && edtTraTu.hasFocus()) {
+
+                edtTraTu.clearFocus();
+
+                InputMethodManager imm =
+                        (InputMethodManager) requireContext()
+                                .getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(
+                            edtTraTu.getWindowToken(),
+                            0
+                    );
+                }
+            }
+
+            return false;
+        });
+    }
+
     private int dpToPx(int dp) {
 
         return (int) (
-                dp
-                        * getResources()
+                dp * getResources()
                         .getDisplayMetrics()
                         .density
         );
     }
 
-    /**
-     * Dọn Handler và PopupWindow
-     * khi Fragment bị hủy View.
-     */
     @Override
     public void onDestroyView() {
 
-        super.onDestroyView();
-
         if (runnableTimKiem != null) {
-
-            handlerTimKiem.removeCallbacks(
-                    runnableTimKiem
-            );
+            handlerTimKiem.removeCallbacks(runnableTimKiem);
         }
 
         dongGoiY();
+
+        super.onDestroyView();
     }
+
+    // ==================================================
+    // LỊCH SỬ TRA TỪ
+    // ==================================================
 
     private void layLichSuTraTu() {
 
@@ -776,25 +748,14 @@ public class TrangChu extends Fragment {
                         Context.MODE_PRIVATE
                 );
 
-        String token =
-                sharedPreferences.getString(
-                        "token",
-                        null
-                );
+        String token = sharedPreferences.getString("token", null);
 
         if (token == null) {
-
-            khungLichSuTraTu.setVisibility(
-                    View.GONE
-            );
-
+            khungLichSuTraTu.setVisibility(View.GONE);
             return;
         }
 
-        apiService
-                .layLichSuTraTu(
-                        "Bearer " + token
-                )
+        apiService.layLichSuTraTu("Bearer " + token)
                 .enqueue(new Callback<LichSuTraTuResponse>() {
 
                     @Override
@@ -802,7 +763,7 @@ public class TrangChu extends Fragment {
                             @NonNull Call<LichSuTraTuResponse> call,
                             @NonNull Response<LichSuTraTuResponse> response) {
 
-                        if (!isAdded()) {
+                        if (!isAdded() || getView() == null) {
                             return;
                         }
 
@@ -812,12 +773,8 @@ public class TrangChu extends Fragment {
                             hienThiLichSu(
                                     response.body().getHistory()
                             );
-
                         } else {
-
-                            khungLichSuTraTu.setVisibility(
-                                    View.GONE
-                            );
+                            khungLichSuTraTu.setVisibility(View.GONE);
                         }
                     }
 
@@ -826,70 +783,44 @@ public class TrangChu extends Fragment {
                             @NonNull Call<LichSuTraTuResponse> call,
                             @NonNull Throwable t) {
 
-                        if (!isAdded()) {
+                        if (!isAdded() || getView() == null) {
                             return;
                         }
 
-                        khungLichSuTraTu.setVisibility(
-                                View.GONE
-                        );
+                        khungLichSuTraTu.setVisibility(View.GONE);
                     }
                 });
     }
 
-    private void hienThiLichSu(
-            List<LichSuTraTu> danhSach) {
+    private void hienThiLichSu(List<LichSuTraTu> danhSach) {
 
         layoutLichSuTraTu.removeAllViews();
 
-        if (danhSach == null
-                || danhSach.isEmpty()) {
-
-            khungLichSuTraTu.setVisibility(
-                    View.GONE
-            );
-
+        if (danhSach == null || danhSach.isEmpty()) {
+            khungLichSuTraTu.setVisibility(View.GONE);
             return;
         }
 
-        khungLichSuTraTu.setVisibility(
-                View.VISIBLE
-        );
+        khungLichSuTraTu.setVisibility(View.VISIBLE);
 
         for (int i = 0; i < danhSach.size(); i++) {
 
-            LichSuTraTu lichSu =
-                    danhSach.get(i);
+            LichSuTraTu lichSu = danhSach.get(i);
 
-            /*
-             * Tạo dòng chứa từ.
-             */
-            TextView txtTu =
-                    new TextView(
-                            requireContext()
-                    );
+            TextView txtTu = new TextView(requireContext());
 
-            txtTu.setText(
-                    lichSu.getWord()
-            );
-
+            txtTu.setText(lichSu.getWord());
             txtTu.setTextSize(13);
-
-            txtTu.setTextColor(
-                    Color.parseColor(
-                            "#111111"
-                    )
-            );
+            txtTu.setTextColor(Color.parseColor("#111111"));
 
             txtTu.setTypeface(
-                    getResources().getFont(
-                            R.font.juve_headin
+                    android.graphics.Typeface.create(
+                            "sans-serif-medium",
+                            android.graphics.Typeface.NORMAL
                     )
             );
 
-            txtTu.setGravity(
-                    Gravity.CENTER_VERTICAL
-            );
+            txtTu.setGravity(Gravity.CENTER_VERTICAL);
 
             txtTu.setPadding(
                     dpToPx(14),
@@ -904,39 +835,20 @@ public class TrangChu extends Fragment {
                             dpToPx(48)
                     );
 
-            txtTu.setLayoutParams(
-                    params
-            );
+            txtTu.setLayoutParams(params);
 
-            /*
-             * Bấm vào từ -> mở chi tiết.
-             */
             txtTu.setOnClickListener(v ->
-                    moChiTietTu(
-                            lichSu.getWord()
-                    )
+                    moChiTietTu(lichSu.getWord())
             );
 
-            layoutLichSuTraTu.addView(
-                    txtTu
-            );
+            layoutLichSuTraTu.addView(txtTu);
 
-            /*
-             * Thêm đường kẻ giữa các từ.
-             *
-             * Từ cuối cùng không cần divider.
-             */
             if (i < danhSach.size() - 1) {
 
-                View divider =
-                        new View(
-                                requireContext()
-                        );
+                View divider = new View(requireContext());
 
                 divider.setBackgroundColor(
-                        Color.parseColor(
-                                "#E2E3E3"
-                        )
+                        Color.parseColor("#E2E3E3")
                 );
 
                 LinearLayout.LayoutParams dividerParams =
@@ -945,21 +857,12 @@ public class TrangChu extends Fragment {
                                 dpToPx(1)
                         );
 
-                dividerParams.setMarginStart(
-                        dpToPx(14)
-                );
+                dividerParams.setMarginStart(dpToPx(14));
+                dividerParams.setMarginEnd(dpToPx(14));
 
-                dividerParams.setMarginEnd(
-                        dpToPx(14)
-                );
+                divider.setLayoutParams(dividerParams);
 
-                divider.setLayoutParams(
-                        dividerParams
-                );
-
-                layoutLichSuTraTu.addView(
-                        divider
-                );
+                layoutLichSuTraTu.addView(divider);
             }
         }
     }
@@ -967,23 +870,13 @@ public class TrangChu extends Fragment {
     private void moChiTietTu(String tu) {
 
         dongGoiY();
-
         edtTraTu.setText("");
 
-        Bundle bundle =
-                new Bundle();
+        Bundle bundle = new Bundle();
+        bundle.putString("tu", tu);
 
-        bundle.putString(
-                "tu",
-                tu
-        );
-
-        ChiTietTu chiTietTu =
-                new ChiTietTu();
-
-        chiTietTu.setArguments(
-                bundle
-        );
+        ChiTietTu chiTietTu = new ChiTietTu();
+        chiTietTu.setArguments(bundle);
 
         requireActivity()
                 .getSupportFragmentManager()
@@ -1011,22 +904,13 @@ public class TrangChu extends Fragment {
                         Context.MODE_PRIVATE
                 );
 
-        String token =
-                sharedPreferences.getString(
-                        "token",
-                        null
-                );
-
+        String token = sharedPreferences.getString("token", null);
 
         if (token == null) {
             return;
         }
 
-
-        apiService
-                .xoaLichSuTraTu(
-                        "Bearer " + token
-                )
+        apiService.xoaLichSuTraTu("Bearer " + token)
                 .enqueue(new Callback<ApiResponse>() {
 
                     @Override
@@ -1034,10 +918,9 @@ public class TrangChu extends Fragment {
                             @NonNull Call<ApiResponse> call,
                             @NonNull Response<ApiResponse> response) {
 
-                        if (!isAdded()) {
+                        if (!isAdded() || getView() == null) {
                             return;
                         }
-
 
                         if (response.isSuccessful()) {
 
@@ -1049,13 +932,12 @@ public class TrangChu extends Fragment {
                         }
                     }
 
-
                     @Override
                     public void onFailure(
                             @NonNull Call<ApiResponse> call,
                             @NonNull Throwable t) {
 
-                        if (!isAdded()) {
+                        if (!isAdded() || getView() == null) {
                             return;
                         }
 

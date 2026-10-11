@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -10,7 +9,9 @@
     android:clickable="true"
     android:focusable="true"
     android:gravity="center"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:paddingStart="10dp"
+    android:paddingEnd="10dp">
 
     <ImageView
         android:id="@+id/img_tao_folder"
@@ -19,16 +20,18 @@
         android:contentDescription="Tạo folder"
         android:scaleType="centerInside"
         android:src="@drawable/ic_themfolder"
-        app:tint="#37659C" />
+        app:tint="#087CFF" />
 
     <TextView
         android:id="@+id/txt_tao_folder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="7dp"
-        android:fontFamily="@font/juve_headin"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:maxLines="1"
         android:text="TẠO FOLDER"
-        android:textColor="#37659C"
-        android:textSize="15sp" />
+        android:textColor="#087CFF"
+        android:textSize="13sp" />
 
 </LinearLayout>

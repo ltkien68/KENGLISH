@@ -24,7 +24,8 @@
         android:layout_marginTop="12dp"
         android:fontFamily="@font/juve_headin"
         android:text="FLASHCARD"
-        android:textColor="#111111"
+        android:textColor="#0B3475"
+        android:textStyle="bold"
         android:textSize="20sp"/>
 
     <TextView
@@ -179,7 +180,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_marginStart="6dp"
-            android:background="#37659C"
+            android:background="@drawable/nen_flashcard_dathuoc"
             android:gravity="center"
             android:fontFamily="@font/juve_headin"
             android:text="ĐÃ THUỘC"

@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_marginTop="20dp"
+    android:background="@drawable/nen_trangchu_chuoihoctap"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Tiêu đề -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="🔥"
+            android:textSize="24sp" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:text="CHUỖI HỌC TẬP"
+                android:textColor="#082F70"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txt_chuoi_hoc_tuan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:fontFamily="sans-serif"
+                android:text="0 ngày liên tiếp"
+                android:textColor="#087CFF"
+                android:textSize="13sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btn_xem_chuoi_hoc"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:clickable="true"
+            android:focusable="true"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:text="Chi tiết"
+                android:textColor="#087CFF"
+                android:textSize="13sp" />
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginStart="4dp"
+                android:src="@drawable/ic_muitenphai"
+                android:contentDescription="Xem chi tiết"
+                app:tint="#087CFF" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Các ngày trong tuần -->
+    <LinearLayout
+        android:id="@+id/layout_cac_ngay_trong_tuan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:baselineAligned="false"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <!-- Thứ hai -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/ngay_t2"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/nen_ngay_chuoi_hoc"
+                android:gravity="center"
+                android:text="–"
+                android:textColor="#7185A3"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="T2"
+                android:textColor="#7185A3"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <!-- Thứ ba -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/ngay_t3"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/nen_ngay_chuoi_hoc"
+                android:gravity="center"
+                android:text="–"
+                android:textColor="#7185A3"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="T3"
+                android:textColor="#7185A3"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <!-- Thứ tư -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/ngay_t4"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/nen_ngay_chuoi_hoc"
+                android:gravity="center"
+                android:text="–"
+                android:textColor="#7185A3"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="T4"
+                android:textColor="#7185A3"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <!-- Thứ năm -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/ngay_t5"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/nen_ngay_chuoi_hoc"
+                android:gravity="center"
+                android:text="–"
+                android:textColor="#7185A3"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="T5"
+                android:textColor="#7185A3"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <!-- Thứ sáu -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/ngay_t6"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/nen_ngay_chuoi_hoc"
+                android:gravity="center"
+                android:text="–"
+                android:textColor="#7185A3"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="T6"
+                android:textColor="#7185A3"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <!-- Thứ bảy -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/ngay_t7"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/nen_ngay_chuoi_hoc"
+                android:gravity="center"
+                android:text="–"
+                android:textColor="#7185A3"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="T7"
+                android:textColor="#7185A3"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+        <!-- Chủ nhật -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/ngay_cn"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="@drawable/nen_ngay_chuoi_hoc"
+                android:gravity="center"
+                android:text="–"
+                android:textColor="#7185A3"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="CN"
+                android:textColor="#7185A3"
+                android:textSize="11sp" />
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

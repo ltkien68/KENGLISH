@@ -15,6 +15,5 @@
 
     android:contentDescription="Ảnh Trang chủ"
     android:scaleType="centerCrop"
-    android:src="@drawable/anh_trang_chu"
 
     app:shapeAppearanceOverlay="@style/BoGocBannerTrangChu" />

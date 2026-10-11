@@ -70,14 +70,17 @@ public class MainActivity extends AppCompatActivity {
      * Ánh xạ các View trong giao diện với biến Java.
      */
     private void anhXa() {
+        thanhDieuHuong = findViewById(R.id.thanh_dieu_huong);
 
-        thanhDieuHuong = findViewById(
-                R.id.thanh_dieu_huong
+        thanhDieuHuong.setLabelVisibilityMode(
+                com.google.android.material.navigation.NavigationBarView.LABEL_VISIBILITY_LABELED
         );
+
+        thanhDieuHuong.setItemActiveIndicatorEnabled(true);
 
         thanhDieuHuong.setItemActiveIndicatorColor(
                 ColorStateList.valueOf(
-                        Color.parseColor("#37659C")
+                        Color.parseColor("#EAF2FF")
                 )
         );
     }
@@ -309,38 +312,38 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void thietLapMauThanhDieuHuong() {
-
         int[][] trangThai = new int[][]{
                 new int[]{android.R.attr.state_checked},
                 new int[]{-android.R.attr.state_checked}
         };
 
-
-        // Màu icon
-        // Active   -> trắng
-        // Inactive -> xám
         int[] mauIcon = new int[]{
-                Color.WHITE,
-                Color.parseColor("#A9A9A9")
+                Color.parseColor("#245AA8"),
+                Color.parseColor("#91A0B5")
         };
 
-
-        // Màu chữ
-        // Active   -> heading
-        // Inactive -> chữ phụ
         int[] mauChu = new int[]{
-                Color.parseColor("#37659C"),
-                Color.parseColor("#A9A9A9")
+                Color.parseColor("#245AA8"),
+                Color.parseColor("#91A0B5")
         };
-
 
         thanhDieuHuong.setItemIconTintList(
                 new ColorStateList(trangThai, mauIcon)
         );
-
         thanhDieuHuong.setItemTextColor(
                 new ColorStateList(trangThai, mauChu)
         );
+        thanhDieuHuong.setItemIconSize(dpToPx(22));
+        thanhDieuHuong.setItemTextAppearanceActive(
+                R.style.KenglishBottomNavTextActive
+        );
+        thanhDieuHuong.setItemTextAppearanceInactive(
+                R.style.KenglishBottomNavTextInactive
+        );
+    }
+
+    private int dpToPx(int dp) {
+        return Math.round(dp * getResources().getDisplayMetrics().density);
     }
 
 

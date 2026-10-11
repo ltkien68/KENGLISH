@@ -1,5 +1,9 @@
 package com.example.kenglish;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,18 +18,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-
 import com.example.kenglish.api.ApiService;
 import com.example.kenglish.api.RetrofitClient;
+import com.example.kenglish.model.ApiResponse;
 import com.example.kenglish.model.DictionaryResponse;
 import com.example.kenglish.model.Meaning;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.example.kenglish.model.ApiResponse;
 import com.example.kenglish.model.ThemLichSuRequest;
-
-
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.IOException;
 import java.util.List;
@@ -52,6 +51,10 @@ public class ChiTietTu extends Fragment {
 
     private MediaPlayer mediaPlayer;
 
+    private static final int MAU_XANH = Color.rgb(8, 124, 255);
+    private static final int MAU_NAVY = Color.rgb(8, 47, 112);
+    private static final int MAU_NOI_DUNG = Color.rgb(36, 59, 85);
+    private static final int MAU_CHU_PHU = Color.rgb(130, 148, 173);
 
     @Nullable
     @Override
@@ -73,25 +76,20 @@ public class ChiTietTu extends Fragment {
                         R.id.thanh_dieu_huong
                 );
 
-        thanhDieuHuong.setVisibility(
-                View.GONE
-        );
+        if (thanhDieuHuong != null) {
+            thanhDieuHuong.setVisibility(View.GONE);
+        }
 
-        apiService =
-                RetrofitClient
-                        .getClient()
-                        .create(ApiService.class);
+        apiService = RetrofitClient
+                .getClient()
+                .create(ApiService.class);
 
         layTuCanTra();
-
         thietLapSuKien();
 
-        if (tuCanTra != null && !tuCanTra.isEmpty()) {
-
+        if (tuCanTra != null && !tuCanTra.trim().isEmpty()) {
             traTu(tuCanTra);
-
         } else {
-
             Toast.makeText(
                     requireContext(),
                     "Không tìm thấy từ cần tra",
@@ -102,57 +100,25 @@ public class ChiTietTu extends Fragment {
         return view;
     }
 
-
-    /**
-     * Ánh xạ giao diện.
-     */
     private void anhXa(View view) {
 
-        txtTuVung =
-                view.findViewById(
-                        R.id.txt_tu_vung
-                );
+        txtTuVung = view.findViewById(R.id.txt_tu_vung);
+        txtIpa = view.findViewById(R.id.txt_ipa);
 
-        txtIpa =
-                view.findViewById(
-                        R.id.txt_ipa
-                );
-
-        btnQuayLai =
-                view.findViewById(
-                        R.id.btn_quay_lai
-                );
-
-        btnPhatAm =
-                view.findViewById(
-                        R.id.btn_phat_am
-                );
-
-        btnLuuTu =
-                view.findViewById(
-                        R.id.btn_luu_tu
-                );
+        btnQuayLai = view.findViewById(R.id.btn_quay_lai);
+        btnPhatAm = view.findViewById(R.id.btn_phat_am);
+        btnLuuTu = view.findViewById(R.id.btn_luu_tu);
 
         layoutDanhSachNghia =
-                view.findViewById(
-                        R.id.layout_danh_sach_nghia
-                );
+                view.findViewById(R.id.layout_danh_sach_nghia);
     }
 
-
-
-
-    /**
-     * Lấy từ được truyền từ Trang chủ.
-     */
     private void layTuCanTra() {
 
         Bundle bundle = getArguments();
 
         if (bundle != null) {
-
-            tuCanTra =
-                    bundle.getString("tu");
+            tuCanTra = bundle.getString("tu");
         }
     }
 
@@ -165,9 +131,10 @@ public class ChiTietTu extends Fragment {
                         R.id.thanh_dieu_huong
                 );
 
-        thanhDieuHuong.setVisibility(View.GONE);
+        if (thanhDieuHuong != null) {
+            thanhDieuHuong.setVisibility(View.GONE);
+        }
     }
-
 
     @Override
     public void onPause() {
@@ -178,13 +145,11 @@ public class ChiTietTu extends Fragment {
                         R.id.thanh_dieu_huong
                 );
 
-        thanhDieuHuong.setVisibility(View.VISIBLE);
+        if (thanhDieuHuong != null) {
+            thanhDieuHuong.setVisibility(View.VISIBLE);
+        }
     }
 
-
-    /**
-     * Thiết lập các sự kiện.
-     */
     private void thietLapSuKien() {
 
         btnQuayLai.setOnClickListener(v ->
@@ -193,336 +158,222 @@ public class ChiTietTu extends Fragment {
                         .popBackStack()
         );
 
+        btnPhatAm.setOnClickListener(v -> phatAm());
 
-        btnPhatAm.setOnClickListener(v ->
-                phatAm()
+        btnLuuTu.setOnClickListener(v ->
+                Toast.makeText(
+                        requireContext(),
+                        "Chức năng lưu từ sẽ làm tiếp",
+                        Toast.LENGTH_SHORT
+                ).show()
         );
-
-
-        btnLuuTu.setOnClickListener(v -> {
-
-            // Làm sau khi tạo API lưu từ.
-            Toast.makeText(
-                    requireContext(),
-                    "Chức năng lưu từ sẽ làm tiếp",
-                    Toast.LENGTH_SHORT
-            ).show();
-        });
     }
 
+    // ==================================================
+    // TRA TỪ
+    // ==================================================
 
-    /**
-     * Gọi backend Kenglish để tra từ.
-     */
     private void traTu(String tu) {
 
-        apiService
-                .traTu(tu)
-                .enqueue(
-                        new Callback<DictionaryResponse>() {
+        apiService.traTu(tu)
+                .enqueue(new Callback<DictionaryResponse>() {
 
-                            @Override
-                            public void onResponse(
-                                    @NonNull Call<DictionaryResponse> call,
-                                    @NonNull Response<DictionaryResponse> response) {
+                    @Override
+                    public void onResponse(
+                            @NonNull Call<DictionaryResponse> call,
+                            @NonNull Response<DictionaryResponse> response) {
 
-                                if (!isAdded()) {
-                                    return;
-                                }
-
-                                if (response.isSuccessful()
-                                        && response.body() != null) {
-
-                                    hienThiChiTietTu(
-                                            response.body()
-                                    );
-
-                                    themVaoLichSu(
-                                            response.body().getWord()
-                                    );
-                                } else {
-
-                                    Toast.makeText(
-                                            requireContext(),
-                                            "Không tìm thấy từ",
-                                            Toast.LENGTH_SHORT
-                                    ).show();
-                                }
-                            }
-
-
-                            @Override
-                            public void onFailure(
-                                    @NonNull Call<DictionaryResponse> call,
-                                    @NonNull Throwable t) {
-
-                                if (!isAdded()) {
-                                    return;
-                                }
-
-                                Toast.makeText(
-                                        requireContext(),
-                                        "Không thể kết nối đến server",
-                                        Toast.LENGTH_SHORT
-                                ).show();
-                            }
+                        if (!isAdded() || getView() == null) {
+                            return;
                         }
-                );
+
+                        if (response.isSuccessful()
+                                && response.body() != null) {
+
+                            DictionaryResponse duLieu = response.body();
+
+                            hienThiChiTietTu(duLieu);
+
+                            if (duLieu.getWord() != null) {
+                                themVaoLichSu(duLieu.getWord());
+                            }
+
+                        } else {
+                            Toast.makeText(
+                                    requireContext(),
+                                    "Không tìm thấy từ",
+                                    Toast.LENGTH_SHORT
+                            ).show();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(
+                            @NonNull Call<DictionaryResponse> call,
+                            @NonNull Throwable t) {
+
+                        if (!isAdded() || getView() == null) {
+                            return;
+                        }
+
+                        Toast.makeText(
+                                requireContext(),
+                                "Không thể kết nối đến server",
+                                Toast.LENGTH_SHORT
+                        ).show();
+                    }
+                });
     }
 
+    private void hienThiChiTietTu(DictionaryResponse duLieu) {
 
-    /**
-     * Hiển thị dữ liệu từ API.
-     */
-    private void hienThiChiTietTu(
-            DictionaryResponse duLieu) {
+        txtTuVung.setText(duLieu.getWord());
 
-        txtTuVung.setText(
-                duLieu.getWord()
-        );
+        String ipa = duLieu.getIpa();
 
-
-        /*
-         * IPA.
-         */
-        if (duLieu.getIpa() != null
-                && !duLieu.getIpa().isEmpty()) {
-
-            txtIpa.setText(
-                    duLieu.getIpa()
-            );
-
-            txtIpa.setVisibility(
-                    View.VISIBLE
-            );
-
+        if (ipa != null && !ipa.trim().isEmpty()) {
+            txtIpa.setText(ipa);
+            txtIpa.setVisibility(View.VISIBLE);
         } else {
-
-            txtIpa.setVisibility(
-                    View.GONE
-            );
+            txtIpa.setVisibility(View.GONE);
         }
 
+        audioUrl = duLieu.getAudio();
 
-        /*
-         * Lưu URL phát âm.
-         */
-        audioUrl =
-                duLieu.getAudio();
-
-
-        /*
-         * Hiển thị nghĩa.
-         */
-        hienThiDanhSachNghia(
-                duLieu.getMeanings()
-        );
+        hienThiDanhSachNghia(duLieu.getMeanings());
     }
 
+    // ==================================================
+    // HIỂN THỊ CARD NGHĨA
+    // ==================================================
 
-    /**
-     * Hiển thị danh sách nghĩa.
-     */
-    private void hienThiDanhSachNghia(
-            List<Meaning> danhSachNghia) {
+    private void hienThiDanhSachNghia(List<Meaning> danhSachNghia) {
 
-        /*
-         * Xóa dữ liệu mẫu trong XML.
-         */
         layoutDanhSachNghia.removeAllViews();
 
+        if (danhSachNghia == null || danhSachNghia.isEmpty()) {
 
-        if (danhSachNghia == null
-                || danhSachNghia.isEmpty()) {
+            TextView txtKhongCoNghia = new TextView(requireContext());
 
-            TextView txtKhongCoNghia =
-                    new TextView(
-                            requireContext()
-                    );
-
-            txtKhongCoNghia.setText(
-                    "Chưa có nghĩa cho từ này."
-            );
-
+            txtKhongCoNghia.setText("Chưa có nghĩa cho từ này.");
             txtKhongCoNghia.setTextSize(13);
-
-            txtKhongCoNghia.setTextColor(
-                    getResources().getColor(
-                            android.R.color.darker_gray,
-                            null
-                    )
+            txtKhongCoNghia.setTextColor(MAU_CHU_PHU);
+            txtKhongCoNghia.setTypeface(
+                    Typeface.create("sans-serif", Typeface.NORMAL)
             );
 
-            layoutDanhSachNghia.addView(
-                    txtKhongCoNghia
-            );
-
+            layoutDanhSachNghia.addView(txtKhongCoNghia);
             return;
         }
 
+        int soNghia = Math.min(danhSachNghia.size(), 3);
 
-        /*
-         * Dùng để tránh hiện:
-         *
-         * Danh từ
-         * 1...
-         * Danh từ
-         * 2...
-         * Danh từ
-         * 3...
-         *
-         * Nếu cùng loại từ thì chỉ hiện một lần.
-         */
-        String loaiTuTruoc = null;
+        for (int i = 0; i < soNghia; i++) {
 
+            Meaning meaning = danhSachNghia.get(i);
 
-        for (int i = 0;
-             i < danhSachNghia.size();
-             i++) {
+            // Mỗi nghĩa là một card riêng.
+            LinearLayout cardNghia = new LinearLayout(requireContext());
 
-            Meaning meaning =
-                    danhSachNghia.get(i);
+            cardNghia.setOrientation(LinearLayout.VERTICAL);
+            cardNghia.setPadding(
+                    dpToPx(14),
+                    dpToPx(14),
+                    dpToPx(14),
+                    dpToPx(14)
+            );
 
+            cardNghia.setBackgroundResource(
+                    R.drawable.nen_chitiettu_nghia
+            );
 
-            /*
-             * Nếu loại từ thay đổi
-             * thì mới thêm tiêu đề loại từ.
-             */
-            if (meaning.getPos() != null
-                    && !meaning.getPos().equals(loaiTuTruoc)) {
+            LinearLayout.LayoutParams paramsCard =
+                    new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                    );
 
-                TextView txtLoaiTu =
-                        taoTextLoaiTu(
-                                meaning.getPos()
-                        );
-
-                layoutDanhSachNghia.addView(
-                        txtLoaiTu
-                );
-
-                loaiTuTruoc =
-                        meaning.getPos();
+            if (i > 0) {
+                paramsCard.topMargin = dpToPx(10);
             }
 
+            cardNghia.setLayoutParams(paramsCard);
 
-            /*
-             * Thêm nghĩa.
-             */
-            TextView txtNghia =
+            // Loại từ
+            String loaiTu = meaning.getPos();
+
+            if (loaiTu != null && !loaiTu.trim().isEmpty()) {
+                cardNghia.addView(taoTextLoaiTu(loaiTu));
+            }
+
+            // Nghĩa tiếng Việt
+            cardNghia.addView(
                     taoTextNghia(
                             i + 1,
                             meaning.getDefinition()
-                    );
-
-            layoutDanhSachNghia.addView(
-                    txtNghia
+                    )
             );
 
+            // Ví dụ (nếu API có)
+            String viDu = meaning.getExample();
 
-            /*
-             * Nếu API có example thì hiện.
-             */
-            if (meaning.getExample() != null
-                    && !meaning.getExample().isEmpty()) {
-
-                TextView txtViDu =
-                        taoTextViDu(
-                                meaning.getExample()
-                        );
-
-                layoutDanhSachNghia.addView(
-                        txtViDu
-                );
+            if (viDu != null && !viDu.trim().isEmpty()) {
+                cardNghia.addView(taoKhungViDu(viDu));
             }
+
+            layoutDanhSachNghia.addView(cardNghia);
         }
     }
 
+    private TextView taoTextLoaiTu(String loaiTu) {
 
-    /**
-     * Tạo TextView loại từ.
-     */
-    private TextView taoTextLoaiTu(
-            String loaiTu) {
+        TextView textView = new TextView(requireContext());
 
-        TextView textView =
-                new TextView(
-                        requireContext()
-                );
-
-        textView.setText(
-                loaiTu
-        );
-
-        textView.setTextSize(11);
-
-        textView.setTextColor(
-                android.graphics.Color.parseColor(
-                        "#37659C"
-                )
-        );
-
-        textView.setTypeface(
-                getResources().getFont(
-                        R.font.juve_normal
-                )
-        );
-
-
-        LinearLayout.LayoutParams params =
-                new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.MATCH_PARENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                );
-
-        params.topMargin =
-                dpToPx(6);
-
-        params.bottomMargin =
-                dpToPx(6);
-
-        textView.setLayoutParams(
-                params
-        );
-
-        return textView;
-    }
-
-
-    /**
-     * Tạo TextView nghĩa.
-     */
-    private TextView taoTextNghia(
-            int soThuTu,
-            String nghia) {
-
-        TextView textView =
-                new TextView(
-                        requireContext()
-                );
-
-        textView.setText(
-                soThuTu + ". " + nghia
-        );
-
+        textView.setText(loaiTu);
         textView.setTextSize(13);
-
-        textView.setTextColor(
-                android.graphics.Color.parseColor(
-                        "#4F4F4F"
-                )
-        );
-
+        textView.setTextColor(MAU_XANH);
         textView.setTypeface(
-                getResources().getFont(
-                        R.font.juve_normal
-                )
+                Typeface.create("sans-serif-medium", Typeface.NORMAL)
         );
 
-        textView.setLineSpacing(
-                dpToPx(3),
-                1f
+        textView.setGravity(android.view.Gravity.CENTER_VERTICAL);
+
+        textView.setPadding(
+                dpToPx(12),
+                dpToPx(6),
+                dpToPx(12),
+                dpToPx(6)
         );
 
+        textView.setBackgroundResource(
+                R.drawable.nen_chitiettu_loaitu
+        );
+
+        LinearLayout.LayoutParams params =
+                new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+
+        textView.setLayoutParams(params);
+
+        return textView;
+    }
+
+    private TextView taoTextNghia(int soThuTu, String nghia) {
+
+        TextView textView = new TextView(requireContext());
+
+        String noiDung = nghia == null ? "" : nghia;
+
+        textView.setText(soThuTu + ". " + noiDung);
+        textView.setTextSize(15);
+        textView.setTextColor(MAU_NOI_DUNG);
+        textView.setTypeface(
+                Typeface.create("sans-serif", Typeface.NORMAL)
+        );
+
+        textView.setLineSpacing(dpToPx(4), 1f);
 
         LinearLayout.LayoutParams params =
                 new LinearLayout.LayoutParams(
@@ -530,71 +381,91 @@ public class ChiTietTu extends Fragment {
                         LinearLayout.LayoutParams.WRAP_CONTENT
                 );
 
-        params.bottomMargin =
-                dpToPx(12);
+        params.topMargin = dpToPx(12);
 
-        textView.setLayoutParams(
-                params
-        );
+        textView.setLayoutParams(params);
 
         return textView;
     }
 
+    private LinearLayout taoKhungViDu(String viDu) {
 
-    /**
-     * Tạo TextView ví dụ.
-     */
-    private TextView taoTextViDu(
-            String viDu) {
+        LinearLayout khungViDu = new LinearLayout(requireContext());
 
-        TextView textView =
-                new TextView(
-                        requireContext()
-                );
+        khungViDu.setOrientation(LinearLayout.HORIZONTAL);
+        khungViDu.setGravity(android.view.Gravity.CENTER_VERTICAL);
 
-        textView.setText(
-                viDu
+        khungViDu.setPadding(
+                dpToPx(12),
+                dpToPx(12),
+                dpToPx(12),
+                dpToPx(12)
         );
 
-        textView.setTextSize(11);
-
-        textView.setTextColor(
-                android.graphics.Color.parseColor(
-                        "#7C8492"
-                )
+        khungViDu.setBackgroundResource(
+                R.drawable.nen_chitiettu_vidu
         );
 
-        textView.setTypeface(
-                getResources().getFont(
-                        R.font.juve_normal
-                )
-        );
-
-
-        LinearLayout.LayoutParams params =
+        LinearLayout.LayoutParams paramsKhung =
                 new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT
                 );
 
-        params.bottomMargin =
-                dpToPx(12);
+        paramsKhung.topMargin = dpToPx(12);
+        khungViDu.setLayoutParams(paramsKhung);
 
-        textView.setLayoutParams(
-                params
+        // Icon ví dụ
+        ImageView iconViDu = new ImageView(requireContext());
+
+        iconViDu.setImageResource(R.drawable.ic_tailieu);
+        iconViDu.setColorFilter(MAU_XANH);
+
+        LinearLayout.LayoutParams paramsIcon =
+                new LinearLayout.LayoutParams(
+                        dpToPx(20),
+                        dpToPx(20)
+                );
+
+        iconViDu.setLayoutParams(paramsIcon);
+        iconViDu.setContentDescription("Ví dụ");
+
+        khungViDu.addView(iconViDu);
+
+        // Nội dung ví dụ
+        TextView txtViDu = new TextView(requireContext());
+
+        txtViDu.setText(viDu);
+        txtViDu.setTextSize(13);
+        txtViDu.setTextColor(MAU_NAVY);
+        txtViDu.setTypeface(
+                Typeface.create("sans-serif", Typeface.NORMAL)
         );
 
-        return textView;
+        txtViDu.setLineSpacing(dpToPx(3), 1f);
+
+        LinearLayout.LayoutParams paramsText =
+                new LinearLayout.LayoutParams(
+                        0,
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        1f
+                );
+
+        paramsText.leftMargin = dpToPx(10);
+        txtViDu.setLayoutParams(paramsText);
+
+        khungViDu.addView(txtViDu);
+
+        return khungViDu;
     }
 
+    // ==================================================
+    // PHÁT ÂM
+    // ==================================================
 
-    /**
-     * Phát audio của từ.
-     */
     private void phatAm() {
 
-        if (audioUrl == null
-                || audioUrl.isEmpty()) {
+        if (audioUrl == null || audioUrl.trim().isEmpty()) {
 
             Toast.makeText(
                     requireContext(),
@@ -605,51 +476,49 @@ public class ChiTietTu extends Fragment {
             return;
         }
 
+        giaiPhongMediaPlayer();
 
-        /*
-         * Giải phóng audio cũ nếu có.
-         */
-        if (mediaPlayer != null) {
-
-            mediaPlayer.release();
-
-            mediaPlayer = null;
-        }
-
-
-        mediaPlayer =
-                new MediaPlayer();
-
+        MediaPlayer player = new MediaPlayer();
+        mediaPlayer = player;
 
         try {
 
-            mediaPlayer.setDataSource(
-                    audioUrl
-            );
+            player.setDataSource(audioUrl);
 
+            player.setOnPreparedListener(mp -> {
+                if (mediaPlayer == mp) {
+                    mp.start();
+                }
+            });
 
-            /*
-             * prepareAsync để không chặn UI.
-             */
-            mediaPlayer.setOnPreparedListener(
-                    MediaPlayer::start
-            );
+            player.setOnCompletionListener(mp -> {
+                if (mediaPlayer == mp) {
+                    giaiPhongMediaPlayer();
+                }
+            });
 
+            player.setOnErrorListener((mp, what, extra) -> {
 
-            mediaPlayer.setOnCompletionListener(
-                    mp -> {
+                if (mediaPlayer == mp) {
+                    giaiPhongMediaPlayer();
+                }
 
-                        mp.release();
+                if (isAdded()) {
+                    Toast.makeText(
+                            requireContext(),
+                            "Không thể phát âm",
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
 
-                        mediaPlayer = null;
-                    }
-            );
+                return true;
+            });
 
+            player.prepareAsync();
 
-            mediaPlayer.prepareAsync();
+        } catch (IOException | IllegalArgumentException | IllegalStateException e) {
 
-
-        } catch (IOException e) {
+            giaiPhongMediaPlayer();
 
             Toast.makeText(
                     requireContext(),
@@ -659,37 +528,22 @@ public class ChiTietTu extends Fragment {
         }
     }
 
-
-    /**
-     * Chuyển dp sang pixel.
-     */
-    private int dpToPx(int dp) {
-
-        return (int) (
-                dp
-                        * getResources()
-                        .getDisplayMetrics()
-                        .density
-        );
-    }
-
-
-    /**
-     * Giải phóng MediaPlayer.
-     */
-    @Override
-    public void onDestroyView() {
-
-        super.onDestroyView();
-
+    private void giaiPhongMediaPlayer() {
 
         if (mediaPlayer != null) {
 
-            mediaPlayer.release();
+            try {
+                mediaPlayer.release();
+            } catch (IllegalStateException ignored) {
+            }
 
             mediaPlayer = null;
         }
     }
+
+    // ==================================================
+    // LỊCH SỬ TRA TỪ
+    // ==================================================
 
     private void themVaoLichSu(String tu) {
 
@@ -699,46 +553,63 @@ public class ChiTietTu extends Fragment {
                         Context.MODE_PRIVATE
                 );
 
-        String token =
-                sharedPreferences.getString(
-                        "token",
-                        null
-                );
+        String token = sharedPreferences.getString("token", null);
 
         if (token == null) {
             return;
         }
 
+        ThemLichSuRequest request = new ThemLichSuRequest(tu);
 
-        ThemLichSuRequest request =
-                new ThemLichSuRequest(tu);
+        apiService.themLichSuTraTu(
+                "Bearer " + token,
+                request
+        ).enqueue(new Callback<ApiResponse>() {
 
+            @Override
+            public void onResponse(
+                    @NonNull Call<ApiResponse> call,
+                    @NonNull Response<ApiResponse> response) {
 
-        apiService
-                .themLichSuTraTu(
-                        "Bearer " + token,
-                        request
-                )
-                .enqueue(new Callback<ApiResponse>() {
+                // Ghi lịch sử ngầm, không cần Toast.
+            }
 
-                    @Override
-                    public void onResponse(
-                            @NonNull Call<ApiResponse> call,
-                            @NonNull Response<ApiResponse> response) {
+            @Override
+            public void onFailure(
+                    @NonNull Call<ApiResponse> call,
+                    @NonNull Throwable t) {
 
-                        // Không cần Toast.
-                        // Đây là thao tác chạy ngầm.
-                    }
+                // Không làm gián đoạn chức năng tra từ.
+            }
+        });
+    }
 
+    // ==================================================
+    // TIỆN ÍCH
+    // ==================================================
 
-                    @Override
-                    public void onFailure(
-                            @NonNull Call<ApiResponse> call,
-                            @NonNull Throwable t) {
+    private int dpToPx(int dp) {
 
-                        // Không hiện lỗi vì không ảnh hưởng
-                        // chức năng tra từ.
-                    }
-                });
+        return (int) (
+                dp * getResources()
+                        .getDisplayMetrics()
+                        .density
+                        + 0.5f
+        );
+    }
+
+    @Override
+    public void onDestroyView() {
+
+        giaiPhongMediaPlayer();
+
+        txtTuVung = null;
+        txtIpa = null;
+        btnLuuTu = null;
+        btnQuayLai = null;
+        btnPhatAm = null;
+        layoutDanhSachNghia = null;
+
+        super.onDestroyView();
     }
 }

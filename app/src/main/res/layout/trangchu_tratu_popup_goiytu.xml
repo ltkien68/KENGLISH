@@ -1,11 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/layout_danh_sach_goi_y"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/nen_goiytu"
+    android:background="@drawable/nen_popup_goi_y"
     android:orientation="vertical"
-    android:paddingTop="4dp"
-    android:paddingBottom="4dp" />
+    android:padding="8dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="12dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="12dp"
+        android:paddingBottom="8dp"
+        android:text="GỢI Ý TỪ VỰNG"
+        android:textColor="#7C8492"
+        android:textSize="11sp"
+        android:textStyle="bold" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:maxHeight="320dp"
+        android:fillViewport="false"
+        android:overScrollMode="never"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:id="@+id/layout_danh_sach_goi_y"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" />
+
+    </ScrollView>
+
+</LinearLayout>

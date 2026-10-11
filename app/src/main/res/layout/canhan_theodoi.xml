@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="16dp"
-    android:background="#FFFFFF"
+    android:background="#F5FAFF"
     android:orientation="vertical">
 
 
@@ -17,7 +17,8 @@
         android:fontFamily="@font/juve_headin"
         android:gravity="start"
         android:text="THEO DÕI CHÚNG TÔI"
-        android:textColor="#111111"
+        android:textColor="#0B3475"
+        android:textStyle="bold"
         android:textSize="17sp" />
 
 

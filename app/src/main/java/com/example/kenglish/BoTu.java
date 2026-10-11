@@ -41,43 +41,19 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
-/**
- * Fragment hiển thị màn hình quản lý
- * các bộ từ vựng.
- */
 public class BoTu extends Fragment {
 
-
-    /*
-     * =========================================
-     * BIẾN
-     * =========================================
-     */
-
     private TextView btnTaoBoTu;
-
     private LinearLayout btnTaoFolder;
-
     private RecyclerView listBoTu;
+    private RecyclerView listFolderNgang;
 
-    private BoTuModel boTuDangKeo;
+    private final List<MucBoTu> danhSachFolder = new ArrayList<>();
+    private final List<MucBoTu> danhSachBoTu = new ArrayList<>();
 
-
-    private final List<MucBoTu> danhSachMuc =
-            new ArrayList<>();
-
-
+    private BoTuAdapter folderAdapter;
     private BoTuAdapter boTuAdapter;
-
-    private boolean daTaiLanDau = false;
-
-
-    /*
-     * =========================================
-     * KHỞI TẠO GIAO DIỆN
-     * =========================================
-     */
+    private int phienTaiDuLieu = 0;
 
     @Nullable
     @Override
@@ -86,218 +62,104 @@ public class BoTu extends Fragment {
             @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState) {
 
-        View view =
-                inflater.inflate(
-                        R.layout.bo_tu,
-                        container,
-                        false
-                );
+        View view = inflater.inflate(R.layout.bo_tu, container, false);
 
-
-        anhXa(
-                view
-        );
-
+        anhXa(view);
         khoiTaoDanhSach();
-
-        layDuLieuBoTu();
-
         xuLySuKien();
+        layDuLieuBoTu();
 
         return view;
     }
 
-
-    /*
-     * =========================================
-     * ÁNH XẠ
-     * =========================================
-     */
-
-    private void anhXa(
-            View view) {
-
-        btnTaoBoTu =
-                view.findViewById(
-                        R.id.component_tao_bo_tu
-                );
-
-
-        btnTaoFolder =
-                view.findViewById(
-                        R.id.component_tao_folder
-                );
-
-
-        listBoTu =
-                view.findViewById(
-                        R.id.list_bo_tu
-                );
+    private void anhXa(View view) {
+        btnTaoBoTu = view.findViewById(R.id.component_tao_bo_tu);
+        btnTaoFolder = view.findViewById(R.id.component_tao_folder);
+        listBoTu = view.findViewById(R.id.list_bo_tu);
+        listFolderNgang = view.findViewById(R.id.list_folder_ngang);
     }
 
-
-    /*
-     * =========================================
-     * SỰ KIỆN
-     * =========================================
-     */
-
     private void xuLySuKien() {
-
-        btnTaoBoTu.setOnClickListener(
-                view -> {
-
-                    moPopupTaoBoTu();
-                }
-        );
-
-
-        btnTaoFolder.setOnClickListener(
-                view -> {
-
-                    moPopupTaoFolder();
-                }
-        );
+        btnTaoBoTu.setOnClickListener(v -> moPopupTaoBoTu());
+        btnTaoFolder.setOnClickListener(v -> moPopupTaoFolder());
     }
 
     @Override
-    public void onHiddenChanged(
-            boolean hidden) {
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
 
-        super.onHiddenChanged(
-                hidden
-        );
-
-
-        /*
-         * Fragment Bộ từ vừa được hiện lại
-         * sau khi Back từ màn con.
-         */
-        if (!hidden) {
-
+        if (!hidden && getView() != null) {
             layDuLieuBoTu();
         }
     }
 
-
-    /*
-     * =========================================
-     * KHỞI TẠO DANH SÁCH
-     * =========================================
-     */
-
     private void khoiTaoDanhSach() {
 
-        boTuAdapter =
-                new BoTuAdapter(
-                        danhSachMuc,
+        BoTuAdapter.OnBoTuDragListener dragListener =
+                new BoTuAdapter.OnBoTuDragListener() {
 
+                    @Override
+                    public void onBatDauKeo(View view, BoTuModel boTu) {
+                        batDauKeoBoTu(view, boTu);
+                    }
 
-                        /*
-                         * =================================
-                         * DRAG + CLICK LISTENER
-                         * =================================
-                         */
-                        new BoTuAdapter.OnBoTuDragListener() {
+                    @Override
+                    public void onMoFolder(Folder folder) {
+                        moChiTietFolder(folder);
+                    }
 
-                            @Override
-                            public void onBatDauKeo(
-                                    View view,
-                                    BoTuModel boTu) {
+                    @Override
+                    public void onThaVaoFolder(BoTuModel boTu, Folder folder) {
+                        xuLyThaVaoFolder(boTu, folder);
+                    }
 
-                                batDauKeoBoTu(
-                                        view,
-                                        boTu
-                                );
-                            }
+                    @Override
+                    public void onXemBoTu(BoTuModel boTu) {
+                        moChiTietBoTu(boTu);
+                    }
 
-
-                            @Override
-                            public void onMoFolder(
-                                    Folder folder) {
-
-                                moChiTietFolder(
-                                        folder
-                                );
-                            }
-
-
-                            @Override
-                            public void onThaVaoFolder(
-                                    BoTuModel boTu,
-                                    Folder folder) {
-
-                                xuLyThaVaoFolder(
-                                        boTu,
-                                        folder
-                                );
-                            }
-
-
-                            @Override
-                            public void onXemBoTu(
-                                    BoTuModel boTu) {
-
-                                moChiTietBoTu(
-                                        boTu
-                                );
-                            }
-
-
-                            @Override
-                            public void onLuyenTapBoTu(BoTuModel boTu) {
-
-                                if (requireActivity() instanceof MainActivity) {
-
-                                    ((MainActivity) requireActivity())
-                                            .chuyenDenLuyenTap(
-                                                    boTu.getId(),
-                                                    boTu.getTenBoTu()
-                                            );
-                                }
-                            }
-
-                        },
-
-
-                        /*
-                         * =================================
-                         * XÓA BỘ TỪ LISTENER
-                         * =================================
-                         */
-                        new BoTuAdapter.OnXoaBoTuListener() {
-
-                            @Override
-                            public void onXoaBoTu(
-                                    BoTuModel boTu) {
-
-                                xoaBoTu(
-                                        boTu
-                                );
-                            }
+                    @Override
+                    public void onLuyenTapBoTu(BoTuModel boTu) {
+                        if (requireActivity() instanceof MainActivity) {
+                            ((MainActivity) requireActivity())
+                                    .chuyenDenLuyenTap(
+                                            boTu.getId(),
+                                            boTu.getTenBoTu()
+                                    );
                         }
-                );
+                    }
+                };
 
+        BoTuAdapter.OnXoaBoTuListener xoaListener = this::xoaBoTu;
 
-        listBoTu.setLayoutManager(
+        folderAdapter = new BoTuAdapter(
+                danhSachFolder,
+                dragListener,
+                xoaListener
+        );
+
+        boTuAdapter = new BoTuAdapter(
+                danhSachBoTu,
+                dragListener,
+                xoaListener
+        );
+
+        listFolderNgang.setLayoutManager(
                 new LinearLayoutManager(
-                        requireContext()
+                        requireContext(),
+                        LinearLayoutManager.HORIZONTAL,
+                        false
                 )
         );
 
+        listBoTu.setLayoutManager(
+                new LinearLayoutManager(requireContext())
+        );
 
-        int khoangCach =
-                (int) (
-                        8
-                                * getResources()
-                                .getDisplayMetrics()
-                                .density
-                );
+        int khoangCach = dp(8);
 
-
-        listBoTu.addItemDecoration(
+        listFolderNgang.addItemDecoration(
                 new RecyclerView.ItemDecoration() {
-
                     @Override
                     public void getItemOffsets(
                             @NonNull Rect outRect,
@@ -305,387 +167,225 @@ public class BoTu extends Fragment {
                             @NonNull RecyclerView parent,
                             @NonNull RecyclerView.State state) {
 
-                        outRect.bottom =
-                                khoangCach;
+                        outRect.right = khoangCach;
                     }
                 }
         );
 
+        listBoTu.addItemDecoration(
+                new RecyclerView.ItemDecoration() {
+                    @Override
+                    public void getItemOffsets(
+                            @NonNull Rect outRect,
+                            @NonNull View view,
+                            @NonNull RecyclerView parent,
+                            @NonNull RecyclerView.State state) {
 
-        listBoTu.setAdapter(
-                boTuAdapter
+                        outRect.bottom = khoangCach;
+                    }
+                }
         );
+
+        listFolderNgang.setAdapter(folderAdapter);
+        listBoTu.setAdapter(boTuAdapter);
     }
 
+    private int dp(int giaTri) {
+        return (int) (giaTri *
+                getResources().getDisplayMetrics().density + 0.5f);
+    }
 
-    /*
-     * =========================================
-     * XÓA BỘ TỪ
-     * =========================================
-     */
-
-    private void xoaBoTu(
-            BoTuModel boTu) {
-
-        SharedPreferences sharedPreferences =
-                requireContext()
-                        .getSharedPreferences(
-                                "Kenglish",
-                                Context.MODE_PRIVATE
-                        );
-
-
-        String token =
-                sharedPreferences.getString(
-                        "token",
-                        null
+    private String layToken() {
+        SharedPreferences preferences =
+                requireContext().getSharedPreferences(
+                        "Kenglish",
+                        Context.MODE_PRIVATE
                 );
 
+        return preferences.getString("token", null);
+    }
 
-        if (token == null) {
+    private ApiService layApiService() {
+        return RetrofitClient.getClient().create(ApiService.class);
+    }
 
+    private void thongBao(String noiDung) {
+        if (isAdded()) {
             Toast.makeText(
                     requireContext(),
-                    "Phiên đăng nhập không hợp lệ",
+                    noiDung,
                     Toast.LENGTH_SHORT
             ).show();
+        }
+    }
 
+    private void layDuLieuBoTu() {
+        if (!isAdded()) {
             return;
         }
 
+        int phien = ++phienTaiDuLieu;
 
-        ApiService apiService =
-                RetrofitClient
-                        .getClient()
-                        .create(
-                                ApiService.class
-                        );
+        String token = layToken();
 
+        if (token == null) {
+            thongBao("Phiên đăng nhập không hợp lệ");
+            return;
+        }
 
-        apiService
-                .xoaBoTu(
-                        "Bearer " + token,
-                        boTu.getId()
-                )
-                .enqueue(
-                        new Callback<ApiResponse<Object>>() {
+        layApiService().layDanhSachFolder("Bearer " + token)
+                .enqueue(new Callback<ApiResponse<List<Folder>>>() {
 
-                            @Override
-                            public void onResponse(
-                                    Call<ApiResponse<Object>> call,
-                                    Response<ApiResponse<Object>> response) {
+                    @Override
+                    public void onResponse(
+                            Call<ApiResponse<List<Folder>>> call,
+                            Response<ApiResponse<List<Folder>>> response) {
 
-                                if (!isAdded()) {
+                        if (!isAdded() || phien != phienTaiDuLieu) {
+                            return;
+                        }
 
-                                    return;
-                                }
+                        List<MucBoTu> ketQua = new ArrayList<>();
 
+                        if (response.isSuccessful()
+                                && response.body() != null
+                                && response.body().isThanhCong()
+                                && response.body().getData() != null) {
 
-                                /*
-                                 * API thành công.
-                                 */
-                                if (response.isSuccessful()
-                                        && response.body() != null
-                                        && response.body().isThanhCong()) {
-
-
-                                    /*
-                                     * Chỉ xóa item khỏi RecyclerView
-                                     * SAU KHI server đã xóa thành công.
-                                     */
-                                    capNhatSauKhiXoaBoTu(
-                                            boTu
-                                    );
-
-
-                                    Toast.makeText(
-                                            requireContext(),
-                                            "Đã xóa bộ từ",
-                                            Toast.LENGTH_SHORT
-                                    ).show();
-
-
-                                } else {
-
-
-                                    String thongBao =
-                                            "Không thể xóa bộ từ";
-
-
-                                    if (response.body() != null
-                                            && response.body()
-                                            .getThongBao() != null) {
-
-                                        thongBao =
-                                                response.body()
-                                                        .getThongBao();
-                                    }
-
-
-                                    Toast.makeText(
-                                            requireContext(),
-                                            thongBao,
-                                            Toast.LENGTH_SHORT
-                                    ).show();
-                                }
-                            }
-
-
-                            @Override
-                            public void onFailure(
-                                    Call<ApiResponse<Object>> call,
-                                    Throwable t) {
-
-                                if (!isAdded()) {
-
-                                    return;
-                                }
-
-
-                                Toast.makeText(
-                                        requireContext(),
-                                        "Không thể kết nối đến server",
-                                        Toast.LENGTH_SHORT
-                                ).show();
+                            for (Folder folder : response.body().getData()) {
+                                ketQua.add(new MucBoTu(folder));
                             }
                         }
-                );
+
+                        danhSachFolder.clear();
+                        danhSachFolder.addAll(ketQua);
+                        folderAdapter.notifyDataSetChanged();
+
+                        layDanhSachBoTu(phien);
+                    }
+
+                    @Override
+                    public void onFailure(
+                            Call<ApiResponse<List<Folder>>> call,
+                            Throwable t) {
+
+                        if (!isAdded() || phien != phienTaiDuLieu) {
+                            return;
+                        }
+
+                        layDanhSachBoTu(phien);
+                    }
+                });
     }
 
+    private void layDanhSachBoTu(int phien) {
+        String token = layToken();
 
-    /*
-     * =========================================
-     * CẬP NHẬT UI SAU KHI XÓA BỘ TỪ
-     * =========================================
-     */
-
-    private void capNhatSauKhiXoaBoTu(
-            BoTuModel boTu) {
-
-        int viTriBoTu =
-                -1;
-
-
-        /*
-         * Không sử dụng position cũ.
-         *
-         * Tìm lại Bộ từ bằng ID
-         * vì RecyclerView có thể đã thay đổi.
-         */
-        for (int i = 0;
-             i < danhSachMuc.size();
-             i++) {
-
-            MucBoTu muc =
-                    danhSachMuc.get(
-                            i
-                    );
-
-
-            if (muc.getLoai()
-                    == MucBoTu.LOAI_BO_TU) {
-
-
-                if (muc.getBoTu().getId()
-                        == boTu.getId()) {
-
-                    viTriBoTu =
-                            i;
-
-                    break;
-                }
-            }
-        }
-
-
-        if (viTriBoTu
-                == -1) {
-
+        if (token == null) {
             return;
         }
 
+        layApiService().layDanhSachBoTu("Bearer " + token)
+                .enqueue(new Callback<ApiResponse<List<BoTuModel>>>() {
 
-        /*
-         * Xóa khỏi danh sách local.
-         */
-        danhSachMuc.remove(
-                viTriBoTu
-        );
+                    @Override
+                    public void onResponse(
+                            Call<ApiResponse<List<BoTuModel>>> call,
+                            Response<ApiResponse<List<BoTuModel>>> response) {
 
+                        if (!isAdded() || phien != phienTaiDuLieu) {
+                            return;
+                        }
 
-        /*
-         * Chỉ update đúng item.
-         *
-         * Không reload toàn bộ RecyclerView.
-         */
-        boTuAdapter.notifyItemRemoved(
-                viTriBoTu
-        );
+                        if (response.isSuccessful()
+                                && response.body() != null
+                                && response.body().isThanhCong()
+                                && response.body().getData() != null) {
+
+                            danhSachBoTu.clear();
+
+                            for (BoTuModel boTu : response.body().getData()) {
+                                danhSachBoTu.add(new MucBoTu(boTu));
+                            }
+
+                            boTuAdapter.notifyDataSetChanged();
+                        } else {
+                            thongBao("Không thể tải danh sách bộ từ");
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(
+                            Call<ApiResponse<List<BoTuModel>>> call,
+                            Throwable t) {
+
+                        if (!isAdded() || phien != phienTaiDuLieu) {
+                            return;
+                        }
+
+                        thongBao("Không thể kết nối đến server");
+                    }
+                });
     }
 
+    private void moChiTietFolder(Folder folder) {
+        ChiTietFolder fragment = new ChiTietFolder();
 
-    /*
-     * =========================================
-     * MỞ CHI TIẾT BỘ TỪ
-     * =========================================
-     */
+        Bundle bundle = new Bundle();
+        bundle.putInt("folder_id", folder.getId());
+        bundle.putString("ten_folder", folder.getTenFolder());
 
-    private void moChiTietBoTu(
-            BoTuModel boTu) {
+        fragment.setArguments(bundle);
 
-        ChiTietBoTu fragment =
-                new ChiTietBoTu();
+        requireActivity()
+                .getSupportFragmentManager()
+                .beginTransaction()
+                .hide(this)
+                .add(
+                        R.id.khung_noi_dung,
+                        fragment,
+                        "CHI_TIET_FOLDER"
+                )
+                .addToBackStack("CHI_TIET_FOLDER")
+                .commit();
+    }
 
+    private void moChiTietBoTu(BoTuModel boTu) {
+        ChiTietBoTu fragment = new ChiTietBoTu();
 
-        Bundle bundle =
-                new Bundle();
+        Bundle bundle = new Bundle();
 
+        bundle.putInt("bo_tu_id", boTu.getId());
+        bundle.putString("ten_bo_tu", boTu.getTenBoTu());
+        bundle.putString("mo_ta", boTu.getMoTa());
+        bundle.putInt("so_luong_tu", boTu.getSoLuongTu());
+        bundle.putInt("so_tu_da_thuoc", boTu.getSoTuDaThuoc());
 
-        bundle.putInt(
+        fragment.setArguments(bundle);
+
+        requireActivity()
+                .getSupportFragmentManager()
+                .beginTransaction()
+                .hide(this)
+                .add(
+                        R.id.khung_noi_dung,
+                        fragment,
+                        "CHI_TIET_BO_TU"
+                )
+                .addToBackStack("CHI_TIET_BO_TU")
+                .commit();
+    }
+
+    private void batDauKeoBoTu(View view, BoTuModel boTu) {
+
+        ClipData clipData = ClipData.newPlainText(
                 "bo_tu_id",
-                boTu.getId()
+                String.valueOf(boTu.getId())
         );
-
-
-        bundle.putString(
-                "ten_bo_tu",
-                boTu.getTenBoTu()
-        );
-
-
-        bundle.putString(
-                "mo_ta",
-                boTu.getMoTa()
-        );
-
-
-        bundle.putInt(
-                "so_luong_tu",
-                boTu.getSoLuongTu()
-        );
-
-
-        bundle.putInt(
-                "so_tu_da_thuoc",
-                boTu.getSoTuDaThuoc()
-        );
-
-
-        fragment.setArguments(
-                bundle
-        );
-
-
-        requireActivity()
-                .getSupportFragmentManager()
-                .beginTransaction()
-
-                .hide(
-                        this
-                )
-
-                .add(
-                        R.id.khung_noi_dung,
-                        fragment,
-                        "CHI_TIET_BO_TU"
-                )
-
-                .addToBackStack(
-                        "CHI_TIET_BO_TU"
-                )
-
-                .commit();
-    }
-
-
-    /*
-     * =========================================
-     * MỞ CHI TIẾT FOLDER
-     * =========================================
-     */
-
-    private void moChiTietFolder(
-            Folder folder) {
-
-        ChiTietFolder fragment =
-                new ChiTietFolder();
-
-
-        Bundle bundle =
-                new Bundle();
-
-
-        bundle.putInt(
-                "folder_id",
-                folder.getId()
-        );
-
-
-        bundle.putString(
-                "ten_folder",
-                folder.getTenFolder()
-        );
-
-
-        fragment.setArguments(
-                bundle
-        );
-
-
-        requireActivity()
-                .getSupportFragmentManager()
-                .beginTransaction()
-
-                .hide(
-                        this
-                )
-
-                .add(
-                        R.id.khung_noi_dung,
-                        fragment,
-                        "CHI_TIET_FOLDER"
-                )
-
-                .addToBackStack(
-                        "CHI_TIET_FOLDER"
-                )
-
-                .commit();
-    }
-
-
-    /*
-     * =========================================
-     * BẮT ĐẦU KÉO BỘ TỪ
-     * =========================================
-     */
-
-    private void batDauKeoBoTu(
-            View view,
-            BoTuModel boTu) {
-
-        boTuDangKeo =
-                boTu;
-
-
-        ClipData clipData =
-                ClipData.newPlainText(
-                        "bo_tu_id",
-                        String.valueOf(
-                                boTu.getId()
-                        )
-                );
-
 
         View.DragShadowBuilder shadowBuilder =
-                new View.DragShadowBuilder(
-                        view
-                );
+                new View.DragShadowBuilder(view);
 
-
-        /*
-         * Thu nhỏ + làm mờ card gốc.
-         */
         view.animate()
                 .scaleX(0.92f)
                 .scaleY(0.92f)
@@ -693,684 +393,266 @@ public class BoTu extends Fragment {
                 .setDuration(120)
                 .start();
 
+        view.setOnDragListener((v, event) -> {
+            if (event.getAction() == DragEvent.ACTION_DRAG_ENDED) {
+                v.animate()
+                        .scaleX(1f)
+                        .scaleY(1f)
+                        .alpha(1f)
+                        .setDuration(180)
+                        .start();
+            }
 
-        /*
-         * Khi kết thúc kéo,
-         * card trở lại bình thường.
-         */
-        view.setOnDragListener(
-                (v, event) -> {
+            return true;
+        });
 
-                    if (event.getAction()
-                            == DragEvent.ACTION_DRAG_ENDED) {
-
-                        v.animate()
-                                .scaleX(1f)
-                                .scaleY(1f)
-                                .alpha(1f)
-                                .setDuration(180)
-                                .start();
-
-
-                        boTuDangKeo =
-                                null;
-                    }
-
-
-                    return true;
-                }
-        );
-
-
-        view.startDragAndDrop(
+        boolean daBatDau = view.startDragAndDrop(
                 clipData,
                 shadowBuilder,
                 boTu,
                 0
         );
+
+        if (!daBatDau) {
+            view.animate()
+                    .scaleX(1f)
+                    .scaleY(1f)
+                    .alpha(1f)
+                    .start();
+        }
     }
 
-
-    /*
-     * =========================================
-     * THẢ BỘ TỪ VÀO FOLDER
-     * =========================================
-     */
-
-    private void xuLyThaVaoFolder(
-            BoTuModel boTu,
-            Folder folder) {
-
-        SharedPreferences sharedPreferences =
-                requireContext()
-                        .getSharedPreferences(
-                                "Kenglish",
-                                Context.MODE_PRIVATE
-                        );
-
-
-        String token =
-                sharedPreferences.getString(
-                        "token",
-                        null
-                );
-
+    private void xuLyThaVaoFolder(BoTuModel boTu, Folder folder) {
+        String token = layToken();
 
         if (token == null) {
-
-            Toast.makeText(
-                    requireContext(),
-                    "Phiên đăng nhập không hợp lệ",
-                    Toast.LENGTH_SHORT
-            ).show();
-
+            thongBao("Phiên đăng nhập không hợp lệ");
             return;
         }
 
-
         ChuyenBoTuRequest request =
-                new ChuyenBoTuRequest(
-                        folder.getId()
-                );
+                new ChuyenBoTuRequest(folder.getId());
 
+        layApiService().chuyenBoTuVaoFolder(
+                "Bearer " + token,
+                boTu.getId(),
+                request
+        ).enqueue(new Callback<ApiResponse<Object>>() {
 
-        ApiService apiService =
-                RetrofitClient
-                        .getClient()
-                        .create(
-                                ApiService.class
-                        );
+            @Override
+            public void onResponse(
+                    Call<ApiResponse<Object>> call,
+                    Response<ApiResponse<Object>> response) {
 
+                if (!isAdded()) {
+                    return;
+                }
 
-        apiService
-                .chuyenBoTuVaoFolder(
-                        "Bearer " + token,
-                        boTu.getId(),
-                        request
-                )
-                .enqueue(
-                        new Callback<ApiResponse<Object>>() {
+                if (response.isSuccessful()
+                        && response.body() != null
+                        && response.body().isThanhCong()) {
 
-                            @Override
-                            public void onResponse(
-                                    Call<ApiResponse<Object>> call,
-                                    Response<ApiResponse<Object>> response) {
+                    capNhatSauKhiChuyen(boTu, folder);
+                    thongBao("Đã chuyển vào " + folder.getTenFolder());
 
-                                if (!isAdded()) {
+                } else {
+                    String thongBaoLoi = "Không thể chuyển bộ từ";
 
-                                    return;
-                                }
+                    if (response.body() != null
+                            && response.body().getThongBao() != null) {
+                        thongBaoLoi = response.body().getThongBao();
+                    }
 
+                    thongBao(thongBaoLoi);
+                }
+            }
 
-                                if (response.isSuccessful()
-                                        && response.body() != null
-                                        && response.body()
-                                        .isThanhCong()) {
+            @Override
+            public void onFailure(
+                    Call<ApiResponse<Object>> call,
+                    Throwable t) {
 
-
-                                    capNhatSauKhiChuyen(
-                                            boTu,
-                                            folder
-                                    );
-
-
-                                    Toast.makeText(
-                                            requireContext(),
-                                            "Đã chuyển vào "
-                                                    + folder.getTenFolder(),
-                                            Toast.LENGTH_SHORT
-                                    ).show();
-
-
-                                } else {
-
-                                    String thongBao =
-                                            "Không thể chuyển bộ từ";
-
-
-                                    if (response.body() != null
-                                            && response.body()
-                                            .getThongBao() != null) {
-
-                                        thongBao =
-                                                response.body()
-                                                        .getThongBao();
-                                    }
-
-
-                                    Toast.makeText(
-                                            requireContext(),
-                                            thongBao,
-                                            Toast.LENGTH_SHORT
-                                    ).show();
-                                }
-                            }
-
-
-                            @Override
-                            public void onFailure(
-                                    Call<ApiResponse<Object>> call,
-                                    Throwable t) {
-
-                                if (!isAdded()) {
-
-                                    return;
-                                }
-
-
-                                Toast.makeText(
-                                        requireContext(),
-                                        "Không thể kết nối đến server",
-                                        Toast.LENGTH_SHORT
-                                ).show();
-                            }
-                        }
-                );
+                thongBao("Không thể kết nối đến server");
+            }
+        });
     }
-
-
-    /*
-     * =========================================
-     * CẬP NHẬT SAU KHI CHUYỂN
-     * =========================================
-     */
 
     private void capNhatSauKhiChuyen(
             BoTuModel boTu,
             Folder folder) {
 
-        int viTriBoTu =
-                -1;
+        int viTriBoTu = -1;
+        int viTriFolder = -1;
 
-        int viTriFolder =
-                -1;
+        for (int i = 0; i < danhSachBoTu.size(); i++) {
+            MucBoTu muc = danhSachBoTu.get(i);
 
-
-        /*
-         * Tìm lại position bằng ID.
-         */
-        for (int i = 0;
-             i < danhSachMuc.size();
-             i++) {
-
-            MucBoTu muc =
-                    danhSachMuc.get(
-                            i
-                    );
-
-
-            if (muc.getLoai()
-                    == MucBoTu.LOAI_FOLDER) {
-
-                if (muc.getFolder().getId()
-                        == folder.getId()) {
-
-                    viTriFolder =
-                            i;
-                }
-
-
-            } else if (muc.getLoai()
-                    == MucBoTu.LOAI_BO_TU) {
-
-                if (muc.getBoTu().getId()
-                        == boTu.getId()) {
-
-                    viTriBoTu =
-                            i;
-                }
+            if (muc.getBoTu().getId() == boTu.getId()) {
+                viTriBoTu = i;
+                break;
             }
         }
 
+        for (int i = 0; i < danhSachFolder.size(); i++) {
+            MucBoTu muc = danhSachFolder.get(i);
 
-        if (viTriBoTu == -1
-                || viTriFolder == -1) {
+            if (muc.getFolder().getId() == folder.getId()) {
+                viTriFolder = i;
+                break;
+            }
+        }
 
+        if (viTriBoTu == -1 || viTriFolder == -1) {
+            layDuLieuBoTu();
             return;
         }
 
+        danhSachFolder.get(viTriFolder)
+                .getFolder()
+                .tangSoBoTu();
 
-        /*
-         * Folder tăng số lượng bộ từ.
-         */
-        folder.tangSoBoTu();
+        folderAdapter.notifyItemChanged(viTriFolder);
 
-
-        boTuAdapter.notifyItemChanged(
-                viTriFolder
-        );
-
-
-        /*
-         * Xóa bộ từ khỏi danh sách ngoài Folder.
-         */
-        danhSachMuc.remove(
-                viTriBoTu
-        );
-
-
-        boTuAdapter.notifyItemRemoved(
-                viTriBoTu
-        );
+        danhSachBoTu.remove(viTriBoTu);
+        boTuAdapter.notifyItemRemoved(viTriBoTu);
     }
 
-
-    /*
-     * =========================================
-     * TẢI DỮ LIỆU
-     * =========================================
-     */
-
-    private void layDuLieuBoTu() {
-
-        danhSachMuc.clear();
-
-
-        boTuAdapter.notifyDataSetChanged();
-
-
-        layDanhSachFolder();
-    }
-
-
-    /*
-     * =========================================
-     * LẤY DANH SÁCH FOLDER
-     * =========================================
-     */
-
-    private void layDanhSachFolder() {
-
-        SharedPreferences sharedPreferences =
-                requireContext()
-                        .getSharedPreferences(
-                                "Kenglish",
-                                Context.MODE_PRIVATE
-                        );
-
-
-        String token =
-                sharedPreferences.getString(
-                        "token",
-                        null
-                );
-
+    private void xoaBoTu(BoTuModel boTu) {
+        String token = layToken();
 
         if (token == null) {
-
+            thongBao("Phiên đăng nhập không hợp lệ");
             return;
         }
 
+        layApiService().xoaBoTu(
+                "Bearer " + token,
+                boTu.getId()
+        ).enqueue(new Callback<ApiResponse<Object>>() {
 
-        ApiService apiService =
-                RetrofitClient
-                        .getClient()
-                        .create(
-                                ApiService.class
-                        );
+            @Override
+            public void onResponse(
+                    Call<ApiResponse<Object>> call,
+                    Response<ApiResponse<Object>> response) {
 
+                if (!isAdded()) {
+                    return;
+                }
 
-        apiService
-                .layDanhSachFolder(
-                        "Bearer " + token
-                )
-                .enqueue(
-                        new Callback<ApiResponse<List<Folder>>>() {
+                if (response.isSuccessful()
+                        && response.body() != null
+                        && response.body().isThanhCong()) {
 
-                            @Override
-                            public void onResponse(
-                                    Call<ApiResponse<List<Folder>>> call,
-                                    Response<ApiResponse<List<Folder>>> response) {
+                    capNhatSauKhiXoaBoTu(boTu);
+                    thongBao("Đã xóa bộ từ");
 
-                                if (!isAdded()) {
+                } else {
+                    String loi = "Không thể xóa bộ từ";
 
-                                    return;
-                                }
+                    if (response.body() != null
+                            && response.body().getThongBao() != null) {
+                        loi = response.body().getThongBao();
+                    }
 
+                    thongBao(loi);
+                }
+            }
 
-                                if (response.isSuccessful()
-                                        && response.body() != null
-                                        && response.body()
-                                        .isThanhCong()) {
+            @Override
+            public void onFailure(
+                    Call<ApiResponse<Object>> call,
+                    Throwable t) {
 
-                                    List<Folder> danhSachFolder =
-                                            response.body()
-                                                    .getData();
-
-
-                                    if (danhSachFolder != null) {
-
-                                        for (Folder folder
-                                                : danhSachFolder) {
-
-                                            danhSachMuc.add(
-                                                    new MucBoTu(
-                                                            folder
-                                                    )
-                                            );
-                                        }
-                                    }
-                                }
-
-
-                                /*
-                                 * Lấy Folder xong
-                                 * thì lấy Bộ từ.
-                                 */
-                                layDanhSachBoTu();
-                            }
-
-
-                            @Override
-                            public void onFailure(
-                                    Call<ApiResponse<List<Folder>>> call,
-                                    Throwable t) {
-
-                                if (!isAdded()) {
-
-                                    return;
-                                }
-
-
-                                layDanhSachBoTu();
-                            }
-                        }
-                );
+                thongBao("Không thể kết nối đến server");
+            }
+        });
     }
 
+    private void capNhatSauKhiXoaBoTu(BoTuModel boTu) {
+        for (int i = 0; i < danhSachBoTu.size(); i++) {
+            MucBoTu muc = danhSachBoTu.get(i);
 
-    /*
-     * =========================================
-     * LẤY DANH SÁCH BỘ TỪ
-     * =========================================
-     */
-
-    private void layDanhSachBoTu() {
-
-        SharedPreferences sharedPreferences =
-                requireContext()
-                        .getSharedPreferences(
-                                "Kenglish",
-                                Context.MODE_PRIVATE
-                        );
-
-
-        String token =
-                sharedPreferences.getString(
-                        "token",
-                        null
-                );
-
-
-        if (token == null) {
-
-            return;
+            if (muc.getBoTu().getId() == boTu.getId()) {
+                danhSachBoTu.remove(i);
+                boTuAdapter.notifyItemRemoved(i);
+                return;
+            }
         }
-
-
-        ApiService apiService =
-                RetrofitClient
-                        .getClient()
-                        .create(
-                                ApiService.class
-                        );
-
-
-        apiService
-                .layDanhSachBoTu(
-                        "Bearer " + token
-                )
-                .enqueue(
-                        new Callback<ApiResponse<List<BoTuModel>>>() {
-
-                            @Override
-                            public void onResponse(
-                                    Call<ApiResponse<List<BoTuModel>>> call,
-                                    Response<ApiResponse<List<BoTuModel>>> response) {
-
-                                if (!isAdded()) {
-
-                                    return;
-                                }
-
-
-                                if (response.isSuccessful()
-                                        && response.body() != null
-                                        && response.body()
-                                        .isThanhCong()) {
-
-                                    List<BoTuModel> danhSachBoTu =
-                                            response.body()
-                                                    .getData();
-
-
-                                    if (danhSachBoTu != null) {
-
-                                        for (BoTuModel boTu
-                                                : danhSachBoTu) {
-
-                                            danhSachMuc.add(
-                                                    new MucBoTu(
-                                                            boTu
-                                                    )
-                                            );
-                                        }
-                                    }
-                                }
-
-
-                                boTuAdapter
-                                        .notifyDataSetChanged();
-                            }
-
-
-                            @Override
-                            public void onFailure(
-                                    Call<ApiResponse<List<BoTuModel>>> call,
-                                    Throwable t) {
-
-                                if (!isAdded()) {
-
-                                    return;
-                                }
-
-
-                                boTuAdapter
-                                        .notifyDataSetChanged();
-
-
-                                Toast.makeText(
-                                        requireContext(),
-                                        "Không thể tải danh sách bộ từ",
-                                        Toast.LENGTH_SHORT
-                                ).show();
-                            }
-                        }
-                );
     }
-
-
-    /*
-     * =========================================
-     * POPUP TẠO BỘ TỪ
-     * =========================================
-     */
 
     private void moPopupTaoBoTu() {
-
         BottomSheetDialog dialog =
-                new BottomSheetDialog(
-                        requireContext()
-                );
+                new BottomSheetDialog(requireContext());
 
-
-        View popupView =
-                getLayoutInflater()
-                        .inflate(
-                                R.layout.botu_popup_taobotu,
-                                null
-                        );
-
-
-        dialog.setContentView(
-                popupView
+        View popupView = getLayoutInflater().inflate(
+                R.layout.botu_popup_taobotu,
+                null
         );
 
+        dialog.setContentView(popupView);
 
         EditText edtTenBoTu =
-                popupView.findViewById(
-                        R.id.edt_ten_bo_tu
-                );
-
+                popupView.findViewById(R.id.edt_ten_bo_tu);
 
         EditText edtMoTaBoTu =
-                popupView.findViewById(
-                        R.id.edt_mo_ta_bo_tu
-                );
-
+                popupView.findViewById(R.id.edt_mo_ta_bo_tu);
 
         TextView btnXacNhan =
-                popupView.findViewById(
-                        R.id.btn_xac_nhan_tao_bo_tu
-                );
+                popupView.findViewById(R.id.btn_xac_nhan_tao_bo_tu);
 
+        btnXacNhan.setOnClickListener(v -> {
+            String tenBoTu = edtTenBoTu.getText()
+                    .toString().trim();
 
-        btnXacNhan.setOnClickListener(
-                view -> {
+            String moTa = edtMoTaBoTu.getText()
+                    .toString().trim();
 
-                    String tenBoTu =
-                            edtTenBoTu
-                                    .getText()
-                                    .toString()
-                                    .trim();
+            if (tenBoTu.isEmpty()) {
+                edtTenBoTu.setError("Vui lòng nhập tên bộ từ");
+                edtTenBoTu.requestFocus();
+                return;
+            }
 
-
-                    String moTa =
-                            edtMoTaBoTu
-                                    .getText()
-                                    .toString()
-                                    .trim();
-
-
-                    if (tenBoTu.isEmpty()) {
-
-                        edtTenBoTu.setError(
-                                "Vui lòng nhập tên bộ từ"
-                        );
-
-
-                        edtTenBoTu.requestFocus();
-
-
-                        return;
-                    }
-
-
-                    taoBoTu(
-                            tenBoTu,
-                            moTa,
-                            dialog
-                    );
-                }
-        );
-
+            taoBoTu(tenBoTu, moTa, dialog);
+        });
 
         dialog.show();
-
-
-        moBanPhim(
-                edtTenBoTu,
-                dialog
-        );
+        moBanPhim(edtTenBoTu, dialog);
     }
-
-
-    /*
-     * =========================================
-     * POPUP TẠO FOLDER
-     * =========================================
-     */
 
     private void moPopupTaoFolder() {
-
         BottomSheetDialog dialog =
-                new BottomSheetDialog(
-                        requireContext()
-                );
+                new BottomSheetDialog(requireContext());
 
-
-        View popupView =
-                getLayoutInflater()
-                        .inflate(
-                                R.layout.botu_popup_taofolder,
-                                null
-                        );
-
-
-        dialog.setContentView(
-                popupView
+        View popupView = getLayoutInflater().inflate(
+                R.layout.botu_popup_taofolder,
+                null
         );
 
+        dialog.setContentView(popupView);
 
         EditText edtTenFolder =
-                popupView.findViewById(
-                        R.id.edt_ten_folder
-                );
-
+                popupView.findViewById(R.id.edt_ten_folder);
 
         TextView btnXacNhan =
-                popupView.findViewById(
-                        R.id.btn_xac_nhan_tao_folder
-                );
+                popupView.findViewById(R.id.btn_xac_nhan_tao_folder);
 
+        btnXacNhan.setOnClickListener(v -> {
+            String tenFolder = edtTenFolder.getText()
+                    .toString().trim();
 
-        btnXacNhan.setOnClickListener(
-                view -> {
+            if (tenFolder.isEmpty()) {
+                edtTenFolder.setError("Vui lòng nhập tên folder");
+                edtTenFolder.requestFocus();
+                return;
+            }
 
-                    String tenFolder =
-                            edtTenFolder
-                                    .getText()
-                                    .toString()
-                                    .trim();
-
-
-                    if (tenFolder.isEmpty()) {
-
-                        edtTenFolder.setError(
-                                "Vui lòng nhập tên folder"
-                        );
-
-
-                        edtTenFolder.requestFocus();
-
-
-                        return;
-                    }
-
-
-                    taoFolder(
-                            tenFolder,
-                            dialog
-                    );
-                }
-        );
-
+            taoFolder(tenFolder, dialog);
+        });
 
         dialog.show();
-
-
-        moBanPhim(
-                edtTenFolder,
-                dialog
-        );
+        moBanPhim(edtTenFolder, dialog);
     }
-
-
-    /*
-     * =========================================
-     * MỞ BÀN PHÍM
-     * =========================================
-     */
 
     private void moBanPhim(
             EditText editText,
@@ -1378,13 +660,9 @@ public class BoTu extends Fragment {
 
         editText.requestFocus();
 
-
-        Window window =
-                dialog.getWindow();
-
+        Window window = dialog.getWindow();
 
         if (window != null) {
-
             window.setSoftInputMode(
                     WindowManager.LayoutParams
                             .SOFT_INPUT_STATE_ALWAYS_VISIBLE
@@ -1392,305 +670,120 @@ public class BoTu extends Fragment {
         }
     }
 
-
-    /*
-     * =========================================
-     * TẠO BỘ TỪ
-     * =========================================
-     */
-
     private void taoBoTu(
             String tenBoTu,
             String moTa,
             BottomSheetDialog dialog) {
 
-        SharedPreferences sharedPreferences =
-                requireContext()
-                        .getSharedPreferences(
-                                "Kenglish",
-                                Context.MODE_PRIVATE
-                        );
-
-
-        String token =
-                sharedPreferences.getString(
-                        "token",
-                        null
-                );
-
+        String token = layToken();
 
         if (token == null) {
-
-            Toast.makeText(
-                    requireContext(),
-                    "Phiên đăng nhập không hợp lệ",
-                    Toast.LENGTH_SHORT
-            ).show();
-
+            thongBao("Phiên đăng nhập không hợp lệ");
             return;
         }
 
-
         TaoBoTuRequest request =
-                new TaoBoTuRequest(
-                        tenBoTu,
-                        moTa,
-                        null
-                );
+                new TaoBoTuRequest(tenBoTu, moTa, null);
 
+        layApiService().taoBoTu(
+                "Bearer " + token,
+                request
+        ).enqueue(new Callback<ApiResponse<BoTuModel>>() {
 
-        ApiService apiService =
-                RetrofitClient
-                        .getClient()
-                        .create(
-                                ApiService.class
-                        );
+            @Override
+            public void onResponse(
+                    Call<ApiResponse<BoTuModel>> call,
+                    Response<ApiResponse<BoTuModel>> response) {
 
+                if (!isAdded()) {
+                    return;
+                }
 
-        apiService
-                .taoBoTu(
-                        "Bearer " + token,
-                        request
-                )
-                .enqueue(
-                        new Callback<ApiResponse<BoTuModel>>() {
+                if (response.isSuccessful()
+                        && response.body() != null
+                        && response.body().isThanhCong()) {
 
-                            @Override
-                            public void onResponse(
-                                    Call<ApiResponse<BoTuModel>> call,
-                                    Response<ApiResponse<BoTuModel>> response) {
+                    dialog.dismiss();
+                    thongBao("Đã tạo bộ từ: " + tenBoTu);
+                    layDuLieuBoTu();
 
-                                if (!isAdded()) {
+                } else {
+                    String loi = "Không thể tạo bộ từ";
 
-                                    return;
-                                }
+                    if (response.body() != null
+                            && response.body().getThongBao() != null) {
+                        loi = response.body().getThongBao();
+                    }
 
+                    thongBao(loi);
+                }
+            }
 
-                                if (response.isSuccessful()
-                                        && response.body() != null) {
+            @Override
+            public void onFailure(
+                    Call<ApiResponse<BoTuModel>> call,
+                    Throwable t) {
 
-                                    ApiResponse<BoTuModel> ketQua =
-                                            response.body();
-
-
-                                    if (ketQua.isThanhCong()) {
-
-                                        Toast.makeText(
-                                                requireContext(),
-                                                "Đã tạo bộ từ: "
-                                                        + tenBoTu,
-                                                Toast.LENGTH_SHORT
-                                        ).show();
-
-
-                                        dialog.dismiss();
-
-
-                                        layDuLieuBoTu();
-
-
-                                    } else {
-
-                                        String thongBao =
-                                                ketQua.getThongBao();
-
-
-                                        if (thongBao == null
-                                                || thongBao.isEmpty()) {
-
-                                            thongBao =
-                                                    "Có lỗi xảy ra";
-                                        }
-
-
-                                        Toast.makeText(
-                                                requireContext(),
-                                                thongBao,
-                                                Toast.LENGTH_SHORT
-                                        ).show();
-                                    }
-
-
-                                } else {
-
-                                    Toast.makeText(
-                                            requireContext(),
-                                            "Không thể tạo bộ từ",
-                                            Toast.LENGTH_SHORT
-                                    ).show();
-                                }
-                            }
-
-
-                            @Override
-                            public void onFailure(
-                                    Call<ApiResponse<BoTuModel>> call,
-                                    Throwable t) {
-
-                                if (!isAdded()) {
-
-                                    return;
-                                }
-
-
-                                Toast.makeText(
-                                        requireContext(),
-                                        "Không thể kết nối đến server",
-                                        Toast.LENGTH_SHORT
-                                ).show();
-                            }
-                        }
-                );
+                thongBao("Không thể kết nối đến server");
+            }
+        });
     }
-
-
-
-    /*
-     * =========================================
-     * TẠO FOLDER
-     * =========================================
-     */
 
     private void taoFolder(
             String tenFolder,
             BottomSheetDialog dialog) {
 
-        SharedPreferences sharedPreferences =
-                requireContext()
-                        .getSharedPreferences(
-                                "Kenglish",
-                                Context.MODE_PRIVATE
-                        );
-
-
-        String token =
-                sharedPreferences.getString(
-                        "token",
-                        null
-                );
-
+        String token = layToken();
 
         if (token == null) {
-
-            Toast.makeText(
-                    requireContext(),
-                    "Phiên đăng nhập không hợp lệ",
-                    Toast.LENGTH_SHORT
-            ).show();
-
+            thongBao("Phiên đăng nhập không hợp lệ");
             return;
         }
 
-
         TaoFolderRequest request =
-                new TaoFolderRequest(
-                        tenFolder
-                );
+                new TaoFolderRequest(tenFolder);
 
+        layApiService().taoFolder(
+                "Bearer " + token,
+                request
+        ).enqueue(new Callback<ApiResponse<Folder>>() {
 
-        ApiService apiService =
-                RetrofitClient
-                        .getClient()
-                        .create(
-                                ApiService.class
-                        );
+            @Override
+            public void onResponse(
+                    Call<ApiResponse<Folder>> call,
+                    Response<ApiResponse<Folder>> response) {
 
+                if (!isAdded()) {
+                    return;
+                }
 
-        apiService
-                .taoFolder(
-                        "Bearer " + token,
-                        request
-                )
-                .enqueue(
-                        new Callback<ApiResponse<Folder>>() {
+                if (response.isSuccessful()
+                        && response.body() != null
+                        && response.body().isThanhCong()) {
 
-                            @Override
-                            public void onResponse(
-                                    Call<ApiResponse<Folder>> call,
-                                    Response<ApiResponse<Folder>> response) {
+                    dialog.dismiss();
+                    thongBao("Đã tạo folder: " + tenFolder);
+                    layDuLieuBoTu();
 
-                                if (!isAdded()) {
+                } else {
+                    String loi = "Không thể tạo folder";
 
-                                    return;
-                                }
+                    if (response.body() != null
+                            && response.body().getThongBao() != null) {
+                        loi = response.body().getThongBao();
+                    }
 
+                    thongBao(loi);
+                }
+            }
 
-                                if (response.isSuccessful()
-                                        && response.body() != null) {
+            @Override
+            public void onFailure(
+                    Call<ApiResponse<Folder>> call,
+                    Throwable t) {
 
-                                    ApiResponse<Folder> ketQua =
-                                            response.body();
-
-
-                                    if (ketQua.isThanhCong()) {
-
-                                        Toast.makeText(
-                                                requireContext(),
-                                                "Đã tạo folder: "
-                                                        + tenFolder,
-                                                Toast.LENGTH_SHORT
-                                        ).show();
-
-
-                                        dialog.dismiss();
-
-
-                                        layDuLieuBoTu();
-
-
-                                    } else {
-
-                                        String thongBao =
-                                                ketQua.getThongBao();
-
-
-                                        if (thongBao == null
-                                                || thongBao.isEmpty()) {
-
-                                            thongBao =
-                                                    "Có lỗi xảy ra";
-                                        }
-
-
-                                        Toast.makeText(
-                                                requireContext(),
-                                                thongBao,
-                                                Toast.LENGTH_SHORT
-                                        ).show();
-                                    }
-
-
-                                } else {
-
-                                    Toast.makeText(
-                                            requireContext(),
-                                            "Không thể tạo folder",
-                                            Toast.LENGTH_SHORT
-                                    ).show();
-                                }
-                            }
-
-
-                            @Override
-                            public void onFailure(
-                                    Call<ApiResponse<Folder>> call,
-                                    Throwable t) {
-
-                                if (!isAdded()) {
-
-                                    return;
-                                }
-
-
-                                Toast.makeText(
-                                        requireContext(),
-                                        "Không thể kết nối đến server",
-                                        Toast.LENGTH_SHORT
-                                ).show();
-                            }
-                        }
-                );
+                thongBao("Không thể kết nối đến server");
+            }
+        });
     }
-
-
 }
