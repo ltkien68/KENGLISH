@@ -1,12 +1,6 @@
-const { GoogleGenAI } = require("@google/genai");
-
-const apiKey = process.env.GEMINI_API_KEY;
-
-if (!apiKey) {
-    console.warn("Chua cau hinh GEMINI_API_KEY trong .env");
-}
-
-const ai = apiKey ? new GoogleGenAI({ apiKey }) : null;
+const {
+    goiGeminiKai
+} = require("./kaiModelService");
 
 const SYSTEM_INSTRUCTION = `
 Bạn là Kenglish AI, trợ lý học tiếng Anh của ứng dụng Kenglish.
@@ -28,18 +22,22 @@ Quy tắc:
 - Không giả vờ có quyền truy cập dữ liệu cá nhân của người dùng.
 `;
 
-const guiCauHoiGemini = async (cauHoi) => {
-    if (!ai) {
-        throw new Error("GEMINI_API_KEY_NOT_CONFIGURED");
+const guiCauHoiGemini = async (cauHoi, luaChon = "auto") => {
+    if (
+        typeof cauHoi !== "string" ||
+        !cauHoi.trim() ||
+        cauHoi.length > 2000
+    ) {
+        throw new Error("KAI_INVALID_QUESTION");
     }
 
-    const response = await ai.models.generateContent({
-        model: process.env.GEMINI_MODEL || "gemini-2.5-flash",
-        contents: cauHoi,
+    const response = await goiGeminiKai({
+        luaChon,
+        contents: cauHoi.trim(),
         config: {
             systemInstruction: SYSTEM_INSTRUCTION,
             temperature: 0.7,
-            maxOutputTokens: 1024
+            maxOutputTokens: 2048
         }
     });
 

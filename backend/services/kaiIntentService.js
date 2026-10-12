@@ -1,21 +1,15 @@
-const { GoogleGenAI } = require("@google/genai");
+const { goiGeminiKai } = require("./kaiModelService");
 
-const ai = process.env.GEMINI_API_KEY
-  ? new GoogleGenAI({
-      apiKey: process.env.GEMINI_API_KEY,
-    })
-  : null;
+const phanTichYeuCauKai = async (cauHoi, luaChon = "auto") => {
+    if (typeof cauHoi !== "string" || !cauHoi.trim()) {
+        throw new Error("KAI_INVALID_QUESTION");
+    }
 
-const phanTichYeuCauKai = async (cauHoi) => {
-  if (!ai) {
-    throw new Error("GEMINI_API_KEY_NOT_CONFIGURED");
-  }
-
-  const response = await ai.models.generateContent({
-    model: process.env.GEMINI_INTENT_MODEL || "gemini-3.1-flash-lite",
-    contents: cauHoi,
-    config: {
-      systemInstruction: `
+    const response = await goiGeminiKai({
+        luaChon,
+        contents: cauHoi,
+        config: {
+            systemInstruction: `
 Bạn là bộ phân tích ý định của trợ lý Kai trong ứng dụng Kenglish.
 
 Chỉ phân loại yêu cầu, không thực hiện hành động.
@@ -51,60 +45,66 @@ Với yêu cầu chat:
   "mo_luyen_tap": false
 }
 `,
-      responseMimeType: "application/json",
-      temperature: 0.1,
-      maxOutputTokens: 2048
-    },
-  });
+            responseMimeType: "application/json",
+            temperature: 0.1,
+            maxOutputTokens: 2048
+        }
+    });
 
-  const noiDung = response.text || "";
+    const noiDung = response.text || "";
 
-  console.log("========== KAI INTENT ==========");
-  console.log("Gemini response:", JSON.stringify(noiDung));
-  console.log("Finish reason:", response.candidates?.[0]?.finishReason);
-  console.log("================================");
+    console.log("========== KAI INTENT ==========");
+    console.log("Gemini response:", JSON.stringify(noiDung));
+    console.log("Finish reason:", response.candidates?.[0]?.finishReason);
+    console.log("================================");
 
-  let duLieu;
+    let duLieu;
 
-  try {
-    duLieu = JSON.parse(noiDung);
-  } catch (error) {
-    console.error("Gemini trả JSON không hợp lệ:", error.message);
-    throw new Error("KAI_INVALID_JSON");
-  }
+    try {
+        duLieu = JSON.parse(noiDung);
+    } catch (error) {
+        console.error(
+            "Gemini trả JSON không hợp lệ:",
+            error.message
+        );
+        throw new Error("KAI_INVALID_JSON");
+    }
 
-  if (duLieu.hanh_dong !== "tao_bo_tu") {
+    if (duLieu.hanh_dong !== "tao_bo_tu") {
+        return {
+            hanh_dong: "chat",
+            chu_de: "",
+            so_luong: 5,
+            mo_luyen_tap: false
+        };
+    }
+
+    const chuDe =
+        typeof duLieu.chu_de === "string"
+            ? duLieu.chu_de.trim()
+            : "";
+
+    const soLuong = duLieu.so_luong;
+
+    if (
+        !chuDe ||
+        chuDe.length > 100 ||
+        !Number.isInteger(soLuong) ||
+        soLuong < 1 ||
+        soLuong > 10 ||
+        typeof duLieu.mo_luyen_tap !== "boolean"
+    ) {
+        throw new Error("KAI_INVALID_INTENT");
+    }
+
     return {
-      hanh_dong: "chat",
-      chu_de: "",
-      so_luong: 5,
-      mo_luyen_tap: false,
+        hanh_dong: "tao_bo_tu",
+        chu_de: chuDe,
+        so_luong: soLuong,
+        mo_luyen_tap: duLieu.mo_luyen_tap
     };
-  }
-
-  const chuDe = typeof duLieu.chu_de === "string" ? duLieu.chu_de.trim() : "";
-
-  const soLuong = duLieu.so_luong;
-
-  if (
-    !chuDe ||
-    chuDe.length > 100 ||
-    !Number.isInteger(soLuong) ||
-    soLuong < 1 ||
-    soLuong > 10 ||
-    typeof duLieu.mo_luyen_tap !== "boolean"
-  ) {
-    throw new Error("KAI_INVALID_INTENT");
-  }
-
-  return {
-    hanh_dong: "tao_bo_tu",
-    chu_de: chuDe,
-    so_luong: soLuong,
-    mo_luyen_tap: duLieu.mo_luyen_tap,
-  };
 };
 
 module.exports = {
-  phanTichYeuCauKai,
+    phanTichYeuCauKai
 };

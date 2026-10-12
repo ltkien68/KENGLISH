@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="50dp"
+        android:paddingTop="24dp"
         android:paddingBottom="20dp">
 
         <!-- TIÊU ĐỀ TRANG -->

@@ -1,10 +1,24 @@
-const { guiCauHoiGemini } = require("../../services/GeminiService");
+const {
+    guiCauHoiGemini
+} = require("../../services/GeminiService");
+
+const DANH_SACH_MODEL = [
+    "auto",
+    "flash",
+    "flash-lite"
+];
 
 const chatAI = async (req, res) => {
     try {
-        const { cau_hoi } = req.body || {};
+        const {
+            cau_hoi,
+            model = "auto"
+        } = req.body || {};
 
-        if (typeof cau_hoi !== "string" || !cau_hoi.trim()) {
+        if (
+            typeof cau_hoi !== "string" ||
+            !cau_hoi.trim()
+        ) {
             return res.status(400).json({
                 success: false,
                 message: "Vui lòng nhập câu hỏi"
@@ -18,7 +32,23 @@ const chatAI = async (req, res) => {
             });
         }
 
-        const traLoi = await guiCauHoiGemini(cau_hoi.trim());
+        if (
+            typeof model !== "string" ||
+            !DANH_SACH_MODEL.includes(model)
+        ) {
+            return res.status(400).json({
+                success: false,
+                message: "Mô hình AI không hợp lệ"
+            });
+        }
+
+        console.log("========== KAI CHAT ==========");
+        console.log("Model được chọn:", model);
+
+        const traLoi = await guiCauHoiGemini(
+            cau_hoi.trim(),
+            model
+        );
 
         return res.status(200).json({
             success: true,
@@ -28,8 +58,9 @@ const chatAI = async (req, res) => {
                 tra_loi: traLoi
             }
         });
+
     } catch (error) {
-        console.error("Loi Gemini:", error.message);
+        console.error("Lỗi Gemini:", error);
 
         if (error.message === "GEMINI_API_KEY_NOT_CONFIGURED") {
             return res.status(503).json({
@@ -38,12 +69,38 @@ const chatAI = async (req, res) => {
             });
         }
 
-        const status = error.status || error.statusCode;
+        if (
+            error.message === "KAI_INVALID_MODEL" ||
+            error.message === "KAI_INVALID_QUESTION"
+        ) {
+            return res.status(400).json({
+                success: false,
+                message: "Yêu cầu hoặc mô hình AI không hợp lệ"
+            });
+        }
+
+        if (error.message === "GEMINI_EMPTY_RESPONSE") {
+            return res.status(502).json({
+                success: false,
+                message: "Gemini không trả về nội dung"
+            });
+        }
+
+        const status = Number(
+            error.status || error.statusCode || error.code
+        );
 
         if (status === 429) {
             return res.status(429).json({
                 success: false,
-                message: "AI đã đạt giới hạn yêu cầu. Vui lòng thử lại sau."
+                message: "Các mô hình AI khả dụng đã đạt giới hạn yêu cầu"
+            });
+        }
+
+        if ([500, 502, 503, 504].includes(status)) {
+            return res.status(503).json({
+                success: false,
+                message: "Dịch vụ Gemini đang quá tải, vui lòng thử lại sau"
             });
         }
 

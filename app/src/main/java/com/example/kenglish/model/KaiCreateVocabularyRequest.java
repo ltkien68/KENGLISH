@@ -9,8 +9,16 @@ public class KaiCreateVocabularyRequest {
     @SerializedName("so_luong")
     private final int soLuong;
 
+    @SerializedName("model")
+    private final String model;
+
     public KaiCreateVocabularyRequest(String chuDe, int soLuong) {
+        this(chuDe, soLuong, "auto");
+    }
+
+    public KaiCreateVocabularyRequest(String chuDe, int soLuong, String model) {
         this.chuDe = chuDe;
         this.soLuong = soLuong;
+        this.model = model;
     }
 }

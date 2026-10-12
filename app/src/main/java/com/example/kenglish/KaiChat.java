@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
@@ -29,6 +30,7 @@ import com.example.kenglish.model.KaiIntentResponse;
 import com.example.kenglish.model.KaiCreateVocabularyRequest;
 import com.example.kenglish.model.KaiCreateVocabularyResponse;
 import com.example.kenglish.model.TinNhanKai;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -52,6 +54,13 @@ public class KaiChat extends Fragment {
     private ApiService apiService;
     private Call<?> requestHienTai;
     private AlertDialog hopThoaiXacNhan;
+
+    private TextView btnChonModel;
+    private TextView txtModelKai;
+
+    private String modelDangChon = "auto";
+
+    private static final String KEY_MODEL_KAI = "kai_model";
 
     private boolean dangGui = false;
     private int phienChat = 0;
@@ -80,6 +89,23 @@ public class KaiChat extends Fragment {
         edtTinNhan = view.findViewById(R.id.edt_tin_nhan_kai);
         btnGui = view.findViewById(R.id.btn_gui_kai);
         btnLamMoi = view.findViewById(R.id.btn_lam_moi_chat);
+
+        btnChonModel = view.findViewById(R.id.btn_chon_model_kai);
+        txtModelKai = view.findViewById(R.id.txt_model_kai);
+
+        modelDangChon = requireContext()
+                .getSharedPreferences("Kenglish", Context.MODE_PRIVATE)
+                .getString(KEY_MODEL_KAI, "auto");
+
+        if (!modelDangChon.equals("auto")
+                && !modelDangChon.equals("flash")
+                && !modelDangChon.equals("flash-lite")) {
+            modelDangChon = "auto";
+        }
+
+        capNhatTenModel();
+
+        btnChonModel.setOnClickListener(v -> hienThiChonModel());
 
         apiService = RetrofitClient.getClient().create(ApiService.class);
         adapter = new TinNhanKaiAdapter(danhSachTinNhan);
@@ -200,7 +226,7 @@ public class KaiChat extends Fragment {
         Call<KaiIntentResponse> request =
                 apiService.phanTichYeuCauKai(
                         "Bearer " + token,
-                        new KaiIntentRequest(noiDung)
+                        new KaiIntentRequest(noiDung, modelDangChon)
                 );
 
         requestHienTai = request;
@@ -306,7 +332,7 @@ public class KaiChat extends Fragment {
         Call<AiChatResponse> request =
                 apiService.chatKai(
                         "Bearer " + token,
-                        new AiChatRequest(noiDung)
+                        new AiChatRequest(noiDung, modelDangChon)
                 );
 
         requestHienTai = request;
@@ -457,6 +483,81 @@ public class KaiChat extends Fragment {
         }
     }
 
+    private void capNhatTenModel() {
+        if (txtModelKai == null) {
+            return;
+        }
+
+        String tenModel;
+
+        switch (modelDangChon) {
+            case "flash":
+                tenModel = "♌\uFE0E Kai Flash";
+                break;
+            case "flash-lite":
+                tenModel = "♌\uFE0E Kai Flash-Lite";
+                break;
+            default:
+                tenModel = "♌\uFE0E Tự động";
+                break;
+        }
+
+        txtModelKai.setText(tenModel);
+    }
+
+    private void hienThiChonModel() {
+        if (!isAdded() || dangGui) {
+            return;
+        }
+
+        BottomSheetDialog dialog =
+                new BottomSheetDialog(requireContext());
+
+        View noiDung = LayoutInflater.from(requireContext())
+                .inflate(R.layout.dialog_chon_model_kai, null);
+
+        RadioGroup nhomModel =
+                noiDung.findViewById(R.id.nhom_model_kai);
+
+        int idDangChon;
+
+        switch (modelDangChon) {
+            case "flash":
+                idDangChon = R.id.radio_model_flash;
+                break;
+            case "flash-lite":
+                idDangChon = R.id.radio_model_lite;
+                break;
+            default:
+                idDangChon = R.id.radio_model_auto;
+                break;
+        }
+
+        nhomModel.check(idDangChon);
+
+        nhomModel.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.radio_model_flash) {
+                modelDangChon = "flash";
+            } else if (checkedId == R.id.radio_model_lite) {
+                modelDangChon = "flash-lite";
+            } else {
+                modelDangChon = "auto";
+            }
+
+            requireContext()
+                    .getSharedPreferences("Kenglish", Context.MODE_PRIVATE)
+                    .edit()
+                    .putString(KEY_MODEL_KAI, modelDangChon)
+                    .apply();
+
+            capNhatTenModel();
+            dialog.dismiss();
+        });
+
+        dialog.setContentView(noiDung);
+        dialog.show();
+    }
+
     private void taoBoTuBangAI(
             String chuDe,
             int soLuong,
@@ -467,10 +568,7 @@ public class KaiChat extends Fragment {
         Call<KaiCreateVocabularyResponse> request =
                 apiService.taoBoTuBangKai(
                         "Bearer " + token,
-                        new KaiCreateVocabularyRequest(
-                                chuDe,
-                                soLuong
-                        )
+                        new KaiCreateVocabularyRequest(chuDe, soLuong, modelDangChon)
                 );
 
         requestHienTai = request;
