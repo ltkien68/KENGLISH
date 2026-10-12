@@ -3,6 +3,7 @@ package com.example.kenglish;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
@@ -10,23 +11,12 @@ import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
-
-/**
- * Activity chính của ứng dụng Kenglish.
- *
- * Chức năng:
- * - Quản lý thanh điều hướng phía dưới.
- * - Hiển thị các Fragment chính của ứng dụng.
- * - Giữ lại trạng thái Fragment khi chuyển tab.
- */
 public class MainActivity extends AppCompatActivity {
 
-
-    // Thanh điều hướng chính của ứng dụng.
     private BottomNavigationView thanhDieuHuong;
+    private View nutNoiKai;
+    private View khungKaiChat;
 
-
-    // Các Fragment chính của ứng dụng.
     private Fragment trangChu;
     private Fragment boTu;
     private Fragment luyenTap;
@@ -34,46 +24,38 @@ public class MainActivity extends AppCompatActivity {
     private Fragment cuaHang;
     private Fragment caNhan;
 
-
-    // Fragment đang được hiển thị.
     private Fragment manHinhHienTai;
 
+    private static final String TAG_KAI = "KAI_CHAT";
+    private static final String BACKSTACK_KAI = "kai_chat";
 
-    /**
-     * Khởi tạo Activity và các thành phần giao diện.
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         setContentView(R.layout.activity_main);
 
-
-        // Ánh xạ các thành phần giao diện.
         anhXa();
-
-
-        // Khởi tạo hoặc lấy lại các Fragment.
         khoiTaoFragment(savedInstanceState);
-
-
-        // Thiết lập sự kiện chuyển màn hình.
         thietLapDieuHuong();
-
-
-        // Thiết lập màu cho tab đang được chọn.
         thietLapMauThanhDieuHuong();
+        thietLapKai();
+
+        getSupportFragmentManager()
+                .addOnBackStackChangedListener(
+                        this::capNhatTrangThaiKai
+                );
+
+        capNhatTrangThaiKai();
     }
 
-
-    /**
-     * Ánh xạ các View trong giao diện với biến Java.
-     */
     private void anhXa() {
         thanhDieuHuong = findViewById(R.id.thanh_dieu_huong);
+        nutNoiKai = findViewById(R.id.khung_nut_noi_kai);
+        khungKaiChat = findViewById(R.id.khung_kai_chat);
 
         thanhDieuHuong.setLabelVisibilityMode(
-                com.google.android.material.navigation.NavigationBarView.LABEL_VISIBILITY_LABELED
+                com.google.android.material.navigation.NavigationBarView
+                        .LABEL_VISIBILITY_LABELED
         );
 
         thanhDieuHuong.setItemActiveIndicatorEnabled(true);
@@ -85,18 +67,10 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
-
-    /**
-     * Khởi tạo 6 Fragment chính.
-     *
-     * Fragment chỉ được tạo một lần.
-     * Khi chuyển tab sẽ sử dụng hide/show thay vì tạo Fragment mới.
-     */
     private void khoiTaoFragment(Bundle savedInstanceState) {
+        FragmentManager fm = getSupportFragmentManager();
 
-        // Activity được tạo lần đầu.
         if (savedInstanceState == null) {
-
             trangChu = new TrangChu();
             boTu = new BoTu();
             luyenTap = new LuyenTap();
@@ -104,124 +78,120 @@ public class MainActivity extends AppCompatActivity {
             cuaHang = new CuaHang();
             caNhan = new CaNhan();
 
-
-            // Thêm tất cả Fragment vào Activity.
-            // Chỉ Trang chủ được hiển thị ban đầu.
-            getSupportFragmentManager()
-                    .beginTransaction()
-
-                    .add(
-                            R.id.khung_noi_dung,
-                            caNhan,
-                            "CA_NHAN"
-                    )
+            fm.beginTransaction()
+                    .add(R.id.khung_noi_dung, caNhan, "CA_NHAN")
                     .hide(caNhan)
-
-                    .add(
-                            R.id.khung_noi_dung,
-                            cuaHang,
-                            "CUA_HANG"
-                    )
+                    .add(R.id.khung_noi_dung, cuaHang, "CUA_HANG")
                     .hide(cuaHang)
-
-                    .add(
-                            R.id.khung_noi_dung,
-                            xepHang,
-                            "XEP_HANG"
-                    )
+                    .add(R.id.khung_noi_dung, xepHang, "XEP_HANG")
                     .hide(xepHang)
-
-                    .add(
-                            R.id.khung_noi_dung,
-                            luyenTap,
-                            "LUYEN_TAP"
-                    )
+                    .add(R.id.khung_noi_dung, luyenTap, "LUYEN_TAP")
                     .hide(luyenTap)
-
-                    .add(
-                            R.id.khung_noi_dung,
-                            boTu,
-                            "BO_TU"
-                    )
+                    .add(R.id.khung_noi_dung, boTu, "BO_TU")
                     .hide(boTu)
-
-                    .add(
-                            R.id.khung_noi_dung,
-                            trangChu,
-                            "TRANG_CHU"
-                    )
-
+                    .add(R.id.khung_noi_dung, trangChu, "TRANG_CHU")
                     .commit();
 
-
-            // Trang chủ là màn hình mặc định.
             manHinhHienTai = trangChu;
 
             thanhDieuHuong.setSelectedItemId(
                     R.id.menu_trang_chu
             );
-
-
             return;
         }
 
+        trangChu = fm.findFragmentByTag("TRANG_CHU");
+        boTu = fm.findFragmentByTag("BO_TU");
+        luyenTap = fm.findFragmentByTag("LUYEN_TAP");
+        xepHang = fm.findFragmentByTag("XEP_HANG");
+        cuaHang = fm.findFragmentByTag("CUA_HANG");
+        caNhan = fm.findFragmentByTag("CA_NHAN");
 
-        // Activity được Android tạo lại, ví dụ khi xoay màn hình.
-        // Lấy lại các Fragment cũ thay vì tạo Fragment mới.
-        trangChu = getSupportFragmentManager()
-                .findFragmentByTag("TRANG_CHU");
-
-        boTu = getSupportFragmentManager()
-                .findFragmentByTag("BO_TU");
-
-        luyenTap = getSupportFragmentManager()
-                .findFragmentByTag("LUYEN_TAP");
-
-        xepHang = getSupportFragmentManager()
-                .findFragmentByTag("XEP_HANG");
-
-        cuaHang = getSupportFragmentManager()
-                .findFragmentByTag("CUA_HANG");
-
-        caNhan = getSupportFragmentManager()
-                .findFragmentByTag("CA_NHAN");
-
-
-        // Xác định Fragment hiện đang được hiển thị.
         if (trangChu != null && !trangChu.isHidden()) {
-
             manHinhHienTai = trangChu;
-
         } else if (boTu != null && !boTu.isHidden()) {
-
             manHinhHienTai = boTu;
-
         } else if (luyenTap != null && !luyenTap.isHidden()) {
-
             manHinhHienTai = luyenTap;
-
         } else if (xepHang != null && !xepHang.isHidden()) {
-
             manHinhHienTai = xepHang;
-
         } else if (cuaHang != null && !cuaHang.isHidden()) {
-
             manHinhHienTai = cuaHang;
-
         } else if (caNhan != null && !caNhan.isHidden()) {
-
             manHinhHienTai = caNhan;
         }
     }
 
+    private void thietLapKai() {
+        nutNoiKai.setOnClickListener(v -> moKai());
+    }
 
-    /**
-     * Thiết lập sự kiện cho BottomNavigationView.
-     */
+    private void moKai() {
+        FragmentManager fm = getSupportFragmentManager();
+
+        if (fm.isStateSaved()) {
+            return;
+        }
+
+        if (fm.findFragmentByTag(TAG_KAI) != null) {
+            return;
+        }
+
+        khungKaiChat.setVisibility(View.VISIBLE);
+        nutNoiKai.setVisibility(View.GONE);
+
+        fm.beginTransaction()
+                .setReorderingAllowed(true)
+                .add(
+                        R.id.khung_kai_chat,
+                        new KaiChat(),
+                        TAG_KAI
+                )
+                .addToBackStack(BACKSTACK_KAI)
+                .commit();
+    }
+
+    private void capNhatTrangThaiKai() {
+        Fragment kai = getSupportFragmentManager()
+                .findFragmentByTag(TAG_KAI);
+
+        boolean dangMoKai = kai != null
+                && kai.isAdded()
+                && !kai.isRemoving();
+
+        khungKaiChat.setVisibility(
+                dangMoKai ? View.VISIBLE : View.GONE
+        );
+
+        nutNoiKai.setVisibility(
+                dangMoKai ? View.GONE : View.VISIBLE
+        );
+    }
+
+    private void dongKai() {
+        FragmentManager fm = getSupportFragmentManager();
+
+        if (fm.isStateSaved()) {
+            return;
+        }
+
+        Fragment kai = fm.findFragmentByTag(TAG_KAI);
+
+        if (kai == null) {
+            capNhatTrangThaiKai();
+            return;
+        }
+
+        fm.popBackStackImmediate(
+                BACKSTACK_KAI,
+                FragmentManager.POP_BACK_STACK_INCLUSIVE
+        );
+
+        capNhatTrangThaiKai();
+    }
+
     private void thietLapDieuHuong() {
-
         thanhDieuHuong.setOnItemSelectedListener(item -> {
-
             int id = item.getItemId();
 
             if (id == R.id.menu_trang_chu) {
@@ -258,57 +228,40 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-
-    /**
-     * Chuyển màn hình bằng cách ẩn Fragment hiện tại
-     * và hiển thị Fragment được chọn.
-     *
-     * Fragment không bị tạo lại khi chuyển tab.
-     *
-     * @param manHinhMoi Fragment cần hiển thị.
-     */
-    private void chuyenManHinh(
-            Fragment manHinhMoi) {
-
+    private void chuyenManHinh(Fragment manHinhMoi) {
         if (manHinhMoi == null) {
             return;
         }
 
+        FragmentManager fm = getSupportFragmentManager();
 
-        /*
-         * Nếu đang có màn con như ChiTietFolder,
-         * đóng toàn bộ màn con trước khi chuyển tab.
-         */
-        if (getSupportFragmentManager()
-                .getBackStackEntryCount() > 0) {
-
-            getSupportFragmentManager()
-                    .popBackStackImmediate(
-                            null,
-                            FragmentManager.POP_BACK_STACK_INCLUSIVE
-                    );
+        if (fm.isStateSaved()) {
+            return;
         }
 
+        if (fm.getBackStackEntryCount() > 0) {
+            fm.popBackStackImmediate(
+                    null,
+                    FragmentManager.POP_BACK_STACK_INCLUSIVE
+            );
+        }
 
-        /*
-         * Sau khi đóng màn con,
-         * nếu người dùng chọn đúng tab hiện tại
-         * thì tab đó đã được hiện lại rồi.
-         */
+        capNhatTrangThaiKai();
+
         if (manHinhMoi == manHinhHienTai) {
             return;
         }
 
+        if (manHinhHienTai == null) {
+            return;
+        }
 
-        getSupportFragmentManager()
-                .beginTransaction()
+        fm.beginTransaction()
                 .hide(manHinhHienTai)
                 .show(manHinhMoi)
                 .commit();
 
-
-        manHinhHienTai =
-                manHinhMoi;
+        manHinhHienTai = manHinhMoi;
     }
 
     private void thietLapMauThanhDieuHuong() {
@@ -330,49 +283,46 @@ public class MainActivity extends AppCompatActivity {
         thanhDieuHuong.setItemIconTintList(
                 new ColorStateList(trangThai, mauIcon)
         );
+
         thanhDieuHuong.setItemTextColor(
                 new ColorStateList(trangThai, mauChu)
         );
+
         thanhDieuHuong.setItemIconSize(dpToPx(22));
+
         thanhDieuHuong.setItemTextAppearanceActive(
                 R.style.KenglishBottomNavTextActive
         );
+
         thanhDieuHuong.setItemTextAppearanceInactive(
                 R.style.KenglishBottomNavTextInactive
         );
     }
 
     private int dpToPx(int dp) {
-        return Math.round(dp * getResources().getDisplayMetrics().density);
+        return Math.round(
+                dp * getResources().getDisplayMetrics().density
+        );
     }
 
-
     public void chuyenDenLuyenTap(int boTuId, String tenBoTu) {
-
         if (!(luyenTap instanceof LuyenTap) || boTuId <= 0) {
             return;
         }
 
-        // Truyền bộ từ vào Fragment Luyện tập đang tồn tại.
         ((LuyenTap) luyenTap).chonBoTuTuManHinhKhac(
                 boTuId,
                 tenBoTu
         );
 
-        // Chuyển tab thông qua BottomNavigationView.
-        // Listener hiện tại sẽ tự đóng màn con trong back stack.
         if (thanhDieuHuong.getSelectedItemId()
                 == R.id.menu_luyen_tap) {
 
             chuyenManHinh(luyenTap);
-
         } else {
-
             thanhDieuHuong.setSelectedItemId(
                     R.id.menu_luyen_tap
             );
         }
     }
-
-
 }

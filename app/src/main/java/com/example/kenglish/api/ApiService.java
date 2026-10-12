@@ -1,6 +1,8 @@
 
 package com.example.kenglish.api;
 
+import com.example.kenglish.model.AiChatRequest;
+import com.example.kenglish.model.AiChatResponse;
 import com.example.kenglish.model.ApiResponse;
 import com.example.kenglish.model.BangXepHangResponse;
 import com.example.kenglish.model.BoTuModel;
@@ -232,5 +234,11 @@ public interface ApiService {
             @Query("loai") String loai
     );
 
+    // ==================== KAI AI ====================
 
+    @POST("ai/chat")
+    Call<AiChatResponse> chatKai(
+            @Header("Authorization") String token,
+            @Body AiChatRequest request
+    );
 }
