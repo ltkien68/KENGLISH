@@ -15,6 +15,10 @@ import com.example.kenglish.model.DangNhapResponse;
 import com.example.kenglish.model.DanhSachTuResponse;
 import com.example.kenglish.model.Folder;
 import com.example.kenglish.model.HoatDongNamResponse;
+import com.example.kenglish.model.KaiCreateVocabularyRequest;
+import com.example.kenglish.model.KaiCreateVocabularyResponse;
+import com.example.kenglish.model.KaiIntentRequest;
+import com.example.kenglish.model.KaiIntentResponse;
 import com.example.kenglish.model.LichSuLuyenTapResponse;
 import com.example.kenglish.model.LuuTienTrinhRequest;
 import com.example.kenglish.model.LuuTienTrinhResponse;
@@ -240,5 +244,17 @@ public interface ApiService {
     Call<AiChatResponse> chatKai(
             @Header("Authorization") String token,
             @Body AiChatRequest request
+    );
+
+    @POST("ai/intent")
+    Call<KaiIntentResponse> phanTichYeuCauKai(
+            @Header("Authorization") String token,
+            @Body KaiIntentRequest request
+    );
+
+    @POST("ai/create-vocabulary")
+    Call<KaiCreateVocabularyResponse> taoBoTuBangKai(
+            @Header("Authorization") String token,
+            @Body KaiCreateVocabularyRequest request
     );
 }
