@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:overScrollMode="never"
+        android:clipToPadding="false">
+
+        <LinearLayout
+            android:id="@+id/khung_quen_mat_khau"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center_horizontal|center_vertical"
+            android:paddingStart="24dp"
+            android:paddingTop="50dp"
+            android:paddingEnd="24dp"
+            android:paddingBottom="24dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <!-- Logo Kenglish -->
+            <ImageView
+                android:id="@+id/img_logo"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:src="@drawable/ic_logo_kenglish"
+                android:scaleType="fitStart"
+                android:contentDescription="Logo Kenglish" />
+
+            <!-- Tiêu đề -->
+            <TextView
+                android:id="@+id/txt_tieu_de"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Tìm tài khoản của bạn"
+                android:textColor="#0B3475"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <!-- Mô tả -->
+            <TextView
+                android:id="@+id/txt_mo_ta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:text="Nhập email đã đăng ký của bạn."
+                android:textColor="#7C8492"
+                android:textSize="13sp" />
+
+            <!-- Email -->
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/layout_email"
+                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:hint="Email"
+                app:boxBackgroundMode="outline"
+                app:boxBackgroundColor="#F5FAFF"
+                app:boxCornerRadiusTopStart="14dp"
+                app:boxCornerRadiusTopEnd="14dp"
+                app:boxCornerRadiusBottomStart="14dp"
+                app:boxCornerRadiusBottomEnd="14dp"
+                app:boxStrokeColor="@color/mau_vien_input_dang_ky"
+                app:boxStrokeWidth="1dp"
+                app:boxStrokeWidthFocused="2dp"
+                app:hintEnabled="true"
+                app:hintAnimationEnabled="true"
+                app:hintTextColor="@color/mau_vien_input_dang_ky"
+                app:expandedHintEnabled="true">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edt_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="46dp"
+                    android:background="@null"
+                    android:inputType="textEmailAddress"
+                    android:singleLine="true"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:textColor="#0B3475"
+                    android:textColorHint="#7C8492"
+                    android:textSize="13sp" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <!-- Thông báo lỗi -->
+            <TextView
+                android:id="@+id/txt_loi_quen_mat_khau"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textColor="#C94A4A"
+                android:textSize="13sp"
+                android:visibility="gone" />
+
+            <!-- Nút gửi mã -->
+            <TextView
+                android:id="@+id/btn_gui_ma"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:layout_marginTop="16dp"
+                android:background="@drawable/nen_nut_dang_ky_moi"
+                android:clickable="true"
+                android:focusable="true"
+                android:gravity="center"
+                android:text="GỬI MÃ XÁC THỰC"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+
+    </ScrollView>
+
+    <!-- Nút quay lại -->
+    <ImageView
+        android:id="@+id/txt_quay_lai_dang_nhap"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="top|start"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:contentDescription="Quay lại"
+        android:focusable="true"
+        android:padding="8dp"
+        android:src="@drawable/ic_back"
+        app:tint="#0B3475" />
+
+</FrameLayout>

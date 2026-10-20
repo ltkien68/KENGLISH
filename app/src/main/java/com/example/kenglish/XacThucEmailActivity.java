@@ -7,16 +7,12 @@ import android.text.InputFilter;
 import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
-import android.view.inputmethod.InputConnection;
-import android.view.inputmethod.InputConnectionWrapper;
+import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.content.Context;
-import android.util.AttributeSet;
-import android.view.inputmethod.InputMethodManager;
-import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -38,8 +34,12 @@ public class XacThucEmailActivity extends AppCompatActivity {
     private final EditText[] danhSachOtp = new EditText[6];
 
     private String email;
+    private String loai;
+
     private boolean dangCapNhatOtp = false;
     private boolean dangGuiXacThuc = false;
+
+    private ImageView btnQuayLai;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +50,7 @@ public class XacThucEmailActivity extends AppCompatActivity {
         khoiTaoOtp();
 
         email = getIntent().getStringExtra("email");
+        loai = getIntent().getStringExtra("loai");
 
         if (email != null && !email.trim().isEmpty()) {
             txtEmail.setText(
@@ -66,12 +67,29 @@ public class XacThucEmailActivity extends AppCompatActivity {
                     Toast.LENGTH_SHORT
             ).show();
         });
+
+        btnQuayLai.setOnClickListener(v -> {
+            Intent i = new Intent(
+                    XacThucEmailActivity.this,
+                    DangNhapActivity.class
+            );
+
+            startActivity(i);
+
+            overridePendingTransition(
+                    R.anim.slide_in_left,
+                    R.anim.slide_out_right
+            );
+
+            finish();
+        });
     }
 
     private void anhXa() {
         txtEmail = findViewById(R.id.txt_email);
         btnXacThuc = findViewById(R.id.btn_xac_thuc);
         txtGuiLai = findViewById(R.id.txt_gui_lai);
+        btnQuayLai = findViewById(R.id.btn_back);
     }
 
     /**
@@ -313,13 +331,16 @@ public class XacThucEmailActivity extends AppCompatActivity {
      * Gửi mã OTP đến backend.
      */
     private void guiYeuCauXacThuc(String maXacThuc) {
-
         dangGuiXacThuc = true;
         btnXacThuc.setEnabled(false);
         btnXacThuc.setAlpha(0.6f);
 
         XacThucEmailRequest request =
-                new XacThucEmailRequest(email, maXacThuc);
+                new XacThucEmailRequest(
+                        email,
+                        maXacThuc,
+                        loai
+                );
 
         ApiService apiService =
                 RetrofitClient.getClient()
@@ -331,7 +352,8 @@ public class XacThucEmailActivity extends AppCompatActivity {
                     @Override
                     public void onResponse(
                             Call<ApiResponse> call,
-                            Response<ApiResponse> response) {
+                            Response<ApiResponse> response
+                    ) {
 
                         dangGuiXacThuc = false;
                         btnXacThuc.setEnabled(true);
@@ -344,16 +366,9 @@ public class XacThucEmailActivity extends AppCompatActivity {
 
                             if (ketQua.isThanhCong()) {
 
-                                Toast.makeText(
-                                        XacThucEmailActivity.this,
-                                        "Xác thực email thành công",
-                                        Toast.LENGTH_SHORT
-                                ).show();
-
-                                moManHinhDangNhap();
+                                xuLySauKhiXacThuc(maXacThuc);
 
                             } else {
-
                                 Toast.makeText(
                                         XacThucEmailActivity.this,
                                         ketQua.getThongBao(),
@@ -374,7 +389,8 @@ public class XacThucEmailActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(
                             Call<ApiResponse> call,
-                            Throwable t) {
+                            Throwable t
+                    ) {
 
                         dangGuiXacThuc = false;
                         btnXacThuc.setEnabled(true);
@@ -391,7 +407,41 @@ public class XacThucEmailActivity extends AppCompatActivity {
     }
 
     /**
-     * Mở màn hình đăng nhập sau khi xác thực.
+     * Xử lý màn hình tiếp theo dựa vào loại OTP.
+     *
+     * xac_thuc_tai_khoan -> Đăng nhập
+     * dat_lai_mat_khau   -> Đặt lại mật khẩu
+     */
+    private void xuLySauKhiXacThuc(String maXacThuc) {
+        if ("dat_lai_mat_khau".equals(loai)) {
+
+            Intent intent = new Intent(
+                    XacThucEmailActivity.this,
+                    DatLaiMatKhauActivity.class
+            );
+
+            intent.putExtra("email", email);
+            intent.putExtra("ma_xac_thuc", maXacThuc);
+
+            startActivity(intent);
+
+            overridePendingTransition(
+                    R.anim.slide_in_right,
+                    R.anim.slide_out_left
+            );
+
+            finish();
+
+        } else {
+
+            // Mặc định:
+            // OTP xác thực tài khoản -> về màn đăng nhập
+            moManHinhDangNhap();
+        }
+    }
+
+    /**
+     * Mở màn hình đăng nhập sau khi xác thực tài khoản.
      */
     private void moManHinhDangNhap() {
 

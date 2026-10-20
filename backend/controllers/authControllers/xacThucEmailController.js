@@ -2,15 +2,14 @@ const ketNoi = require("../../config/database");
 
 async function xacThucEmail(req, res) {
     try {
-        // Lấy dữ liệu Android gửi lên
         const {
             email = "",
-            ma_xac_thuc = ""
+            ma_xac_thuc = "",
+            loai = "xac_thuc_tai_khoan"
         } = req.body;
 
         const emailNguoiDung = email.trim();
 
-        // Kiểm tra dữ liệu
         if (!emailNguoiDung || !ma_xac_thuc) {
             return res.json({
                 thanh_cong: false,
@@ -18,7 +17,6 @@ async function xacThucEmail(req, res) {
             });
         }
 
-        // Tìm người dùng theo email
         const [ketQua] = await ketNoi.execute(
             `SELECT
                 id,
@@ -30,7 +28,6 @@ async function xacThucEmail(req, res) {
             [emailNguoiDung]
         );
 
-        // Không tìm thấy tài khoản
         if (ketQua.length === 0) {
             return res.json({
                 thanh_cong: false,
@@ -40,16 +37,22 @@ async function xacThucEmail(req, res) {
 
         const nguoiDung = ketQua[0];
 
-        // Email đã được xác thực
-        if (nguoiDung.email_da_xac_thuc === 1) {
-            return res.json({
-                thanh_cong: false,
-                thong_bao: "Email đã được xác thực"
-            });
+        // Luồng đăng ký tài khoản
+        if (loai === "xac_thuc_tai_khoan") {
+
+            if (nguoiDung.email_da_xac_thuc === 1) {
+                return res.json({
+                    thanh_cong: false,
+                    thong_bao: "Email đã được xác thực"
+                });
+            }
         }
 
         // Kiểm tra OTP
-        if (String(ma_xac_thuc) !== String(nguoiDung.ma_xac_thuc)) {
+        if (
+            String(ma_xac_thuc)
+            !== String(nguoiDung.ma_xac_thuc)
+        ) {
             return res.json({
                 thanh_cong: false,
                 thong_bao: "Mã OTP không đúng"
@@ -68,21 +71,50 @@ async function xacThucEmail(req, res) {
             });
         }
 
-        // Xác thực email và xóa OTP đã sử dụng
-        await ketNoi.execute(
-            `UPDATE nguoi_dung
-             SET email_da_xac_thuc = 1,
-                 ma_xac_thuc = NULL,
-                 het_han_ma_xac_thuc = NULL,
-                 da_xoa = 0,
-                 xoa_luc = NULL
-             WHERE id = ?`,
-            [nguoiDung.id]
-        );
+        // =========================
+        // XÁC THỰC TÀI KHOẢN
+        // =========================
+        if (loai === "xac_thuc_tai_khoan") {
+
+            await ketNoi.execute(
+                `UPDATE nguoi_dung
+                 SET email_da_xac_thuc = 1,
+                     ma_xac_thuc = NULL,
+                     het_han_ma_xac_thuc = NULL,
+                     da_xoa = 0,
+                     xoa_luc = NULL
+                 WHERE id = ?`,
+                [nguoiDung.id]
+            );
+
+            return res.json({
+                thanh_cong: true,
+                thong_bao: "Email xác thực thành công"
+            });
+        }
+
+        // =========================
+        // ĐẶT LẠI MẬT KHẨU
+        // =========================
+        if (loai === "dat_lai_mat_khau") {
+
+            await ketNoi.execute(
+                `UPDATE nguoi_dung
+                 SET ma_xac_thuc = NULL,
+                     het_han_ma_xac_thuc = NULL
+                 WHERE id = ?`,
+                [nguoiDung.id]
+            );
+
+            return res.json({
+                thanh_cong: true,
+                thong_bao: "Mã OTP hợp lệ"
+            });
+        }
 
         return res.json({
-            thanh_cong: true,
-            thong_bao: "Email xác thực thành công"
+            thanh_cong: false,
+            thong_bao: "Loại xác thực không hợp lệ"
         });
 
     } catch (error) {
@@ -90,7 +122,7 @@ async function xacThucEmail(req, res) {
 
         return res.status(500).json({
             thanh_cong: false,
-            thong_bao: "Email xác thực thất bại"
+            thong_bao: "Xác thực thất bại"
         });
     }
 }

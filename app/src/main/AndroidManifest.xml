@@ -66,6 +66,10 @@
         <activity
             android:name=".QuenMatKhauActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".DatLaiMatKhauActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

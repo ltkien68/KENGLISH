@@ -1,185 +1,206 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    android:fillViewport="true"
-    android:clipToPadding="false"
-    android:overScrollMode="never">
+    android:background="#FFFFFF">
 
-    <LinearLayout
-        android:id="@+id/khung_xac_thuc"
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_horizontal|center_vertical"
-        android:orientation="vertical"
-        android:paddingStart="24dp"
-        android:paddingTop="50dp"
-        android:paddingEnd="24dp"
-        android:paddingBottom="24dp"
-        android:focusable="true"
-        android:focusableInTouchMode="true">
+        android:fillViewport="true"
+        android:clipToPadding="false"
+        android:overScrollMode="never">
 
-        <!-- LOGO -->
-        <ImageView
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:contentDescription="Logo Kenglish"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_logo_kenglish" />
-
-        <!-- TIÊU ĐỀ -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:gravity="center"
-            android:text="XÁC THỰC EMAIL"
-            android:textColor="#0B3475"
-            android:textSize="15sp"
-            android:textStyle="bold" />
-
-        <!-- MÔ TẢ -->
-        <TextView
-            android:id="@+id/txt_email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:gravity="center"
-            android:text="Mã xác thực đã được gửi tới email của bạn"
-            android:textColor="#7C8492"
-            android:textSize="13sp" />
-
-        <!-- NHÃN OTP -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
-            android:fontFamily="sans-serif-medium"
-            android:text="Nhập mã xác thực"
-            android:textColor="#0B3475"
-            android:textSize="13sp" />
-
-        <!-- 6 Ô OTP -->
         <LinearLayout
-            android:id="@+id/layout_nhap_otp"
+            android:id="@+id/khung_xac_thuc"
             android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:layout_marginTop="12dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-
-            <EditText
-                android:id="@+id/edt_otp_1"
-                style="@style/KenglishOtpInput" />
-
-            <EditText
-                android:id="@+id/edt_otp_2"
-                style="@style/KenglishOtpInput" />
-
-            <EditText
-                android:id="@+id/edt_otp_3"
-                style="@style/KenglishOtpInput" />
-
-            <EditText
-                android:id="@+id/edt_otp_4"
-                style="@style/KenglishOtpInput" />
-
-            <EditText
-                android:id="@+id/edt_otp_5"
-                style="@style/KenglishOtpInput" />
-
-            <EditText
-                android:id="@+id/edt_otp_6"
-                style="@style/KenglishOtpInput" />
-
-        </LinearLayout>
-
-        <!-- GỢI Ý -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:gravity="center"
-            android:text="Mã gồm 6 chữ số và có hiệu lực trong 5 phút"
-            android:textColor="#7C8492"
-            android:textSize="11sp" />
-
-        <!-- NÚT XÁC THỰC -->
-        <TextView
-            android:id="@+id/btn_xac_thuc"
-            android:layout_width="match_parent"
-            android:layout_height="46dp"
-            android:layout_marginTop="24dp"
-            android:background="@drawable/nen_nut_dang_ky_moi"
-            android:clickable="true"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal|center_vertical"
+            android:orientation="vertical"
+            android:paddingStart="24dp"
+            android:paddingTop="50dp"
+            android:paddingEnd="24dp"
+            android:paddingBottom="24dp"
             android:focusable="true"
-            android:gravity="center"
-            android:text="XÁC THỰC"
-            android:textColor="#FFFFFF"
-            android:textSize="13sp"
-            android:textStyle="bold" />
+            android:focusableInTouchMode="true">
 
-        <!-- PHÂN CÁCH -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            <!-- LOGO -->
+            <ImageView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:contentDescription="Logo Kenglish"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_logo_kenglish" />
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1"
-                android:background="#DDEEFF" />
-
+            <!-- TIÊU ĐỀ -->
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:text="hoặc"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:text="XÁC THỰC EMAIL"
+                android:textColor="#0B3475"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <!-- MÔ TẢ -->
+            <TextView
+                android:id="@+id/txt_email"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:gravity="center"
+                android:text="Mã xác thực đã được gửi tới email của bạn"
                 android:textColor="#7C8492"
                 android:textSize="13sp" />
 
-            <View
-                android:layout_width="0dp"
-                android:layout_height="1dp"
-                android:layout_weight="1"
-                android:background="#DDEEFF" />
-
-        </LinearLayout>
-
-        <!-- GỬI LẠI MÃ -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="44dp"
-            android:layout_marginTop="4dp"
-            android:gravity="center"
-            android:orientation="horizontal">
-
+            <!-- NHÃN OTP -->
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Không nhận được mã? "
-                android:textColor="#7C8492"
+                android:layout_marginTop="28dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="Nhập mã xác thực"
+                android:textColor="#0B3475"
                 android:textSize="13sp" />
 
+            <!-- 6 Ô OTP -->
+            <LinearLayout
+                android:id="@+id/layout_nhap_otp"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/edt_otp_1"
+                    style="@style/KenglishOtpInput" />
+
+                <EditText
+                    android:id="@+id/edt_otp_2"
+                    style="@style/KenglishOtpInput" />
+
+                <EditText
+                    android:id="@+id/edt_otp_3"
+                    style="@style/KenglishOtpInput" />
+
+                <EditText
+                    android:id="@+id/edt_otp_4"
+                    style="@style/KenglishOtpInput" />
+
+                <EditText
+                    android:id="@+id/edt_otp_5"
+                    style="@style/KenglishOtpInput" />
+
+                <EditText
+                    android:id="@+id/edt_otp_6"
+                    style="@style/KenglishOtpInput" />
+
+            </LinearLayout>
+
+            <!-- GỢI Ý -->
             <TextView
-                android:id="@+id/txt_gui_lai"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:gravity="center"
+                android:text="Mã gồm 6 chữ số và có hiệu lực trong 5 phút"
+                android:textColor="#7C8492"
+                android:textSize="11sp" />
+
+            <!-- NÚT XÁC THỰC -->
+            <TextView
+                android:id="@+id/btn_xac_thuc"
+                android:layout_width="match_parent"
+                android:layout_height="46dp"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/nen_nut_dang_ky_moi"
                 android:clickable="true"
                 android:focusable="true"
-                android:padding="4dp"
-                android:text="Gửi lại mã"
-                android:textColor="#1877F2"
+                android:gravity="center"
+                android:text="XÁC THỰC"
+                android:textColor="#FFFFFF"
                 android:textSize="13sp"
                 android:textStyle="bold" />
 
+            <!-- PHÂN CÁCH -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    android:background="#DDEEFF" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:text="hoặc"
+                    android:textColor="#7C8492"
+                    android:textSize="13sp" />
+
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="1dp"
+                    android:layout_weight="1"
+                    android:background="#DDEEFF" />
+
+            </LinearLayout>
+
+            <!-- GỬI LẠI MÃ -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="44dp"
+                android:layout_marginTop="4dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Không nhận được mã? "
+                    android:textColor="#7C8492"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:id="@+id/txt_gui_lai"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:padding="4dp"
+                    android:text="Gửi lại mã"
+                    android:textColor="#1877F2"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+
+    <!-- NÚT BACK -->
+    <ImageView
+        android:id="@+id/btn_back"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="top|start"
+        android:layout_marginTop="16dp"
+        android:clickable="true"
+        android:contentDescription="Quay lại"
+        android:focusable="true"
+        android:padding="8dp"
+        android:src="@drawable/ic_back"
+        app:tint="#0B3475" />
+
+</FrameLayout>
