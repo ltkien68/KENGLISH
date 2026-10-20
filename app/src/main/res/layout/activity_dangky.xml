@@ -41,16 +41,6 @@
             android:textSize="15sp"
             android:textStyle="bold" />
 
-        <!-- Mô tả -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:gravity="center"
-            android:text="Bắt đầu hành trình học từ vựng của bạn"
-            android:textColor="#7C8492"
-            android:textSize="13sp" />
-
         <!-- Tên hiển thị -->
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layout_ten_hien_thi"

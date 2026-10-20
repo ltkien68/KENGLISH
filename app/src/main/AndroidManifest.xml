@@ -62,6 +62,10 @@
         <activity
             android:name=".XacThucEmailActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".QuenMatKhauActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

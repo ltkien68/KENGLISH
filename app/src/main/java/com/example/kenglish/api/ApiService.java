@@ -22,6 +22,7 @@ import com.example.kenglish.model.KaiIntentResponse;
 import com.example.kenglish.model.LichSuLuyenTapResponse;
 import com.example.kenglish.model.LuuTienTrinhRequest;
 import com.example.kenglish.model.LuuTienTrinhResponse;
+import com.example.kenglish.model.QuenMatKhauRequest;
 import com.example.kenglish.model.TaoBoTuRequest;
 import com.example.kenglish.model.TaoFolderRequest;
 import com.example.kenglish.model.ThemTuRequest;
@@ -256,5 +257,10 @@ public interface ApiService {
     Call<KaiCreateVocabularyResponse> taoBoTuBangKai(
             @Header("Authorization") String token,
             @Body KaiCreateVocabularyRequest request
+    );
+
+    @POST("auth/quen-mat-khau")
+    Call<ApiResponse> quenMatKhau(
+            @Body QuenMatKhauRequest request
     );
 }

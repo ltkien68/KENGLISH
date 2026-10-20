@@ -31,6 +31,7 @@ public class DangNhapActivity extends AppCompatActivity {
     private View txtDangKy;
 
     private TextView txtLoiDangNhap;
+    private TextView txtQuenMatKhau;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +57,13 @@ public class DangNhapActivity extends AppCompatActivity {
                     R.anim.slide_in_right,
                     R.anim.slide_out_left
             );
+        });
+
+        txtQuenMatKhau.setOnClickListener(v -> {
+            Intent i = new Intent(DangNhapActivity.this, QuenMatKhauActivity.class);
+            startActivity(i);
+
+            overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         });
 
         // Xử lý khi nhấn nút đăng nhập
@@ -98,6 +106,9 @@ public class DangNhapActivity extends AppCompatActivity {
 
         txtLoiDangNhap =
                 findViewById(R.id.txt_loi_dang_nhap);
+
+        txtQuenMatKhau =
+                findViewById(R.id.txt_quen_mat_khau);
     }
 
     private void dangNhap() {
