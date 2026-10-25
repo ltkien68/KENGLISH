@@ -131,6 +131,57 @@ Kenglish/
 
 ---
 
+## Hướng dẫn cài đặt Kenglish trên Android
+
+### Yêu cầu hệ thống
+
+- **Hệ điều hành:** Android 7.0 trở lên.
+- **Kết nối Internet:** Cần thiết để sử dụng các chức năng trực tuyến.
+- **Bộ cài đặt:** File APK trong GitHub Releases.
+
+### 1. Tải file APK
+
+1. Truy cập trang [Kenglish Releases](../../releases/latest).
+2. Tìm phần **Assets** trong bản phát hành mới nhất.
+3. Nhấn vào file kenglish.apk để tải xuống điện thoại.
+
+### 2. Cho phép cài đặt ứng dụng
+
+Nếu điện thoại yêu cầu cấp quyền cài đặt ứng dụng từ nguồn bên ngoài Google Play:
+
+1. Mở **Cài đặt (Settings)** trên điện thoại.
+2. Tìm mục **Cài đặt ứng dụng không rõ nguồn gốc (Install unknown apps)**.
+3. Chọn ứng dụng dùng để mở file APK, chẳng hạn Chrome hoặc Quản lý tệp.
+4. Bật **Cho phép từ nguồn này (Allow from this source)**.
+
+*Tên và vị trí các mục cài đặt có thể khác nhau tùy theo hãng điện thoại và phiên bản Android.*
+
+### 3. Cài đặt Kenglish
+
+1. Mở ứng dụng **Quản lý tệp (File Manager)**.
+2. Truy cập thư mục **Downloads / Tải xuống**.
+3. Nhấn vào file APK vừa tải.
+4. Chọn **Cài đặt (Install)**.
+5. Sau khi hoàn tất, nhấn **Mở (Open)** để khởi chạy Kenglish.
+
+### 4. Đăng nhập và sử dụng
+
+1. Mở ứng dụng Kenglish.
+2. Đăng nhập bằng tài khoản đã đăng ký hoặc tạo tài khoản mới.
+3. Đảm bảo điện thoại có kết nối Internet để sử dụng các chức năng cần máy chủ.
+
+### ⚠️ Lưu ý
+
+- Chỉ tải APK từ trang Releases chính thức của repository Kenglish.
+- Nếu Android cảnh báo về file APK, hãy xác minh nguồn tải trước khi tiếp tục.
+- Nếu không cài đặt được, hãy kiểm tra phiên bản Android, tính toàn vẹn của file APK và chữ ký ứng dụng.
+- Nếu phiên bản Kenglish cũ được ký bằng khóa khác, bạn có thể cần gỡ phiên bản cũ trước khi cài bản mới. Việc này có thể làm mất dữ liệu lưu cục bộ.
+- Các chức năng trực tuyến phụ thuộc vào tình trạng hoạt động của backend.
+
+---
+
+**Kenglish — Learn English smarter, one word at a time.**
+
 
 ## Công nghệ sử dụng
 
