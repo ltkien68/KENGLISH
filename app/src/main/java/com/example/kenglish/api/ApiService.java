@@ -13,6 +13,7 @@ import com.example.kenglish.model.DangKyRequest;
 import com.example.kenglish.model.DangNhapRequest;
 import com.example.kenglish.model.DangNhapResponse;
 import com.example.kenglish.model.DanhSachTuResponse;
+import com.example.kenglish.model.DatLaiMatKhauRequest;
 import com.example.kenglish.model.Folder;
 import com.example.kenglish.model.HoatDongNamResponse;
 import com.example.kenglish.model.KaiCreateVocabularyRequest;
@@ -270,5 +271,10 @@ public interface ApiService {
     @POST("auth/quen-mat-khau")
     Call<ApiResponse> quenMatKhau(
             @Body QuenMatKhauRequest request
+    );
+
+    @POST("auth/dat-lai-mat-khau")
+    Call<ApiResponse> datLaiMatKhau(
+            @Body DatLaiMatKhauRequest request
     );
 }
