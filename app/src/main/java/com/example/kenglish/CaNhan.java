@@ -1,3 +1,4 @@
+
 package com.example.kenglish;
 
 import static androidx.core.util.TypedValueCompat.dpToPx;
@@ -21,10 +22,12 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.example.kenglish.api.ApiService;
 import com.example.kenglish.api.RetrofitClient;
 import com.example.kenglish.model.ApiResponse;
 import com.example.kenglish.model.HoatDongNamResponse;
+import com.example.kenglish.model.NguoiDung;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -37,7 +40,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
 /**
  * Fragment hiển thị thông tin cá nhân và cài đặt người dùng.
  */
@@ -47,13 +49,14 @@ public class CaNhan extends Fragment {
     private LinearLayout cardXoaTaiKhoan;
     private LinearLayout cardCongDongZalo;
     private TextView txtHoTen;
+    private TextView txtEmail;
+    private ImageView imgAvatar;
     private ImageView btnFacebook;
     private ImageView btnInstagram;
     private TextView txtNamHoatDong;
     private TextView txtStreak;
     private LinearLayout layoutContributionGraph;
     private HorizontalScrollView scrollHoatDong;
-
 
     /**
      * Khởi tạo giao diện của màn hình Cá nhân.
@@ -94,7 +97,6 @@ public class CaNhan extends Fragment {
         return view;
     }
 
-
     /**
      * Ánh xạ các View cần xử lý sự kiện.
      */
@@ -103,22 +105,19 @@ public class CaNhan extends Fragment {
         cardXoaTaiKhoan = view.findViewById(R.id.card_xoa_tai_khoan);
         cardCongDongZalo = view.findViewById(R.id.card_cong_dong_zalo);
         txtHoTen = view.findViewById(R.id.txt_ho_ten);
+        txtEmail = view.findViewById(R.id.txt_email);
+        imgAvatar = view.findViewById(R.id.img_anh_dai_dien);
         btnFacebook = view.findViewById(R.id.btn_facebook);
         btnInstagram = view.findViewById(R.id.btn_instagram);
+
         txtNamHoatDong =
-                view.findViewById(
-                        R.id.txt_nam_hoat_dong
-                );
+                view.findViewById(R.id.txt_nam_hoat_dong);
 
         txtStreak =
-                view.findViewById(
-                        R.id.txt_streak
-                );
+                view.findViewById(R.id.txt_streak);
 
         layoutContributionGraph =
-                view.findViewById(
-                        R.id.layout_contribution_graph
-                );
+                view.findViewById(R.id.layout_contribution_graph);
 
         scrollHoatDong =
                 view.findViewById(R.id.scroll_hoat_dong);
@@ -130,7 +129,123 @@ public class CaNhan extends Fragment {
 
         if (!hidden) {
             layHoatDongNamHienTai();
+            hienThiThongTinUser();
         }
+    }
+
+    /**
+     * Lấy thông tin người dùng từ backend và hiển thị avatar.
+     */
+    private void hienThiThongTinUser() {
+        if (!isAdded()) {
+            return;
+        }
+
+        SharedPreferences sharedPreferences =
+                requireContext().getSharedPreferences(
+                        "Kenglish",
+                        Context.MODE_PRIVATE
+                );
+
+        // Hiển thị tên đã lưu trước để giao diện không bị trống.
+        String tenHienThi =
+                sharedPreferences.getString(
+                        "ten_hien_thi",
+                        "Người dùng"
+                );
+
+        String emailHienThi =
+                sharedPreferences.getString(
+                        "email",
+                        "Email"
+                );
+
+        txtHoTen.setText(tenHienThi);
+        txtEmail.setText(emailHienThi);
+
+
+        // Đặt avatar mặc định trước khi tải dữ liệu mới.
+        imgAvatar.setImageResource(R.drawable.ic_logo_kenglish);
+
+        String token = sharedPreferences.getString("token", null);
+
+        if (token == null || token.isEmpty()) {
+            return;
+        }
+
+        ApiService apiService =
+                RetrofitClient.getClient().create(ApiService.class);
+
+        apiService.layThongTinNguoiDung("Bearer " + token)
+                .enqueue(new Callback<ApiResponse<NguoiDung>>() {
+
+                    @Override
+                    public void onResponse(
+                            @NonNull Call<ApiResponse<NguoiDung>> call,
+                            @NonNull Response<ApiResponse<NguoiDung>> response) {
+
+                        if (!isAdded() || imgAvatar == null) {
+                            return;
+                        }
+
+                        if (response.isSuccessful()
+                                && response.body() != null
+                                && response.body().isThanhCong()
+                                && response.body().getData() != null) {
+
+                            NguoiDung nguoiDung =
+                                    response.body().getData();
+
+                            // Cập nhật tên từ dữ liệu mới nhất trên server.
+                            String tenMoi = nguoiDung.getTenHienThi();
+
+                            if (tenMoi != null && !tenMoi.trim().isEmpty()) {
+                                txtHoTen.setText(tenMoi);
+
+                                sharedPreferences.edit()
+                                        .putString("ten_hien_thi", tenMoi)
+                                        .apply();
+                            }
+
+                            String emailMoi = nguoiDung.getEmail();
+
+                            if (emailMoi != null && !emailMoi.trim().isEmpty()) {
+                                txtEmail.setText(emailMoi);
+
+                                sharedPreferences.edit()
+                                        .putString("email", emailMoi)
+                                        .apply();
+                            }
+
+                            // Lấy URL avatar từ Cloudinary.
+                            String avatarUrl = nguoiDung.getAvatarUrl();
+
+                            if (avatarUrl != null
+                                    && !avatarUrl.trim().isEmpty()) {
+
+                                Glide.with(CaNhan.this)
+                                        .load(avatarUrl)
+                                        .placeholder(R.drawable.ic_logo_kenglish)
+                                        .error(R.drawable.ic_logo_kenglish)
+                                        .fallback(R.drawable.ic_logo_kenglish)
+                                        .into(imgAvatar);
+
+                            } else {
+                                // Tài khoản chưa có avatar.
+                                imgAvatar.setImageResource(
+                                        R.drawable.ic_logo_kenglish
+                                );
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(
+                            @NonNull Call<ApiResponse<NguoiDung>> call,
+                            @NonNull Throwable t) {
+                        // Giữ tên và avatar mặc định nếu mất kết nối.
+                    }
+                });
     }
 
     private void layHoatDongNamHienTai() {
@@ -142,24 +257,20 @@ public class CaNhan extends Fragment {
                                 Context.MODE_PRIVATE
                         );
 
-
         String token =
                 sharedPreferences.getString(
                         "token",
                         null
                 );
 
-
         if (token == null) {
             return;
         }
-
 
         ApiService apiService =
                 RetrofitClient
                         .getClient()
                         .create(ApiService.class);
-
 
         apiService
                 .layHoatDongNamHienTai(
@@ -177,7 +288,6 @@ public class CaNhan extends Fragment {
                                     return;
                                 }
 
-
                                 if (response.isSuccessful()
                                         && response.body() != null
                                         && response.body().isThanhCong()
@@ -187,19 +297,16 @@ public class CaNhan extends Fragment {
                                             response.body()
                                                     .getData();
 
-
                                     txtNamHoatDong.setText(
                                             String.valueOf(
                                                     duLieu.getNam()
                                             )
                                     );
 
-
                                     txtStreak.setText(
                                             duLieu.getCurrentStreak()
                                                     + " ngày"
                                     );
-
 
                                     taoContributionGraph(
                                             duLieu.getNam(),
@@ -208,15 +315,11 @@ public class CaNhan extends Fragment {
                                 }
                             }
 
-
                             @Override
                             public void onFailure(
                                     @NonNull Call<ApiResponse<HoatDongNamResponse>> call,
                                     @NonNull Throwable t) {
-
                                 /*
-                                 * Không cần Toast.
-                                 *
                                  * Nếu mất mạng thì graph xám
                                  * ban đầu vẫn được giữ lại.
                                  */
@@ -231,7 +334,6 @@ public class CaNhan extends Fragment {
 
         layoutContributionGraph.removeAllViews();
 
-
         /*
          * Chuyển danh sách ngày hoạt động
          * thành Set để kiểm tra nhanh.
@@ -239,14 +341,11 @@ public class CaNhan extends Fragment {
         Set<String> tapNgayHoatDong =
                 new HashSet<>();
 
-
         if (danhSachNgayHoatDong != null) {
-
             tapNgayHoatDong.addAll(
                     danhSachNgayHoatDong
             );
         }
-
 
         /*
          * Ngày 01/01 của năm.
@@ -254,29 +353,24 @@ public class CaNhan extends Fragment {
         Calendar ngayBatDau =
                 Calendar.getInstance();
 
-
         ngayBatDau.set(
                 nam,
                 Calendar.JANUARY,
                 1
         );
 
-
         /*
          * Tổng số ngày:
-         *
          * năm thường = 365
-         * năm nhuận  = 366
+         * năm nhuận = 366
          */
         int tongSoNgay =
                 ngayBatDau.getActualMaximum(
                         Calendar.DAY_OF_YEAR
                 );
 
-
         /*
          * Tạo formatter giống dữ liệu backend:
-         *
          * 2026-10-05
          */
         SimpleDateFormat dinhDangNgay =
@@ -285,15 +379,12 @@ public class CaNhan extends Fragment {
                         Locale.getDefault()
                 );
 
-
         /*
          * GitHub graph chia theo tuần.
-         *
          * Mỗi cột = 1 tuần.
          * Mỗi cột tối đa 7 ô.
          */
         LinearLayout cotTuan = null;
-
 
         for (int i = 0; i < tongSoNgay; i++) {
 
@@ -307,11 +398,9 @@ public class CaNhan extends Fragment {
                                 requireContext()
                         );
 
-
                 cotTuan.setOrientation(
                         LinearLayout.VERTICAL
                 );
-
 
                 LinearLayout.LayoutParams paramsCot =
                         new LinearLayout.LayoutParams(
@@ -319,22 +408,18 @@ public class CaNhan extends Fragment {
                                 LinearLayout.LayoutParams.WRAP_CONTENT
                         );
 
-
                 paramsCot.setMarginEnd(
                         dpToPx(3)
                 );
-
 
                 cotTuan.setLayoutParams(
                         paramsCot
                 );
 
-
                 layoutContributionGraph.addView(
                         cotTuan
                 );
             }
-
 
             /*
              * Ngày tương ứng với ô hiện tại.
@@ -342,18 +427,15 @@ public class CaNhan extends Fragment {
             Calendar ngayHienTai =
                     (Calendar) ngayBatDau.clone();
 
-
             ngayHienTai.add(
                     Calendar.DAY_OF_YEAR,
                     i
             );
 
-
             String ngay =
                     dinhDangNgay.format(
                             ngayHienTai.getTime()
                     );
-
 
             /*
              * Tạo ô contribution.
@@ -363,13 +445,11 @@ public class CaNhan extends Fragment {
                             requireContext()
                     );
 
-
             LinearLayout.LayoutParams paramsO =
                     new LinearLayout.LayoutParams(
                             dpToPx(10),
                             dpToPx(10)
                     );
-
 
             paramsO.setMargins(
                     0,
@@ -378,15 +458,12 @@ public class CaNhan extends Fragment {
                     dpToPx(3)
             );
 
-
             oNgay.setLayoutParams(
                     paramsO
             );
 
-
             /*
              * Có hoạt động → xanh.
-             *
              * Không hoạt động → xám.
              */
             if (tapNgayHoatDong.contains(ngay)) {
@@ -401,7 +478,6 @@ public class CaNhan extends Fragment {
                         R.drawable.nen_activity_inactive
                 );
             }
-
 
             cotTuan.addView(
                     oNgay
@@ -436,7 +512,6 @@ public class CaNhan extends Fragment {
     }
 
     private int dpToPx(int dp) {
-
         return (int) (
                 dp
                         * getResources()
@@ -444,18 +519,6 @@ public class CaNhan extends Fragment {
                         .density
         );
     }
-
-    private void hienThiThongTinUser() {
-        SharedPreferences sharedPreferences = requireContext().getSharedPreferences(
-                "Kenglish",
-                Context.MODE_PRIVATE
-        );
-
-        String tenHienThi = sharedPreferences.getString("ten_hien_thi", "Người dùng");
-
-        txtHoTen.setText(tenHienThi);
-    }
-
 
     /**
      * Gắn các sự kiện cho giao diện.
@@ -505,31 +568,25 @@ public class CaNhan extends Fragment {
         });
     }
 
-
     private void xuLyNhacHoc() {
         // Mở tab nhắc học
     }
-
 
     private void xuLyCongDong() {
         // Mở link Zalo
     }
 
-
     private void xuLyLienHeHoTro() {
         // Mở trang hỗ trợ
     }
-
 
     private void xuLyChinhSach() {
         // Mở chính sách
     }
 
-
     private void xuLyDieuKhoan() {
         // Mở điều khoản
     }
-
 
     private void xuLyMangXaHoi() {
         // Facebook / Instagram
@@ -594,7 +651,6 @@ public class CaNhan extends Fragment {
                         }
                     }
 
-
                     @Override
                     public void onFailure(
                             @NonNull Call<ApiResponse> call,
@@ -608,7 +664,6 @@ public class CaNhan extends Fragment {
                     }
                 });
     }
-
 
     /**
      * Chuyển về màn hình đăng nhập và đóng MainActivity.

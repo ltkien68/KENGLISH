@@ -177,14 +177,9 @@ public class DangNhapActivity extends AppCompatActivity {
 
                                 String tenHienThi = ketQua.getNguoiDung().getTenHienThi();
 
+                                String emailHienThi = ketQua.getNguoiDung().getEmail();
                                 // Lưu token vào máy
-                                luuThongTinDangNhap(token, tenHienThi);
-
-                                Toast.makeText(
-                                        DangNhapActivity.this,
-                                        ketQua.getThongBao(),
-                                        Toast.LENGTH_SHORT
-                                ).show();
+                                luuThongTinDangNhap(token, tenHienThi, emailHienThi);
 
                                 // Đăng nhập thành công -> Trang chủ
                                 moTrangChu();
@@ -230,7 +225,7 @@ public class DangNhapActivity extends AppCompatActivity {
                 });
     }
 
-    private void luuThongTinDangNhap(String token, String tenHienThi) {
+    private void luuThongTinDangNhap(String token, String tenHienThi, String emailHienThi) {
 
         SharedPreferences sharedPreferences =
                 getSharedPreferences(
@@ -242,6 +237,7 @@ public class DangNhapActivity extends AppCompatActivity {
                 .edit()
                 .putString("token", token)
                 .putString("ten_hien_thi", tenHienThi)
+                .putString("email", emailHienThi)
                 .apply();
     }
 
