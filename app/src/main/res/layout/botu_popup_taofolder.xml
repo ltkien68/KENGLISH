@@ -25,7 +25,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
-        android:fontFamily="@font/juve_headin"
         android:text="TẠO THƯ MỤC"
         android:textColor="#0B3475"
         android:textSize="20sp" />
@@ -38,7 +37,6 @@
         android:layout_height="44dp"
         android:layout_marginTop="22dp"
         android:background="@drawable/nen_onhapbotu"
-        android:fontFamily="@font/juve_normal"
         android:hint="Tên thư mục *"
         android:paddingStart="14dp"
         android:paddingEnd="14dp"
@@ -55,7 +53,6 @@
         android:layout_height="40dp"
         android:layout_marginTop="22dp"
         android:background="@drawable/nen_nuttaobotu"
-        android:fontFamily="@font/juve_headin"
         android:gravity="center"
         android:text="TẠO"
         android:textColor="#FFFFFF"

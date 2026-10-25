@@ -24,7 +24,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/juve_headin"
         android:text="CỬA HÀNG"
         android:textColor="#0B3475"
         android:textStyle="bold"
@@ -55,7 +54,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:fontFamily="@font/juve_headin"
             android:text="Đang phát triển"
             android:textColor="#111111"
             android:textSize="17sp" />
@@ -65,7 +63,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="6dp"
-            android:fontFamily="@font/juve_normal"
             android:gravity="center"
             android:text="Tính năng này sẽ sớm được cập nhật"
             android:textColor="#7C8492"

@@ -9,7 +9,6 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="@font/juve_headin"
         android:text="Chọn mô hình AI"
         android:textColor="#0B3475"
         android:textSize="17sp" />
@@ -18,7 +17,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="6dp"
-        android:fontFamily="@font/juve_normal"
         android:text="Chọn mô hình Kai sẽ sử dụng để xử lý yêu cầu."
         android:textColor="#7C8492"
         android:textSize="13sp" />
@@ -35,7 +33,6 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:buttonTint="#1877F2"
-            android:fontFamily="@font/juve_normal"
             android:gravity="center_vertical"
             android:paddingStart="8dp"
             android:text="Tự động (khuyến nghị)"
@@ -47,7 +44,6 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:buttonTint="#1877F2"
-            android:fontFamily="@font/juve_normal"
             android:gravity="center_vertical"
             android:paddingStart="8dp"
             android:text="Kai Flash"
@@ -59,7 +55,6 @@
             android:layout_width="match_parent"
             android:layout_height="56dp"
             android:buttonTint="#1877F2"
-            android:fontFamily="@font/juve_normal"
             android:gravity="center_vertical"
             android:paddingStart="8dp"
             android:text="Kai Flash-Lite"
@@ -71,7 +66,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
-        android:fontFamily="@font/juve_normal"
         android:text="Chế độ Tự động có thể chuyển sang mô hình dự phòng khi dịch vụ quá tải."
         android:textColor="#7C8492"
         android:textSize="11sp" />

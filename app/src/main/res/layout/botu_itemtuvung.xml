@@ -25,7 +25,6 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/juve_headin"
             android:text="✕"
             android:textColor="#FFFFFF"
             android:textSize="17sp" />
@@ -34,7 +33,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:fontFamily="@font/juve_normal"
             android:text="XÓA"
             android:textColor="#FFFFFF"
             android:textSize="11sp" />
@@ -68,7 +66,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:fontFamily="@font/juve_headin"
                 android:text="achieve"
                 android:textColor="#111111"
                 android:textSize="15sp" />
@@ -78,7 +75,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="28dp"
                 android:background="@drawable/nen_tuvung_chuathuoc"
-                android:fontFamily="@font/juve_normal"
                 android:gravity="center"
                 android:minWidth="76dp"
                 android:paddingStart="10dp"
@@ -97,7 +93,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:fontFamily="@font/juve_normal"
             android:text="/əˈtʃiːv/  •  verb"
             android:textColor="#7C8492"
             android:textSize="11sp" />
@@ -110,7 +105,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:fontFamily="@font/juve_headin"
             android:text="đạt được"
             android:textColor="#4F4F4F"
             android:textSize="13sp" />
@@ -123,7 +117,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:fontFamily="@font/juve_normal"
             android:maxLines="2"
             android:text="She achieved her goal."
             android:textColor="#7C8492"
