@@ -22,6 +22,7 @@ import com.example.kenglish.model.KaiIntentResponse;
 import com.example.kenglish.model.LichSuLuyenTapResponse;
 import com.example.kenglish.model.LuuTienTrinhRequest;
 import com.example.kenglish.model.LuuTienTrinhResponse;
+import com.example.kenglish.model.NguoiDung;
 import com.example.kenglish.model.QuenMatKhauRequest;
 import com.example.kenglish.model.TaoBoTuRequest;
 import com.example.kenglish.model.TaoFolderRequest;
@@ -68,6 +69,13 @@ public interface ApiService {
 
     @POST("auth/dang-xuat")
     Call<ApiResponse> dangXuat(
+            @Header("Authorization") String token
+    );
+
+    // ==================== NGƯỜI DÙNG ====================
+
+    @GET("user/me")
+    Call<ApiResponse<NguoiDung>> layThongTinNguoiDung(
             @Header("Authorization") String token
     );
 
