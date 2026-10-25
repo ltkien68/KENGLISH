@@ -90,11 +90,6 @@ async function xacThucEmail(req, res) {
     // ĐẶT LẠI MẬT KHẨU
     // =========================
     if (loai === "dat_lai_mat_khau") {
-      await ketNoi.execute(
-        `UPDATE nguoi_dung
-                 WHERE id = ?`,
-        [nguoiDung.id],
-      );
 
       return res.json({
         thanh_cong: true,
