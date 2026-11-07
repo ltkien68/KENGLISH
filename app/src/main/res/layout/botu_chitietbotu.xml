@@ -5,7 +5,7 @@
     android:id="@+id/scroll_chi_tiet_bo_tu"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F7F9FC"
+    android:background="#F5FAFF"
     android:fillViewport="true"
     android:overScrollMode="never"
     android:scrollbars="none">
@@ -35,7 +35,7 @@
                 android:focusable="true"
                 android:padding="10dp"
                 android:src="@drawable/ic_back"
-                app:tint="#087CFF" />
+                app:tint="#1877F2" />
 
             <TextView
                 android:id="@+id/txt_ten_bo_tu"
@@ -48,8 +48,8 @@
                 android:maxLines="1"
                 android:text="Bộ Từ 1"
                 android:textColor="#0B3475"
-                android:textStyle="bold"
-                android:textSize="17sp" />
+                android:textSize="17sp"
+                android:textStyle="bold" />
 
             <ImageView
                 android:id="@+id/btn_them_tu"
@@ -61,7 +61,7 @@
                 android:focusable="true"
                 android:padding="11dp"
                 android:src="@drawable/ic_add"
-                app:tint="#087CFF" />
+                app:tint="#1877F2" />
         </LinearLayout>
 
         <!-- MÔ TẢ -->
@@ -80,7 +80,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:background="@drawable/nen_botu_thongke"
+            android:background="@drawable/nen_ctbotu_dashboard"
             android:orientation="vertical"
             android:padding="14dp">
 
@@ -90,8 +90,8 @@
                 android:fontFamily="sans-serif-medium"
                 android:text="TIẾN ĐỘ HỌC TẬP"
                 android:textColor="#0B3475"
-                android:textStyle="bold"
-                android:textSize="13sp" />
+                android:textSize="13sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -99,12 +99,13 @@
                 android:layout_marginTop="14dp"
                 android:orientation="horizontal">
 
+                <!-- TỔNG TỪ -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="78dp"
                     android:layout_marginEnd="5dp"
                     android:layout_weight="1"
-                    android:background="@drawable/nen_botu_thongke_item"
+                    android:background="@drawable/nen_ctbotu_stat_item"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -114,8 +115,8 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-medium"
                         android:text="0"
-                        android:textColor="#111111"
-                        android:textSize="17sp" />
+                        android:textColor="#0B3475"
+                        android:textSize="19sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -127,13 +128,14 @@
                         android:textSize="11sp" />
                 </LinearLayout>
 
+                <!-- ĐÃ THUỘC -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="78dp"
                     android:layout_marginStart="5dp"
                     android:layout_marginEnd="5dp"
                     android:layout_weight="1"
-                    android:background="@drawable/nen_botu_thongke_item"
+                    android:background="@drawable/nen_ctbotu_stat_item"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -143,8 +145,8 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-medium"
                         android:text="0"
-                        android:textColor="#087CFF"
-                        android:textSize="17sp" />
+                        android:textColor="#1877F2"
+                        android:textSize="19sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -156,12 +158,13 @@
                         android:textSize="11sp" />
                 </LinearLayout>
 
+                <!-- CHƯA THUỘC -->
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="78dp"
                     android:layout_marginStart="5dp"
                     android:layout_weight="1"
-                    android:background="@drawable/nen_botu_thongke_item"
+                    android:background="@drawable/nen_ctbotu_stat_item"
                     android:gravity="center"
                     android:orientation="vertical">
 
@@ -171,8 +174,8 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="sans-serif-medium"
                         android:text="0"
-                        android:textColor="#111111"
-                        android:textSize="17sp" />
+                        android:textColor="#0B3475"
+                        android:textSize="19sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -192,7 +195,7 @@
             android:layout_width="match_parent"
             android:layout_height="46dp"
             android:layout_marginTop="16dp"
-            android:background="@drawable/nen_botu_timkiem"
+            android:background="@drawable/nen_ctbotu_search"
             android:gravity="center_vertical"
             android:orientation="horizontal"
             android:paddingStart="14dp"
@@ -203,7 +206,7 @@
                 android:layout_height="20dp"
                 android:contentDescription="Tìm kiếm"
                 android:src="@drawable/ic_kinhlup"
-                app:tint="#8D99A9" />
+                app:tint="#7C8492" />
 
             <EditText
                 android:id="@+id/edt_tim_tu"
@@ -219,8 +222,8 @@
                 android:inputType="text"
                 android:padding="0dp"
                 android:singleLine="true"
-                android:textColor="#111111"
-                android:textColorHint="#9AA3AF"
+                android:textColor="#0B3475"
+                android:textColorHint="#9AA8B8"
                 android:textSize="13sp" />
         </LinearLayout>
 
@@ -230,7 +233,7 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_marginTop="12dp"
-            android:background="@drawable/nen_botu_hocngay"
+            android:background="@drawable/nen_ctbotu_hocngay"
             android:clickable="true"
             android:focusable="true"
             android:fontFamily="sans-serif-medium"
@@ -239,7 +242,7 @@
             android:textColor="#FFFFFF"
             android:textSize="13sp" />
 
-        <!-- TIÊU ĐỀ -->
+        <!-- TIÊU ĐỀ DANH SÁCH -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -247,64 +250,66 @@
             android:fontFamily="sans-serif-medium"
             android:text="DANH SÁCH TỪ VỰNG"
             android:textColor="#0B3475"
-            android:textStyle="bold"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:textStyle="bold" />
 
         <!-- BỘ LỌC -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="44dp"
             android:layout_marginTop="12dp"
-            android:orientation="horizontal">
+            android:background="@drawable/nen_ctbotu_filter_group"
+            android:orientation="horizontal"
+            android:padding="4dp">
 
             <TextView
                 android:id="@+id/btn_tat_ca"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginEnd="5dp"
+                android:layout_marginEnd="2dp"
                 android:layout_weight="1"
-                android:background="@drawable/nen_filter_active"
+                android:background="@drawable/nen_ctbotu_filter_active"
                 android:clickable="true"
                 android:focusable="true"
                 android:fontFamily="sans-serif-medium"
                 android:gravity="center"
                 android:text="Tất cả"
-                android:textColor="#087CFF"
+                android:textColor="#FFFFFF"
                 android:textSize="11sp" />
 
             <TextView
                 android:id="@+id/btn_da_thuoc"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
+                android:layout_marginStart="2dp"
+                android:layout_marginEnd="2dp"
                 android:layout_weight="1"
-                android:background="@drawable/nen_filter"
+                android:background="@drawable/nen_ctbotu_filter"
                 android:clickable="true"
                 android:focusable="true"
                 android:fontFamily="sans-serif-medium"
                 android:gravity="center"
                 android:text="Đã thuộc"
-                android:textColor="#7C8492"
+                android:textColor="#52769F"
                 android:textSize="11sp" />
 
             <TextView
                 android:id="@+id/btn_chua_thuoc"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginStart="5dp"
+                android:layout_marginStart="2dp"
                 android:layout_weight="1"
-                android:background="@drawable/nen_filter"
+                android:background="@drawable/nen_ctbotu_filter"
                 android:clickable="true"
                 android:focusable="true"
                 android:fontFamily="sans-serif-medium"
                 android:gravity="center"
                 android:text="Chưa thuộc"
-                android:textColor="#7C8492"
+                android:textColor="#52769F"
                 android:textSize="11sp" />
         </LinearLayout>
 
-        <!-- DANH SÁCH TỰ GIÃN CHIỀU CAO -->
+        <!-- DANH SÁCH TỪ VỰNG -->
         <ListView
             android:id="@+id/list_tu_vung"
             android:layout_width="match_parent"

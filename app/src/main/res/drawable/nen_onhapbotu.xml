@@ -1,14 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
 
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
+    <!-- Khi ô nhập được chọn -->
+    <item android:state_focused="true">
+        <shape android:shape="rectangle">
+            <solid android:color="#F5F8FC" />
+            <stroke
+                android:width="1dp"
+                android:color="#1877F2" />
+            <corners android:radius="12dp" />
+        </shape>
+    </item>
 
-    <solid android:color="#F5F5F6" />
+    <!-- Mặc định -->
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#F5F8FC" />
+            <stroke
+                android:width="1dp"
+                android:color="#E5EAF2" />
+            <corners android:radius="12dp" />
+        </shape>
+    </item>
 
-    <stroke
-        android:width="1dp"
-        android:color="#E2E3E3" />
-
-    <corners android:radius="6dp" />
-
-</shape>
+</selector>

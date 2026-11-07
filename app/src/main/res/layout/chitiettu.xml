@@ -13,50 +13,51 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingStart="16dp"
-        android:paddingTop="20dp"
+        android:paddingTop="14dp"
         android:paddingEnd="16dp"
-        android:paddingBottom="30dp">
+        android:paddingBottom="22dp">
 
-        <!-- Thanh điều hướng -->
+        <!-- THANH ĐIỀU HƯỚNG -->
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="44dp"
+            android:layout_height="40dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <ImageView
                 android:id="@+id/btn_quay_lai"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="34dp"
+                android:layout_height="34dp"
                 android:clickable="true"
                 android:focusable="true"
                 android:contentDescription="Quay lại"
                 android:padding="8dp"
                 android:src="@drawable/ic_back"
-                app:tint="#082F70" />
+                app:tint="#0B3475" />
 
             <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="7dp"
                 android:layout_weight="1"
-                android:textStyle="bold"
+                android:fontFamily="@font/juve_headin"
                 android:text="CHI TIẾT TỪ"
-                android:textColor="#082F70"
-                android:textSize="17sp" />
+                android:textColor="#0B3475"
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
-        <!-- Card thông tin từ vựng -->
+        <!-- CARD THÔNG TIN TỪ VỰNG -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="18dp"
             android:background="@drawable/nen_chitiettu_thongtin"
             android:gravity="center_vertical"
-            android:minHeight="118dp"
+            android:minHeight="96dp"
             android:orientation="horizontal"
-            android:padding="18dp">
+            android:padding="14dp">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -71,112 +72,115 @@
                     android:fontFamily="@font/juve_headin"
                     android:maxLines="2"
                     android:text="abandon"
-                    android:textColor="#082F70"
-                    android:textSize="24sp" />
+                    android:textColor="#0B3475"
+                    android:textSize="21sp" />
 
                 <TextView
                     android:id="@+id/txt_ipa"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="5dp"
                     android:fontFamily="@font/juve_normal"
                     android:text="/əˈbæn.dən/"
                     android:textColor="#8294AD"
-                    android:textSize="15sp" />
+                    android:textSize="12sp" />
 
             </LinearLayout>
 
             <ImageView
                 android:id="@+id/btn_phat_am"
-                android:layout_width="52dp"
-                android:layout_height="52dp"
-                android:layout_marginStart="12dp"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_marginStart="10dp"
                 android:background="@drawable/nen_chitiettu_phatam"
                 android:clickable="true"
                 android:focusable="true"
                 android:contentDescription="Phát âm"
-                android:padding="14dp"
+                android:padding="11dp"
                 android:src="@drawable/ic_volume"
-                app:tint="#087CFF" />
+                app:tint="#1877F2" />
 
         </LinearLayout>
 
-        <!-- Đường phân cách -->
+        <!-- ĐƯỜNG PHÂN CÁCH -->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="24dp"
-            android:background="#E3EAF4" />
+            android:layout_marginTop="19dp"
+            android:background="#E8EEF6" />
 
-        <!-- Tiêu đề nghĩa -->
+        <!-- TIÊU ĐỀ NGHĨA -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="22dp"
-            android:textStyle="bold"
+            android:layout_marginTop="17dp"
+            android:fontFamily="@font/juve_headin"
             android:text="NGHĨA CỦA TỪ"
-            android:textColor="#082F70"
-            android:textSize="17sp" />
+            android:textColor="#0B3475"
+            android:textSize="15sp"
+            android:textStyle="bold" />
 
-        <!-- Java thêm các card nghĩa vào đây -->
+        <!-- DANH SÁCH NGHĨA -->
         <LinearLayout
             android:id="@+id/layout_danh_sach_nghia"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="11dp"
             android:orientation="vertical">
 
-            <!-- Dữ liệu mẫu, Java có thể xóa khi đổ API -->
+            <!-- DỮ LIỆU MẪU -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/nen_chitiettu_nghia"
                 android:orientation="vertical"
-                android:padding="14dp">
+                android:padding="12dp">
 
+                <!-- CHIP LOẠI TỪ -->
                 <TextView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="24dp"
                     android:background="@drawable/nen_chitiettu_loaitu"
                     android:fontFamily="@font/juve_headin"
-                    android:paddingStart="12dp"
-                    android:paddingTop="6dp"
-                    android:paddingEnd="12dp"
-                    android:paddingBottom="6dp"
+                    android:gravity="center"
+                    android:paddingStart="9dp"
+                    android:paddingEnd="9dp"
                     android:text="Động từ"
-                    android:textColor="#087CFF"
-                    android:textSize="13sp" />
+                    android:textColor="#2463A5"
+                    android:textSize="11sp" />
 
+                <!-- NGHĨA TIẾNG VIỆT -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="9dp"
                     android:fontFamily="@font/juve_normal"
-                    android:lineSpacingExtra="5dp"
+                    android:lineSpacingExtra="3dp"
                     android:text="1. Bỏ rơi, từ bỏ, ruồng bỏ."
                     android:textColor="#243B55"
-                    android:textSize="15sp" />
+                    android:textSize="13sp" />
 
+                <!-- VÍ DỤ -->
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
+                    android:layout_marginTop="9dp"
                     android:background="@drawable/nen_chitiettu_vidu"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    android:padding="12dp">
+                    android:padding="9dp">
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="17dp"
+                        android:layout_height="17dp"
                         android:contentDescription="Ví dụ"
                         android:src="@drawable/ic_tailieu"
-                        app:tint="#087CFF" />
+                        app:tint="#1877F2" />
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
+                        android:layout_marginStart="9dp"
                         android:layout_weight="1"
                         android:orientation="vertical">
 
@@ -185,13 +189,13 @@
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/juve_normal"
                             android:text="to abandon a hope"
-                            android:textColor="#087CFF"
-                            android:textSize="13sp" />
+                            android:textColor="#1877F2"
+                            android:textSize="12sp" />
 
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="4dp"
+                            android:layout_marginTop="3dp"
                             android:fontFamily="@font/juve_normal"
                             android:text="từ bỏ một hy vọng"
                             android:textColor="#8294AD"
@@ -205,12 +209,12 @@
 
         </LinearLayout>
 
-        <!-- Nút lưu từ dạng pill -->
+        <!-- NÚT LƯU TỪ -->
         <TextView
             android:id="@+id/btn_luu_tu"
             android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:layout_marginTop="24dp"
+            android:layout_height="46dp"
+            android:layout_marginTop="18dp"
             android:background="@drawable/nen_chitiettu_luutu"
             android:clickable="true"
             android:focusable="true"
@@ -218,7 +222,7 @@
             android:gravity="center"
             android:text="+  LƯU VÀO BỘ TỪ"
             android:textColor="#FFFFFF"
-            android:textSize="15sp" />
+            android:textSize="13sp" />
 
     </LinearLayout>
 

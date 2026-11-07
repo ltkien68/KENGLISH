@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="150dp"
@@ -12,6 +11,7 @@
         android:id="@+id/btn_xoa_bo_tu"
         android:layout_width="match_parent"
         android:layout_height="42dp"
+        android:background="@drawable/nen_botu_nut_xoa"
         android:clickable="true"
         android:focusable="true"
         android:gravity="center_vertical"
@@ -30,6 +30,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:fontFamily="sans-serif-medium"
             android:text="Xóa bộ từ"
             android:textColor="#D64545"
             android:textSize="13sp" />

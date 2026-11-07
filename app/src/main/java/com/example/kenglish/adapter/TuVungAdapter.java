@@ -152,6 +152,8 @@ public class TuVungAdapter
                         R.id.txt_phien_am_loai_tu
                 );
 
+        TextView txtLoaiTu = convertView.findViewById(R.id.txt_loai_tu);
+
 
         TextView txtNghiaTiengViet =
                 convertView.findViewById(
@@ -196,74 +198,95 @@ public class TuVungAdapter
 
         /*
          * =====================================
-         * PHIÊN ÂM + LOẠI TỪ
+         * PHIÊN ÂM
          * =====================================
          */
 
-        String phienAm =
-                tuVung.getPhien_am();
+        String phienAm = tuVung.getPhien_am();
 
-
-        String loaiTu =
-                tuVung.getLoai_tu();
-
-
-        if (phienAm == null) {
-
-            phienAm = "";
-        }
-
-
-        if (loaiTu == null) {
-
-            loaiTu = "";
-        }
-
-
-        String thongTinPhu;
-
-
-        if (!phienAm.isEmpty()
-                && !loaiTu.isEmpty()) {
-
-            thongTinPhu =
-                    phienAm
-                            + "  •  "
-                            + loaiTu;
-
-        } else if (!phienAm.isEmpty()) {
-
-            thongTinPhu =
-                    phienAm;
-
+        if (phienAm == null || phienAm.trim().isEmpty()) {
+            txtPhienAmLoaiTu.setVisibility(View.GONE);
         } else {
-
-            thongTinPhu =
-                    loaiTu;
+            txtPhienAmLoaiTu.setText(phienAm.trim());
+            txtPhienAmLoaiTu.setVisibility(View.VISIBLE);
         }
-
-
-        txtPhienAmLoaiTu.setText(
-                thongTinPhu
-        );
-
 
         /*
-         * Nếu không có cả phiên âm
-         * lẫn loại từ thì ẩn dòng này.
+         * =====================================
+         * LOẠI TỪ
+         * =====================================
          */
 
-        if (thongTinPhu.isEmpty()) {
+        String loaiTu = tuVung.getLoai_tu();
 
-            txtPhienAmLoaiTu.setVisibility(
-                    View.GONE
-            );
-
+        if (loaiTu == null || loaiTu.trim().isEmpty()) {
+            txtLoaiTu.setVisibility(View.GONE);
         } else {
+            loaiTu = loaiTu.trim();
 
-            txtPhienAmLoaiTu.setVisibility(
-                    View.VISIBLE
-            );
+            txtLoaiTu.setText(loaiTu);
+            txtLoaiTu.setVisibility(View.VISIBLE);
+
+            int nenLoaiTu;
+            int mauChu;
+
+            switch (loaiTu.toLowerCase()) {
+                case "verb":
+                case "v":
+                    nenLoaiTu = R.drawable.nen_tuvung_chip_verb;
+                    mauChu = android.graphics.Color.parseColor("#287A49");
+                    break;
+
+                case "noun":
+                case "n":
+                    nenLoaiTu = R.drawable.nen_tuvung_chip_noun;
+                    mauChu = android.graphics.Color.parseColor("#2463A5");
+                    break;
+
+                case "adjective":
+                case "adj":
+                    nenLoaiTu = R.drawable.nen_tuvung_chip_adjective;
+                    mauChu = android.graphics.Color.parseColor("#9A6418");
+                    break;
+
+                case "adverb":
+                case "adv":
+                    nenLoaiTu = R.drawable.nen_tuvung_chip_adverb;
+                    mauChu = android.graphics.Color.parseColor("#7952A3");
+                    break;
+
+                case "preposition":
+                case "prep":
+                    nenLoaiTu = R.drawable.nen_tuvung_chip_preposition;
+                    mauChu = android.graphics.Color.parseColor("#16818A");
+                    break;
+
+                case "pronoun":
+                case "pron":
+                    nenLoaiTu = R.drawable.nen_tuvung_chip_pronoun;
+                    mauChu = android.graphics.Color.parseColor("#B04D75");
+                    break;
+
+                case "conjunction":
+                case "conj":
+                    nenLoaiTu = R.drawable.nen_tuvung_chip_conjunction;
+                    mauChu = android.graphics.Color.parseColor("#526B8C");
+                    break;
+
+                case "interjection":
+                case "int":
+                    nenLoaiTu = R.drawable.nen_tuvung_chip_interjection;
+                    mauChu = android.graphics.Color.parseColor("#C05B35");
+                    break;
+
+                default:
+                    nenLoaiTu = R.drawable.nen_tuvung_chip_phienam;
+                    mauChu = android.graphics.Color.parseColor("#37659C");
+                    break;
+            }
+
+            txtLoaiTu.setBackgroundResource(nenLoaiTu);
+            txtLoaiTu.setTextColor(mauChu);
         }
 
 
@@ -315,27 +338,20 @@ public class TuVungAdapter
          */
 
         if (tuVung.isDa_thuoc()) {
-
-            txtTrangThai.setText(
-                    "Đã thuộc"
+            txtTrangThai.setText("Đã thuộc");
+            txtTrangThai.setBackgroundResource(
+                    R.drawable.nen_tuvung_dathuoc
             );
-
             txtTrangThai.setTextColor(
-                    android.graphics.Color.parseColor(
-                            "#3E7D58"
-                    )
+                    android.graphics.Color.parseColor("#287A49")
             );
-
         } else {
-
-            txtTrangThai.setText(
-                    "Chưa thuộc"
+            txtTrangThai.setText("Chưa thuộc");
+            txtTrangThai.setBackgroundResource(
+                    R.drawable.nen_tuvung_chuathuoc
             );
-
             txtTrangThai.setTextColor(
-                    android.graphics.Color.parseColor(
-                            "#7C8492"
-                    )
+                    android.graphics.Color.parseColor("#9A6418")
             );
         }
 

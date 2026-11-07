@@ -7,127 +7,168 @@
     android:orientation="vertical"
     android:padding="16dp">
 
+    <!-- Nút quay lại -->
     <TextView
         android:id="@+id/btn_quay_lai"
         android:layout_width="wrap_content"
-        android:layout_height="44dp"
+        android:layout_height="40dp"
         android:gravity="center_vertical"
         android:fontFamily="@font/juve_headin"
         android:text="← QUAY LẠI"
         android:textColor="#37659C"
-        android:textSize="15sp"/>
+        android:textSize="13sp"/>
 
+    <!-- Tiêu đề -->
     <TextView
         android:id="@+id/txt_tieu_de_flashcard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/juve_headin"
         android:text="FLASHCARD"
         android:textColor="#0B3475"
         android:textStyle="bold"
-        android:textSize="20sp"/>
+        android:textSize="19sp"/>
 
-    <TextView
-        android:id="@+id/txt_tien_do_flashcard"
+    <!-- Tiến độ -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:fontFamily="@font/juve_normal"
-        android:text="1 / 20"
-        android:textColor="#7C8492"
-        android:textSize="13sp"/>
+        android:layout_marginTop="16dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/juve_headin"
+            android:text="TIẾN ĐỘ HỌC"
+            android:textColor="#526B8C"
+            android:textSize="11sp"/>
+
+        <TextView
+            android:id="@+id/txt_tien_do_flashcard"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/juve_headin"
+            android:text="1 / 20"
+            android:textColor="#1877F2"
+            android:textSize="12sp"/>
+    </LinearLayout>
 
     <ProgressBar
         android:id="@+id/progress_flashcard"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
-        android:layout_height="6dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="7dp"
+        android:layout_marginTop="9dp"
         android:max="100"
         android:progress="0"
-        android:progressTint="#37659C"/>
+        android:progressTint="#1877F2"
+        android:progressBackgroundTint="#DDEEFF"/>
 
+    <!-- Thẻ từ vựng -->
     <LinearLayout
         android:id="@+id/card_flashcard"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="24dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="14dp"
         android:background="@drawable/nen_flashcard"
         android:gravity="center"
         android:orientation="vertical"
-        android:padding="24dp">
+        android:padding="22dp">
 
         <TextView
             android:id="@+id/txt_mat_the"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/juve_normal"
+            android:background="@drawable/nen_flashcard_chip"
+            android:fontFamily="@font/juve_headin"
+            android:gravity="center"
+            android:paddingHorizontal="14dp"
+            android:paddingVertical="7dp"
             android:text="MẶT TRƯỚC"
-            android:textColor="#7C8492"
-            android:textSize="11sp"/>
+            android:textColor="#37659C"
+            android:textSize="10sp"/>
 
         <TextView
             android:id="@+id/txt_tu_flashcard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="30dp"
             android:fontFamily="@font/juve_headin"
             android:gravity="center"
             android:text="Vocabulary"
-            android:textColor="#111111"
-            android:textSize="17sp"/>
+            android:textColor="#0B3475"
+            android:textStyle="bold"
+            android:textSize="25sp"/>
 
         <TextView
             android:id="@+id/txt_phien_am_flashcard"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="13dp"
+            android:background="@drawable/nen_flashcard_ipa"
             android:fontFamily="@font/juve_normal"
             android:gravity="center"
+            android:paddingHorizontal="13dp"
+            android:paddingVertical="7dp"
             android:text="/vəˈkæbjələri/"
-            android:textColor="#7C8492"
-            android:textSize="13sp"/>
+            android:textColor="#526B8C"
+            android:textSize="12sp"/>
 
         <TextView
             android:id="@+id/txt_loai_tu_flashcard"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="12dp"
-            android:fontFamily="@font/juve_normal"
+            android:background="@drawable/nen_flashcard_chip"
+            android:fontFamily="@font/juve_headin"
             android:gravity="center"
-            android:textColor="#37659C"
-            android:textSize="13sp"
+            android:paddingHorizontal="13dp"
+            android:paddingVertical="6dp"
+            android:textColor="#1877F2"
+            android:textSize="11sp"
             android:visibility="gone"/>
 
         <TextView
             android:id="@+id/txt_vi_du_flashcard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="22dp"
+            android:background="@drawable/nen_flashcard_vidu"
             android:fontFamily="@font/juve_normal"
             android:gravity="center"
-            android:textColor="#7C8492"
-            android:textSize="13sp"
+            android:padding="14dp"
+            android:textColor="#526B8C"
+            android:textSize="12sp"
             android:visibility="gone"/>
+
+        <View
+            android:layout_width="36dp"
+            android:layout_height="1dp"
+            android:layout_marginTop="26dp"
+            android:background="#DDE8F5"/>
 
         <TextView
             android:id="@+id/txt_goi_y_lat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="14dp"
             android:fontFamily="@font/juve_normal"
             android:text="Chạm để lật thẻ"
-            android:textColor="#37659C"
+            android:textColor="#7C91AA"
             android:textSize="11sp"/>
 
     </LinearLayout>
 
+    <!-- Điều hướng -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="46dp"
         android:orientation="horizontal">
 
         <TextView
@@ -135,29 +176,34 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_marginEnd="6dp"
+            android:background="@drawable/nen_flashcard_nutphu"
             android:gravity="center"
             android:fontFamily="@font/juve_headin"
             android:text="← TRƯỚC"
             android:textColor="#37659C"
-            android:textSize="13sp"/>
+            android:textSize="12sp"/>
 
         <TextView
             android:id="@+id/btn_tiep"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:layout_marginStart="6dp"
+            android:background="@drawable/nen_flashcard_nutchinh"
             android:gravity="center"
             android:fontFamily="@font/juve_headin"
             android:text="TIẾP →"
-            android:textColor="#37659C"
-            android:textSize="13sp"/>
+            android:textColor="#FFFFFF"
+            android:textSize="12sp"/>
     </LinearLayout>
 
+    <!-- Đánh giá -->
     <LinearLayout
         android:id="@+id/layout_danh_gia"
         android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="46dp"
         android:layout_marginTop="12dp"
         android:orientation="horizontal">
 
@@ -167,12 +213,12 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:layout_marginEnd="6dp"
-            android:background="@drawable/nen_flashcard"
+            android:background="@drawable/nen_flashcard_chuathuoc"
             android:gravity="center"
             android:fontFamily="@font/juve_headin"
             android:text="CHƯA THUỘC"
-            android:textColor="#37659C"
-            android:textSize="13sp"/>
+            android:textColor="#9A6418"
+            android:textSize="12sp"/>
 
         <TextView
             android:id="@+id/btn_da_thuoc"
@@ -185,7 +231,7 @@
             android:fontFamily="@font/juve_headin"
             android:text="ĐÃ THUỘC"
             android:textColor="#FFFFFF"
-            android:textSize="13sp"/>
+            android:textSize="12sp"/>
     </LinearLayout>
 
 </LinearLayout>

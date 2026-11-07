@@ -1,16 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginBottom="8dp">
 
-
-    <!-- ===================================== -->
     <!-- VÙNG XÓA NẰM PHÍA SAU -->
-    <!-- ===================================== -->
-
     <LinearLayout
         android:id="@+id/layout_xoa"
         android:layout_width="82dp"
@@ -39,11 +34,7 @@
 
     </LinearLayout>
 
-
-    <!-- ===================================== -->
     <!-- CARD TỪ VỰNG -->
-    <!-- ===================================== -->
-
     <LinearLayout
         android:id="@+id/card_tu_vung"
         android:layout_width="match_parent"
@@ -52,9 +43,7 @@
         android:orientation="vertical"
         android:padding="14dp">
 
-
-        <!-- TỪ + TRẠNG THÁI -->
-
+        <!-- TỪ GỐC + TRẠNG THÁI -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -66,57 +55,87 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:fontFamily="sans-serif-medium"
                 android:text="achieve"
-                android:textColor="#111111"
-                android:textSize="15sp" />
+                android:textColor="#0B3475"
+                android:textSize="15sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/txt_trang_thai"
                 android:layout_width="wrap_content"
                 android:layout_height="28dp"
                 android:background="@drawable/nen_tuvung_chuathuoc"
+                android:fontFamily="sans-serif-medium"
                 android:gravity="center"
                 android:minWidth="76dp"
                 android:paddingStart="10dp"
                 android:paddingEnd="10dp"
                 android:text="Chưa thuộc"
-                android:textColor="#7C8492"
+                android:textColor="#9A6418"
                 android:textSize="11sp" />
 
         </LinearLayout>
 
-
         <!-- PHIÊN ÂM + LOẠI TỪ -->
-
-        <TextView
-            android:id="@+id/txt_phien_am_loai_tu"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="/əˈtʃiːv/  •  verb"
-            android:textColor="#7C8492"
-            android:textSize="11sp" />
+            android:layout_marginTop="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
+            <TextView
+                android:id="@+id/txt_phien_am_loai_tu"
+                android:layout_width="wrap_content"
+                android:layout_height="28dp"
+                android:background="@drawable/nen_tuvung_chip_phienam"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="/əˈtʃiːv/"
+                android:textColor="#1877F2"
+                android:textSize="11sp" />
+
+            <!--
+                Chip từ loại dùng chung ID hiện tại.
+                Màu sắc được đổi theo dữ liệu từ loại bằng Adapter.
+            -->
+            <TextView
+                android:id="@+id/txt_loai_tu"
+                android:layout_width="wrap_content"
+                android:layout_height="28dp"
+                android:layout_marginStart="7dp"
+                android:background="@drawable/nen_tuvung_chip_verb"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:paddingStart="10dp"
+                android:paddingEnd="10dp"
+                android:text="VERB"
+                android:textColor="#27834A"
+                android:textSize="10sp" />
+
+        </LinearLayout>
 
         <!-- NGHĨA -->
-
         <TextView
             android:id="@+id/txt_nghia_tieng_viet"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="11dp"
+            android:fontFamily="sans-serif"
             android:text="đạt được"
-            android:textColor="#4F4F4F"
+            android:textColor="#333333"
             android:textSize="13sp" />
 
-
         <!-- VÍ DỤ -->
-
         <TextView
             android:id="@+id/txt_cau_vi_du"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
+            android:fontFamily="sans-serif"
             android:maxLines="2"
             android:text="She achieved her goal."
             android:textColor="#7C8492"

@@ -10,6 +10,7 @@
     android:paddingTop="24dp"
     android:paddingEnd="16dp">
 
+
     <!-- HEADER -->
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,35 +27,39 @@
             android:focusable="true"
             android:padding="10dp"
             android:src="@drawable/ic_back"
-            app:tint="#087CFF" />
+            app:tint="#1877F2" />
 
         <TextView
             android:id="@+id/txt_ten_folder"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_weight="1"
             android:ellipsize="end"
             android:fontFamily="sans-serif-medium"
+            android:maxWidth="220dp"
             android:maxLines="1"
             android:text="TOEIC FOLDER"
-            android:textStyle="bold"
             android:textColor="#0B3475"
-            android:textSize="17sp" />
+            android:textSize="17sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txt_so_bo_tu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/nen_folder_chip_soluong"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:paddingStart="8dp"
+            android:paddingTop="3dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="3dp"
+            android:text="0 bộ từ"
+            android:textColor="#1877F2"
+            android:textSize="10sp" />
 
     </LinearLayout>
-
-    <!-- SỐ LƯỢNG BỘ TỪ -->
-    <TextView
-        android:id="@+id/txt_so_bo_tu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="2dp"
-        android:fontFamily="sans-serif"
-        android:text="0 bộ từ"
-        android:textColor="#7C8492"
-        android:textSize="13sp" />
 
     <!-- NÚT TẠO BỘ TỪ -->
     <TextView
@@ -88,8 +93,8 @@
             android:maxLines="1"
             android:text="BỘ TỪ TRONG THƯ MỤC"
             android:textColor="#0B3475"
-            android:textStyle="bold"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/btn_tim_kiem"
@@ -100,7 +105,7 @@
             android:focusable="true"
             android:padding="10dp"
             android:src="@drawable/ic_kinhlup"
-            app:tint="#087CFF" />
+            app:tint="#1877F2" />
 
         <!-- INPUT TÌM KIẾM -->
         <LinearLayout
@@ -190,7 +195,7 @@
                 android:contentDescription="Thư mục trống"
                 android:padding="10dp"
                 android:src="@drawable/ic_folder"
-                app:tint="#087CFF" />
+                app:tint="#1877F2" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -198,7 +203,7 @@
                 android:layout_marginTop="14dp"
                 android:fontFamily="sans-serif-medium"
                 android:text="THƯ MỤC ĐANG TRỐNG"
-                android:textColor="#111111"
+                android:textColor="#0B3475"
                 android:textSize="15sp" />
 
             <TextView

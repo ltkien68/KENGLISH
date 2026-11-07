@@ -20,7 +20,7 @@
         android:contentDescription="Tạo folder"
         android:scaleType="centerInside"
         android:src="@drawable/ic_themfolder"
-        app:tint="#087CFF" />
+        app:tint="#1877F2" />
 
     <TextView
         android:id="@+id/txt_tao_folder"
@@ -31,7 +31,7 @@
         android:gravity="center"
         android:maxLines="1"
         android:text="TẠO FOLDER"
-        android:textColor="#087CFF"
+        android:textColor="#1877F2"
         android:textSize="13sp" />
 
 </LinearLayout>

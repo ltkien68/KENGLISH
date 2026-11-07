@@ -5,7 +5,6 @@
     android:id="@+id/khung_lich_su_tra_tu"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="24dp"
     android:orientation="vertical">
 
     <!-- Tiêu đề và nút xóa -->
@@ -21,40 +20,41 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif"
             android:text="TRA GẦN ĐÂY"
-            android:textColor="#082F70"
+            android:textColor="#0B3475"
             android:textSize="15sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"/>
 
         <ImageView
             android:id="@+id/btn_xoa_lich_su"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
+            android:layout_width="34dp"
+            android:layout_height="34dp"
             android:background="@drawable/nen_nut_xoa_lich_su"
             android:clickable="true"
             android:focusable="true"
             android:contentDescription="Xóa toàn bộ lịch sử tra từ"
             android:padding="9dp"
             android:src="@drawable/ic_thungrac"
-            app:tint="#D64545" />
+            app:tint="#D64545"/>
 
     </LinearLayout>
 
-    <!-- Danh sách lịch sử -->
+    <!-- Vùng chứa lịch sử -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:background="@drawable/nen_lichsutratu"
         android:fillViewport="false"
-        android:maxHeight="220dp"
+        android:maxHeight="180dp"
         android:overScrollMode="never"
+        android:padding="12dp"
         android:scrollbars="vertical">
 
         <LinearLayout
             android:id="@+id/layout_lich_su_tra_tu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical" />
+            android:orientation="vertical"/>
 
     </androidx.core.widget.NestedScrollView>
 

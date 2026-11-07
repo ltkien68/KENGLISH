@@ -4,10 +4,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="24dp"
     android:orientation="vertical">
 
-    <!-- Tiêu đề và xem chi tiết -->
+    <!-- Tiêu đề thống kê -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -20,9 +19,9 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif"
             android:text="THỐNG KÊ HỌC TẬP"
-            android:textColor="#082F70"
+            android:textColor="#0B3475"
             android:textSize="15sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"/>
 
         <TextView
             android:id="@+id/txt_xem_chi_tiet_thong_ke"
@@ -33,16 +32,16 @@
             android:fontFamily="sans-serif"
             android:padding="4dp"
             android:text="Xem chi tiết →"
-            android:textColor="#087CFF"
-            android:textSize="11sp" />
+            android:textColor="#1877F2"
+            android:textSize="11sp"/>
 
     </LinearLayout>
 
-    <!-- Danh sách 4 mục thống kê -->
+    <!-- Danh sách thống kê -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="14dp"
+        android:layout_marginTop="12dp"
         android:baselineAligned="false"
         android:orientation="horizontal">
 
@@ -55,54 +54,52 @@
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
-            <!-- Ô vuông chứa icon và số -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="76dp"
+                android:layout_height="66dp"
                 android:background="@drawable/nen_trangchu_thongke_xanh"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:padding="6dp">
+                android:padding="5dp">
 
                 <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:contentDescription="Tổng từ"
                     android:src="@drawable/ic_luyentap"
-                    app:tint="#FFFFFF" />
+                    app:tint="#1877F2"/>
 
                 <TextView
                     android:id="@+id/txt_tong_tu"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="4dp"
                     android:fontFamily="sans-serif"
                     android:gravity="center"
                     android:maxLines="1"
                     android:text="0"
-                    android:textColor="#FFFFFF"
-                    android:textSize="17sp"
-                    android:textStyle="bold" />
+                    android:textColor="#0B3475"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
 
             </LinearLayout>
 
-            <!-- Tên nằm ngoài ô vuông -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="6dp"
                 android:fontFamily="sans-serif"
                 android:gravity="center"
                 android:maxLines="1"
                 android:text="Tổng từ"
-                android:textColor="#082F70"
-                android:textSize="11sp" />
+                android:textColor="#0B3475"
+                android:textSize="10sp"/>
 
         </LinearLayout>
 
         <Space
             android:layout_width="8dp"
-            android:layout_height="1dp" />
+            android:layout_height="1dp"/>
 
         <!-- Đã thuộc -->
         <LinearLayout
@@ -113,54 +110,52 @@
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
-            <!-- Ô vuông chứa icon và số -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="76dp"
-                android:background="@drawable/nen_trangchu_thongke_xanh"
+                android:layout_height="66dp"
+                android:background="@drawable/nen_thongke_dathuoc"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:padding="6dp">
+                android:padding="5dp">
 
                 <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:contentDescription="Đã thuộc"
                     android:src="@drawable/ic_check"
-                    app:tint="#FFFFFF" />
+                    app:tint="#218653"/>
 
                 <TextView
                     android:id="@+id/txt_da_thuoc"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="4dp"
                     android:fontFamily="sans-serif"
                     android:gravity="center"
                     android:maxLines="1"
                     android:text="0"
-                    android:textColor="#FFFFFF"
-                    android:textSize="17sp"
-                    android:textStyle="bold" />
+                    android:textColor="#0B3475"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
 
             </LinearLayout>
 
-            <!-- Tên nằm ngoài ô vuông -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="6dp"
                 android:fontFamily="sans-serif"
                 android:gravity="center"
                 android:maxLines="1"
                 android:text="Đã thuộc"
-                android:textColor="#082F70"
-                android:textSize="11sp" />
+                android:textColor="#0B3475"
+                android:textSize="10sp"/>
 
         </LinearLayout>
 
         <Space
             android:layout_width="8dp"
-            android:layout_height="1dp" />
+            android:layout_height="1dp"/>
 
         <!-- Tiến độ -->
         <LinearLayout
@@ -171,54 +166,52 @@
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
-            <!-- Ô vuông chứa icon và số -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="76dp"
-                android:background="@drawable/nen_trangchu_thongke_xanh"
+                android:layout_height="66dp"
+                android:background="@drawable/nen_thongke_tiendo"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:padding="6dp">
+                android:padding="5dp">
 
                 <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:contentDescription="Tiến độ"
                     android:src="@drawable/ic_tiendo"
-                    app:tint="#FFFFFF" />
+                    app:tint="#7654C5"/>
 
                 <TextView
                     android:id="@+id/txt_tien_do"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="4dp"
                     android:fontFamily="sans-serif"
                     android:gravity="center"
                     android:maxLines="1"
                     android:text="0%"
-                    android:textColor="#FFFFFF"
-                    android:textSize="17sp"
-                    android:textStyle="bold" />
+                    android:textColor="#0B3475"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
 
             </LinearLayout>
 
-            <!-- Tên nằm ngoài ô vuông -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="6dp"
                 android:fontFamily="sans-serif"
                 android:gravity="center"
                 android:maxLines="1"
                 android:text="Tiến độ"
-                android:textColor="#082F70"
-                android:textSize="11sp" />
+                android:textColor="#0B3475"
+                android:textSize="10sp"/>
 
         </LinearLayout>
 
         <Space
             android:layout_width="8dp"
-            android:layout_height="1dp" />
+            android:layout_height="1dp"/>
 
         <!-- Từ đến hạn -->
         <LinearLayout
@@ -229,51 +222,49 @@
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
-            <!-- Ô vuông màu cam -->
             <LinearLayout
                 android:id="@+id/layout_tudenhan"
                 android:layout_width="match_parent"
-                android:layout_height="76dp"
+                android:layout_height="66dp"
                 android:background="@drawable/nen_thongke_denhan"
                 android:clickable="true"
                 android:focusable="true"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:padding="6dp">
+                android:padding="5dp">
 
                 <ImageView
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:contentDescription="Từ đến hạn"
                     android:src="@drawable/ic_lich"
-                    app:tint="#FFFFFF" />
+                    app:tint="#B86A22"/>
 
                 <TextView
                     android:id="@+id/txt_tudenhan"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginTop="4dp"
                     android:fontFamily="sans-serif"
                     android:gravity="center"
                     android:maxLines="1"
                     android:text="0"
-                    android:textColor="#FFFFFF"
-                    android:textSize="17sp"
-                    android:textStyle="bold" />
+                    android:textColor="#0B3475"
+                    android:textSize="16sp"
+                    android:textStyle="bold"/>
 
             </LinearLayout>
 
-            <!-- Tên nằm ngoài ô vuông -->
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="6dp"
                 android:fontFamily="sans-serif"
                 android:gravity="center"
                 android:maxLines="1"
                 android:text="Từ đến hạn"
-                android:textColor="#082F70"
-                android:textSize="11sp" />
+                android:textColor="#0B3475"
+                android:textSize="10sp"/>
 
         </LinearLayout>
 

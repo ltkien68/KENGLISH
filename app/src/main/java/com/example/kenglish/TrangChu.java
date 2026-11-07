@@ -792,6 +792,7 @@ public class TrangChu extends Fragment {
                 });
     }
 
+
     private void hienThiLichSu(List<LichSuTraTu> danhSach) {
 
         layoutLichSuTraTu.removeAllViews();
@@ -803,15 +804,28 @@ public class TrangChu extends Fragment {
 
         khungLichSuTraTu.setVisibility(View.VISIBLE);
 
-        for (int i = 0; i < danhSach.size(); i++) {
+        com.google.android.flexbox.FlexboxLayout layoutChip =
+                new com.google.android.flexbox.FlexboxLayout(requireContext());
 
-            LichSuTraTu lichSu = danhSach.get(i);
+        layoutChip.setFlexWrap(
+                com.google.android.flexbox.FlexWrap.WRAP
+        );
+
+        layoutChip.setJustifyContent(
+                com.google.android.flexbox.JustifyContent.FLEX_START
+        );
+
+        layoutChip.setAlignItems(
+                com.google.android.flexbox.AlignItems.CENTER
+        );
+
+        for (LichSuTraTu lichSu : danhSach) {
 
             TextView txtTu = new TextView(requireContext());
 
             txtTu.setText(lichSu.getWord());
-            txtTu.setTextSize(13);
-            txtTu.setTextColor(Color.parseColor("#111111"));
+            txtTu.setTextSize(12);
+            txtTu.setTextColor(Color.parseColor("#1877F2"));
 
             txtTu.setTypeface(
                     android.graphics.Typeface.create(
@@ -820,20 +834,31 @@ public class TrangChu extends Fragment {
                     )
             );
 
-            txtTu.setGravity(Gravity.CENTER_VERTICAL);
-
+            txtTu.setGravity(Gravity.CENTER);
+            txtTu.setSingleLine(true);
             txtTu.setPadding(
-                    dpToPx(14),
-                    0,
-                    dpToPx(14),
-                    0
+                    dpToPx(12),
+                    dpToPx(8),
+                    dpToPx(12),
+                    dpToPx(8)
             );
 
-            LinearLayout.LayoutParams params =
-                    new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.MATCH_PARENT,
-                            dpToPx(48)
+            txtTu.setBackgroundResource(
+                    R.drawable.nen_chip_lich_su
+            );
+
+            com.google.android.flexbox.FlexboxLayout.LayoutParams params =
+                    new com.google.android.flexbox.FlexboxLayout.LayoutParams(
+                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT
                     );
+
+            params.setMargins(
+                    0,
+                    0,
+                    dpToPx(8),
+                    dpToPx(8)
+            );
 
             txtTu.setLayoutParams(params);
 
@@ -841,31 +866,12 @@ public class TrangChu extends Fragment {
                     moChiTietTu(lichSu.getWord())
             );
 
-            layoutLichSuTraTu.addView(txtTu);
-
-            if (i < danhSach.size() - 1) {
-
-                View divider = new View(requireContext());
-
-                divider.setBackgroundColor(
-                        Color.parseColor("#E2E3E3")
-                );
-
-                LinearLayout.LayoutParams dividerParams =
-                        new LinearLayout.LayoutParams(
-                                LinearLayout.LayoutParams.MATCH_PARENT,
-                                dpToPx(1)
-                        );
-
-                dividerParams.setMarginStart(dpToPx(14));
-                dividerParams.setMarginEnd(dpToPx(14));
-
-                divider.setLayoutParams(dividerParams);
-
-                layoutLichSuTraTu.addView(divider);
-            }
+            layoutChip.addView(txtTu);
         }
+
+        layoutLichSuTraTu.addView(layoutChip);
     }
+
 
     private void moChiTietTu(String tu) {
 

@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -11,7 +10,6 @@
     android:paddingEnd="20dp"
     android:paddingBottom="26dp">
 
-
     <!-- Thanh kéo -->
     <View
         android:layout_width="42dp"
@@ -19,59 +17,61 @@
         android:layout_gravity="center_horizontal"
         android:background="@drawable/nen_botu_thanhkeo" />
 
-
     <!-- Tiêu đề -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="22dp"
+        android:fontFamily="sans-serif-medium"
         android:text="TẠO BỘ TỪ MỚI"
         android:textColor="#0B3475"
-        android:textSize="20sp"
-        android:textStyle="bold"/>
-
+        android:textSize="19sp"
+        android:textStyle="bold" />
 
     <!-- Tên bộ từ -->
     <EditText
         android:id="@+id/edt_ten_bo_tu"
         android:layout_width="match_parent"
-        android:layout_height="44dp"
-        android:layout_marginTop="22dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/nen_onhapbotu"
+        android:fontFamily="sans-serif"
         android:hint="Tên bộ từ *"
         android:paddingStart="14dp"
         android:paddingEnd="14dp"
         android:singleLine="true"
-        android:textColor="#111111"
-        android:textColorHint="#A9A9A9"
-        android:textSize="15sp" />
-
+        android:textColor="#0B3475"
+        android:textColorHint="#9AA8B8"
+        android:textSize="13sp" />
 
     <!-- Mô tả -->
     <EditText
         android:id="@+id/edt_mo_ta_bo_tu"
         android:layout_width="match_parent"
-        android:layout_height="72dp"
+        android:layout_height="76dp"
         android:layout_marginTop="12dp"
         android:background="@drawable/nen_onhapbotu"
+        android:fontFamily="sans-serif"
         android:gravity="top"
         android:hint="Mô tả (tùy chọn)"
         android:padding="14dp"
-        android:textColor="#111111"
-        android:textColorHint="#A9A9A9"
-        android:textSize="15sp" />
-
+        android:textColor="#0B3475"
+        android:textColorHint="#9AA8B8"
+        android:textSize="13sp" />
 
     <!-- Xác nhận -->
     <TextView
         android:id="@+id/btn_xac_nhan_tao_bo_tu"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:layout_marginTop="22dp"
+        android:layout_height="44dp"
+        android:layout_marginTop="20dp"
         android:background="@drawable/nen_nuttaobotu"
+        android:clickable="true"
+        android:focusable="true"
+        android:fontFamily="sans-serif-medium"
         android:gravity="center"
-        android:text="TẠO"
+        android:text="TẠO BỘ TỪ"
         android:textColor="#FFFFFF"
-        android:textSize="15sp" />
+        android:textSize="13sp" />
 
 </LinearLayout>

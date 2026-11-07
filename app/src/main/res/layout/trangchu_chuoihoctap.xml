@@ -1,26 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_marginTop="20dp"
     android:background="@drawable/nen_trangchu_chuoihoctap"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="12dp">
 
-    <!-- Tiêu đề -->
+    <!-- Tiêu đề chuỗi học tập -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
+        <!-- Icon ngọn lửa -->
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:gravity="center"
             android:text="🔥"
-            android:textSize="24sp" />
+            android:textSize="19sp" />
 
+        <!-- Thông tin chuỗi học -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -31,59 +34,61 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
                 android:text="CHUỖI HỌC TẬP"
-                android:textColor="#082F70"
-                android:textSize="15sp"
+                android:textColor="#0B3475"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/txt_chuoi_hoc_tuan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
-                android:fontFamily="sans-serif"
+                android:layout_marginTop="3dp"
                 android:text="0 ngày liên tiếp"
-                android:textColor="#087CFF"
-                android:textSize="13sp" />
+                android:textColor="#1877F2"
+                android:textSize="12sp" />
+
         </LinearLayout>
 
+        <!-- Nút xem chi tiết -->
         <LinearLayout
             android:id="@+id/btn_xem_chuoi_hoc"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
+            android:layout_height="32dp"
+            android:background="@drawable/nen_trangchu_streak"
             android:clickable="true"
             android:focusable="true"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp">
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="sans-serif"
                 android:text="Chi tiết"
-                android:textColor="#087CFF"
-                android:textSize="13sp" />
+                android:textColor="#1877F2"
+                android:textSize="11sp"
+                android:textStyle="bold" />
 
             <ImageView
-                android:layout_width="16dp"
-                android:layout_height="16dp"
-                android:layout_marginStart="4dp"
-                android:src="@drawable/ic_muitenphai"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_marginStart="3dp"
                 android:contentDescription="Xem chi tiết"
-                app:tint="#087CFF" />
+                android:src="@drawable/ic_muitenphai"
+                app:tint="#1877F2" />
 
         </LinearLayout>
+
     </LinearLayout>
 
-    <!-- Các ngày trong tuần -->
+    <!-- Lịch học trong tuần -->
     <LinearLayout
         android:id="@+id/layout_cac_ngay_trong_tuan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="16dp"
         android:baselineAligned="false"
         android:gravity="center"
         android:orientation="horizontal">
@@ -98,22 +103,23 @@
 
             <TextView
                 android:id="@+id/ngay_t2"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="40dp"
+                android:layout_height="30dp"
                 android:background="@drawable/nen_ngay_chuoi_hoc"
                 android:gravity="center"
                 android:text="–"
                 android:textColor="#7185A3"
-                android:textSize="15sp"
+                android:textSize="12sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="6dp"
                 android:text="T2"
                 android:textColor="#7185A3"
-                android:textSize="11sp" />
+                android:textSize="10sp" />
+
         </LinearLayout>
 
         <!-- Thứ ba -->
@@ -126,22 +132,23 @@
 
             <TextView
                 android:id="@+id/ngay_t3"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="40dp"
+                android:layout_height="30dp"
                 android:background="@drawable/nen_ngay_chuoi_hoc"
                 android:gravity="center"
                 android:text="–"
                 android:textColor="#7185A3"
-                android:textSize="15sp"
+                android:textSize="12sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="6dp"
                 android:text="T3"
                 android:textColor="#7185A3"
-                android:textSize="11sp" />
+                android:textSize="10sp" />
+
         </LinearLayout>
 
         <!-- Thứ tư -->
@@ -154,22 +161,23 @@
 
             <TextView
                 android:id="@+id/ngay_t4"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="40dp"
+                android:layout_height="30dp"
                 android:background="@drawable/nen_ngay_chuoi_hoc"
                 android:gravity="center"
                 android:text="–"
                 android:textColor="#7185A3"
-                android:textSize="15sp"
+                android:textSize="12sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="6dp"
                 android:text="T4"
                 android:textColor="#7185A3"
-                android:textSize="11sp" />
+                android:textSize="10sp" />
+
         </LinearLayout>
 
         <!-- Thứ năm -->
@@ -182,22 +190,23 @@
 
             <TextView
                 android:id="@+id/ngay_t5"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="40dp"
+                android:layout_height="30dp"
                 android:background="@drawable/nen_ngay_chuoi_hoc"
                 android:gravity="center"
                 android:text="–"
                 android:textColor="#7185A3"
-                android:textSize="15sp"
+                android:textSize="12sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="6dp"
                 android:text="T5"
                 android:textColor="#7185A3"
-                android:textSize="11sp" />
+                android:textSize="10sp" />
+
         </LinearLayout>
 
         <!-- Thứ sáu -->
@@ -210,22 +219,23 @@
 
             <TextView
                 android:id="@+id/ngay_t6"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="40dp"
+                android:layout_height="30dp"
                 android:background="@drawable/nen_ngay_chuoi_hoc"
                 android:gravity="center"
                 android:text="–"
                 android:textColor="#7185A3"
-                android:textSize="15sp"
+                android:textSize="12sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="6dp"
                 android:text="T6"
                 android:textColor="#7185A3"
-                android:textSize="11sp" />
+                android:textSize="10sp" />
+
         </LinearLayout>
 
         <!-- Thứ bảy -->
@@ -238,22 +248,23 @@
 
             <TextView
                 android:id="@+id/ngay_t7"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="40dp"
+                android:layout_height="30dp"
                 android:background="@drawable/nen_ngay_chuoi_hoc"
                 android:gravity="center"
                 android:text="–"
                 android:textColor="#7185A3"
-                android:textSize="15sp"
+                android:textSize="12sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="6dp"
                 android:text="T7"
                 android:textColor="#7185A3"
-                android:textSize="11sp" />
+                android:textSize="10sp" />
+
         </LinearLayout>
 
         <!-- Chủ nhật -->
@@ -266,23 +277,25 @@
 
             <TextView
                 android:id="@+id/ngay_cn"
-                android:layout_width="36dp"
-                android:layout_height="36dp"
+                android:layout_width="40dp"
+                android:layout_height="30dp"
                 android:background="@drawable/nen_ngay_chuoi_hoc"
                 android:gravity="center"
                 android:text="–"
                 android:textColor="#7185A3"
-                android:textSize="15sp"
+                android:textSize="12sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="6dp"
                 android:text="CN"
                 android:textColor="#7185A3"
-                android:textSize="11sp" />
+                android:textSize="10sp" />
+
         </LinearLayout>
 
     </LinearLayout>
+
 </LinearLayout>

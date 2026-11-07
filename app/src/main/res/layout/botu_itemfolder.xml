@@ -12,13 +12,13 @@
 
     <!-- Icon folder -->
     <ImageView
-        android:layout_width="30dp"
-        android:layout_height="30dp"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
         android:background="@drawable/nen_icon_folder"
         android:contentDescription="Thư mục"
         android:padding="7dp"
         android:src="@drawable/ic_themfolder"
-        app:tint="#B98524" />
+        app:tint="#D99524" />
 
     <!-- Thông tin folder -->
     <LinearLayout
@@ -48,9 +48,9 @@
             android:fontFamily="sans-serif"
             android:maxLines="1"
             android:text="3 bộ từ"
-            android:textColor="#8A713F"
-            android:textStyle="bold"
-            android:textSize="11sp" />
+            android:textColor="#A8792B"
+            android:textSize="11sp"
+            android:textStyle="bold" />
 
     </LinearLayout>
 

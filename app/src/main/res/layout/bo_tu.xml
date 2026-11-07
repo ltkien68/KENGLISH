@@ -13,8 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingTop="24dp"
-        android:paddingBottom="20dp">
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp">
 
         <!-- TIÊU ĐỀ TRANG -->
         <LinearLayout
@@ -30,23 +30,23 @@
                 android:fontFamily="sans-serif-medium"
                 android:text="BỘ TỪ CỦA TÔI"
                 android:textColor="#0B3475"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
+                android:layout_marginTop="3dp"
                 android:fontFamily="sans-serif"
                 android:text="Quản lý và luyện tập các bộ từ của bạn"
                 android:textColor="#7C8492"
-                android:textSize="13sp" />
+                android:textSize="12sp" />
 
             <!-- NÚT TẠO BỘ TỪ VÀ FOLDER -->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_marginTop="22dp"
+                android:layout_height="44dp"
+                android:layout_marginTop="16dp"
                 android:orientation="horizontal">
 
                 <include
@@ -54,7 +54,7 @@
                     layout="@layout/botu_nuttaobotu"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginEnd="6dp"
+                    android:layout_marginEnd="5dp"
                     android:layout_weight="1" />
 
                 <include
@@ -62,7 +62,7 @@
                     layout="@layout/botu_nuttaofolder"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_marginStart="6dp"
+                    android:layout_marginStart="5dp"
                     android:layout_weight="1" />
 
             </LinearLayout>
@@ -71,7 +71,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="26dp"
+                android:layout_marginTop="20dp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -82,19 +82,23 @@
                     android:fontFamily="sans-serif-medium"
                     android:text="FOLDER"
                     android:textColor="#0B3475"
-                    android:textSize="15sp"
+                    android:textSize="14sp"
                     android:textStyle="bold" />
 
                 <TextView
                     android:id="@+id/btn_xem_tat_ca_folder"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/nen_xem_tat_ca_folder"
                     android:clickable="true"
                     android:focusable="true"
-                    android:fontFamily="sans-serif"
-                    android:padding="6dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="6dp"
                     android:text="Xem tất cả ›"
-                    android:textColor="#7C8492"
+                    android:textColor="#1877F2"
                     android:textSize="11sp" />
 
             </LinearLayout>
@@ -105,8 +109,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list_folder_ngang"
             android:layout_width="match_parent"
-            android:layout_height="108dp"
-            android:layout_marginTop="12dp"
+            android:layout_height="104dp"
+            android:layout_marginTop="10dp"
             android:clipToPadding="false"
             android:nestedScrollingEnabled="false"
             android:overScrollMode="never"
@@ -119,7 +123,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="26dp"
+            android:layout_marginTop="20dp"
             android:layout_marginEnd="16dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
@@ -131,23 +135,23 @@
                 android:fontFamily="sans-serif-medium"
                 android:text="BỘ TỪ CỦA BẠN"
                 android:textColor="#0B3475"
-                android:textSize="15sp"
+                android:textSize="14sp"
                 android:textStyle="bold" />
 
         </LinearLayout>
 
-        <!-- DANH SÁCH BỘ TỪ: MỞ RỘNG THEO NỘI DUNG -->
+        <!-- DANH SÁCH BỘ TỪ -->
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/list_bo_tu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="10dp"
             android:clipToPadding="false"
             android:nestedScrollingEnabled="false"
             android:overScrollMode="never"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:paddingBottom="20dp"
+            android:paddingBottom="16dp"
             android:scrollbars="none" />
 
     </LinearLayout>
