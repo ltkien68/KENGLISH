@@ -6,39 +6,13 @@ const ai = process.env.GEMINI_API_KEY
     })
     : null;
 
-const DANH_SACH_MODEL = {
-    flash: process.env.GEMINI_MODEL || "gemini-3.8-flash",
-    "flash-lite": process.env.GEMINI_FALLBACK_MODEL || "gemini-3.1-flash-lite"
-};
+// KAI chỉ sử dụng duy nhất Gemini 3.1 Flash-Lite
+const MODEL_KAI = "gemini-3.1-flash-lite";
 
 const cho = (ms) =>
     new Promise(resolve => setTimeout(resolve, ms));
 
-const layDanhSachModel = (luaChon = "auto") => {
-    if (!["auto", "flash", "flash-lite"].includes(luaChon)) {
-        const error = new Error("KAI_INVALID_MODEL");
-        error.status = 400;
-        throw error;
-    }
-
-    if (luaChon === "flash") {
-        return [DANH_SACH_MODEL.flash];
-    }
-
-    if (luaChon === "flash-lite") {
-        return [DANH_SACH_MODEL["flash-lite"]];
-    }
-
-    return [
-        ...new Set([
-            DANH_SACH_MODEL.flash,
-            DANH_SACH_MODEL["flash-lite"]
-        ])
-    ];
-};
-
 const goiGeminiKai = async ({
-    luaChon = "auto",
     contents,
     config
 }) => {
@@ -48,45 +22,55 @@ const goiGeminiKai = async ({
         throw error;
     }
 
-    const danhSachModel = layDanhSachModel(luaChon);
+    if (
+        typeof contents !== "string" ||
+        !contents.trim()
+    ) {
+        const error = new Error("KAI_INVALID_QUESTION");
+        error.status = 400;
+        throw error;
+    }
+
     let loiCuoi = null;
 
-    for (const model of danhSachModel) {
-        for (let lan = 1; lan <= 2; lan++) {
-            try {
-                console.log(`[Kai] Model: ${model}, lần ${lan}`);
+    // Tối đa 2 lần gọi, luôn sử dụng cùng một model
+    for (let lan = 1; lan <= 2; lan++) {
+        try {
+            console.log(`[Kai] Model: ${MODEL_KAI}, lần ${lan}`);
 
-                const response = await ai.models.generateContent({
-                    model,
-                    contents,
-                    config
-                });
+            const response = await ai.models.generateContent({
+                model: MODEL_KAI,
+                contents,
+                config
+            });
 
-                console.log(`[Kai] Thành công: ${model}`);
-                return response;
+            console.log(`[Kai] Thành công: ${MODEL_KAI}`);
 
-            } catch (error) {
-                loiCuoi = error;
+            return response;
 
-                const maLoi = Number(
-                    error.status || error.code
-                );
+        } catch (error) {
+            loiCuoi = error;
 
-                const loiTamThoi = [
-                    429, 500, 502, 503, 504
-                ].includes(maLoi);
+            const maLoi = Number(
+                error.status || error.statusCode || error.code
+            );
 
-                console.error(
-                    `[Kai] ${model} lỗi ${maLoi || "không xác định"}`
-                );
+            const loiTamThoi = [
+                429, 500, 502, 503, 504
+            ].includes(maLoi);
 
-                if (!loiTamThoi) {
-                    throw error;
-                }
+            console.error(
+                `[Kai] ${MODEL_KAI} lỗi ${maLoi || "không xác định"}`
+            );
 
-                if (lan < 2) {
-                    await cho(1000);
-                }
+            // Lỗi không thể phục hồi: dừng ngay
+            if (!loiTamThoi) {
+                throw error;
+            }
+
+            // Chỉ thử lại chính model Gemini 3.1 Flash-Lite
+            if (lan < 2) {
+                await cho(1000);
             }
         }
     }
@@ -95,6 +79,5 @@ const goiGeminiKai = async ({
 };
 
 module.exports = {
-    goiGeminiKai,
-    layDanhSachModel
+    goiGeminiKai
 };

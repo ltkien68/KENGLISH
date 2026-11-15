@@ -1,18 +1,17 @@
 const { goiGeminiKai } = require("./kaiModelService");
 
-const phanTichYeuCauKai = async (cauHoi, luaChon = "auto") => {
-    if (typeof cauHoi !== "string" || !cauHoi.trim()) {
-        throw new Error("KAI_INVALID_QUESTION");
-    }
+const phanTichYeuCauKai = async (cauHoi) => {
+  if (typeof cauHoi !== "string" || !cauHoi.trim()) {
+    throw new Error("KAI_INVALID_QUESTION");
+  }
 
-    const response = await goiGeminiKai({
-        luaChon,
-        contents: cauHoi,
-        config: {
-            systemInstruction: `
+  const response = await goiGeminiKai({
+    contents: cauHoi.trim(),
+    config: {
+      systemInstruction: `
 Bạn là bộ phân tích ý định của trợ lý Kai trong ứng dụng Kenglish.
 
-Chỉ phân loại yêu cầu, không thực hiện hành động.
+Chỉ phân loại ý định, không thực hiện hành động.
 
 Hành động được hỗ trợ:
 - "tao_bo_tu": người dùng yêu cầu tạo một bộ từ mới.
@@ -30,6 +29,7 @@ Nếu người dùng chỉ hỏi cách tạo bộ từ hoặc hỏi về từ v�
 phân loại là "chat".
 
 Trả JSON có các trường:
+
 {
   "hanh_dong": "tao_bo_tu",
   "chu_de": "Công nghệ thông tin",
@@ -38,6 +38,7 @@ Trả JSON có các trường:
 }
 
 Với yêu cầu chat:
+
 {
   "hanh_dong": "chat",
   "chu_de": "",
@@ -45,66 +46,62 @@ Với yêu cầu chat:
   "mo_luyen_tap": false
 }
 `,
-            responseMimeType: "application/json",
-            temperature: 0.1,
-            maxOutputTokens: 2048
-        }
-    });
+      responseMimeType: "application/json",
+      temperature: 0.1,
+      maxOutputTokens: 2048,
+    },
+  });
 
-    const noiDung = response.text || "";
+  const noiDung = response.text || "";
 
-    console.log("========== KAI INTENT ==========");
-    console.log("Gemini response:", JSON.stringify(noiDung));
-    console.log("Finish reason:", response.candidates?.[0]?.finishReason);
-    console.log("================================");
+  console.log("========== KAI INTENT ==========");
+  console.log("Model: gemini-3.1-flash-lite");
+  console.log("Gemini response:", JSON.stringify(noiDung));
+  console.log("Finish reason:", response.candidates?.[0]?.finishReason);
+  console.log("================================");
 
-    let duLieu;
+  let duLieu;
 
-    try {
-        duLieu = JSON.parse(noiDung);
-    } catch (error) {
-        console.error(
-            "Gemini trả JSON không hợp lệ:",
-            error.message
-        );
-        throw new Error("KAI_INVALID_JSON");
-    }
+  try {
+    duLieu = JSON.parse(noiDung);
+  } catch (error) {
+    console.error("Gemini trả JSON không hợp lệ:", error.message);
 
-    if (duLieu.hanh_dong !== "tao_bo_tu") {
-        return {
-            hanh_dong: "chat",
-            chu_de: "",
-            so_luong: 5,
-            mo_luyen_tap: false
-        };
-    }
+    throw new Error("KAI_INVALID_JSON");
+  }
 
-    const chuDe =
-        typeof duLieu.chu_de === "string"
-            ? duLieu.chu_de.trim()
-            : "";
-
-    const soLuong = duLieu.so_luong;
-
-    if (
-        !chuDe ||
-        chuDe.length > 100 ||
-        !Number.isInteger(soLuong) ||
-        soLuong < 1 ||
-        soLuong > 10 ||
-        typeof duLieu.mo_luyen_tap !== "boolean"
-    ) {
-        throw new Error("KAI_INVALID_INTENT");
-    }
-
+  if (duLieu.hanh_dong !== "tao_bo_tu") {
     return {
-        hanh_dong: "tao_bo_tu",
-        chu_de: chuDe,
-        so_luong: soLuong,
-        mo_luyen_tap: duLieu.mo_luyen_tap
+      hanh_dong: "chat",
+      chu_de: "",
+      so_luong: 5,
+      mo_luyen_tap: false,
     };
+  }
+
+  const chuDe = typeof duLieu.chu_de === "string" ? duLieu.chu_de.trim() : "";
+
+  const soLuong = duLieu.so_luong;
+
+  if (
+    !chuDe ||
+    chuDe.length > 100 ||
+    !Number.isInteger(soLuong) ||
+    soLuong < 1 ||
+    soLuong > 10 ||
+    typeof duLieu.mo_luyen_tap !== "boolean"
+  ) {
+    throw new Error("KAI_INVALID_INTENT");
+  }
+
+  return {
+    hanh_dong: "tao_bo_tu",
+    chu_de: chuDe,
+    so_luong: soLuong,
+    mo_luyen_tap: duLieu.mo_luyen_tap,
+  };
 };
 
 module.exports = {
-    phanTichYeuCauKai
+  phanTichYeuCauKai,
 };

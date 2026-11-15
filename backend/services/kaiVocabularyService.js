@@ -1,26 +1,29 @@
-const { GoogleGenAI } = require("@google/genai");
-
-const ai = new GoogleGenAI({
-    apiKey: process.env.GEMINI_API_KEY
-});
+const { goiGeminiKai } = require("./kaiModelService");
 
 const gioiHan = (giaTri, doDai) => {
     if (typeof giaTri !== "string") {
         return "";
     }
+
     return giaTri.trim().slice(0, doDai);
 };
 
 const taoDanhSachTuAI = async (chuDe, soLuong) => {
-    if (!process.env.GEMINI_API_KEY) {
-        throw new Error("GEMINI_API_KEY_NOT_CONFIGURED");
+    if (
+        typeof chuDe !== "string" ||
+        !chuDe.trim() ||
+        !Number.isInteger(soLuong) ||
+        soLuong < 1 ||
+        soLuong > 10
+    ) {
+        throw new Error("KAI_INVALID_INTENT");
     }
 
     const prompt = `
 Bạn là Kai, trợ lý học tiếng Anh của Kenglish.
 
 Hãy tạo chính xác ${soLuong} từ vựng tiếng Anh
-thuộc chủ đề: "${chuDe}".
+thuộc chủ đề: "${chuDe.trim()}".
 
 Yêu cầu:
 - Chọn từ thực tế, hữu ích cho người học.
@@ -30,8 +33,11 @@ Yêu cầu:
 - Mỗi từ có một câu ví dụ tiếng Anh tự nhiên.
 - Từ đồng nghĩa, trái nghĩa có thể để chuỗi rỗng.
 - Không viết giải thích ngoài JSON.
+- Phải tạo đủ chính xác ${soLuong} từ.
+- Không tự ý giảm số lượng từ.
 
 Trả về một đối tượng JSON theo cấu trúc:
+
 {
   "ten_bo_tu": "Tên bộ từ ngắn gọn",
   "mo_ta": "Mô tả ngắn",
@@ -49,8 +55,12 @@ Trả về một đối tượng JSON theo cấu trúc:
 }
 `;
 
-    const response = await ai.models.generateContent({
-        model: process.env.GEMINI_MODEL || "gemini-2.5-flash",
+    console.log("========== KAI VOCAB ==========");
+    console.log("Model: gemini-3.1-flash-lite");
+    console.log("Chủ đề:", chuDe);
+    console.log("Số lượng:", soLuong);
+
+    const response = await goiGeminiKai({
         contents: prompt,
         config: {
             responseMimeType: "application/json",
@@ -59,7 +69,7 @@ Trả về một đối tượng JSON theo cấu trúc:
         }
     });
 
-    if (!response.text) {
+    if (!response.text || !response.text.trim()) {
         throw new Error("GEMINI_EMPTY_RESPONSE");
     }
 
@@ -68,6 +78,7 @@ Trả về một đối tượng JSON theo cấu trúc:
     try {
         duLieu = JSON.parse(response.text);
     } catch (error) {
+        console.error("JSON không hợp lệ:", error.message);
         throw new Error("GEMINI_INVALID_JSON");
     }
 
@@ -123,11 +134,16 @@ Trả về một đối tượng JSON theo cấu trúc:
         throw new Error("GEMINI_INSUFFICIENT_VOCABULARY");
     }
 
+    console.log("Số từ tạo thành công:", danhSachTu.length);
+    console.log("==============================");
+
     return {
         ten_bo_tu: gioiHan(duLieu.ten_bo_tu, 100)
             || `Kai - ${chuDe}`.slice(0, 100),
+
         mo_ta: gioiHan(duLieu.mo_ta, 255)
             || `Bộ từ vựng chủ đề ${chuDe}`,
+
         danh_sach_tu: danhSachTu
     };
 };
