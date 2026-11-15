@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.DataSetObserver;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -19,6 +21,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -26,6 +29,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 
 import com.example.kenglish.adapter.TuVungAdapter;
@@ -40,7 +44,11 @@ import com.example.kenglish.model.ThemTuRequest;
 import com.example.kenglish.model.TuVung;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -951,424 +959,562 @@ public class ChiTietBoTu extends Fragment {
 
     private void moPopupThemTu() {
 
-        Dialog dialog =
-                new Dialog(
-                        requireContext()
-                );
+        Dialog dialog = new Dialog(requireContext());
 
-        dialog.setContentView(
-                R.layout.botu_popup_themtu
-        );
+        dialog.setContentView(R.layout.botu_popup_themtu);
 
-
-        /*
-         * Nền ngoài popup trong suốt
-         */
-        Window window =
-                dialog.getWindow();
+        Window window = dialog.getWindow();
 
         if (window != null) {
-
             window.setBackgroundDrawable(
-                    new ColorDrawable(
-                            Color.TRANSPARENT
-                    )
-            );
-
-            window.setLayout(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.WRAP_CONTENT
+                    new ColorDrawable(Color.TRANSPARENT)
             );
         }
 
+        // Ánh xạ giao diện
+        ImageView btnDongPopup = dialog.findViewById(R.id.btn_dong_popup);
+        TextView txtBoTuHienTai = dialog.findViewById(R.id.txt_bo_tu_hien_tai);
 
-        /*
-         * =========================================
-         * ÁNH XẠ
-         * =========================================
-         */
+        EditText edtTuVung = dialog.findViewById(R.id.edt_tu_vung);
+        EditText edtPhienAm = dialog.findViewById(R.id.edt_phien_am);
+        AutoCompleteTextView edtNghia = dialog.findViewById(R.id.edt_nghia);
 
-        ImageView btnDongPopup =
-                dialog.findViewById(
-                        R.id.btn_dong_popup
-                );
+        TextView btnHuy = dialog.findViewById(R.id.btn_huy);
+        TextView btnLuuTu = dialog.findViewById(R.id.btn_luu_tu);
+        TextView btnThemLoaiTu = dialog.findViewById(R.id.btn_them_loai_tu);
 
+        TextView txtGoiYLoaiTu = dialog.findViewById(R.id.txt_goi_y_loai_tu);
 
-        TextView txtBoTuHienTai =
-                dialog.findViewById(
-                        R.id.txt_bo_tu_hien_tai
-                );
+        txtBoTuHienTai.setText(tenBoTu);
 
+        // Lưu các loại từ đang được chọn
+        Set<String> danhSachLoaiTuChon = new LinkedHashSet<>();
 
-        EditText edtTuVung =
-                dialog.findViewById(
-                        R.id.edt_tu_vung
-                );
+        // Ánh xạ 9 chip có sẵn
+        Map<String, TextView> danhSachChip = new LinkedHashMap<>();
 
+        danhSachChip.put("noun", dialog.findViewById(R.id.chip_noun));
+        danhSachChip.put("verb", dialog.findViewById(R.id.chip_verb));
+        danhSachChip.put("adjective", dialog.findViewById(R.id.chip_adjective));
+        danhSachChip.put("adverb", dialog.findViewById(R.id.chip_adverb));
+        danhSachChip.put("pronoun", dialog.findViewById(R.id.chip_pronoun));
+        danhSachChip.put("preposition", dialog.findViewById(R.id.chip_preposition));
+        danhSachChip.put("conjunction", dialog.findViewById(R.id.chip_conjunction));
+        danhSachChip.put("interjection", dialog.findViewById(R.id.chip_interjection));
+        danhSachChip.put("determiner", dialog.findViewById(R.id.chip_determiner));
 
-        EditText edtPhienAm =
-                dialog.findViewById(
-                        R.id.edt_phien_am
-                );
+        // Xử lý chọn / bỏ chọn chip
+        for (Map.Entry<String, TextView> entry : danhSachChip.entrySet()) {
 
+            String loaiTu = entry.getKey();
+            TextView chip = entry.getValue();
 
-        AutoCompleteTextView edtNghia =
-                dialog.findViewById(
-                        R.id.edt_nghia
-                );
+            chip.setOnClickListener(v -> {
 
+                if (danhSachLoaiTuChon.contains(loaiTu)) {
+                    danhSachLoaiTuChon.remove(loaiTu);
+                } else {
+                    danhSachLoaiTuChon.add(loaiTu);
+                }
 
-        TextView btnHuy =
-                dialog.findViewById(
-                        R.id.btn_huy
-                );
+                capNhatTrangThaiChip(chip, danhSachLoaiTuChon.contains(loaiTu));
+            });
+        }
 
+        // Tra từ điển khi nhập từ
+        Handler handler = new Handler(Looper.getMainLooper());
 
-        TextView btnLuuTu =
-                dialog.findViewById(
-                        R.id.btn_luu_tu
-                );
+        Runnable[] tacVuTraTu = new Runnable[1];
 
-        /*
-         * =========================================
-         * TỰ ĐỘNG TRA TỪ
-         * =========================================
-         */
+        edtTuVung.addTextChangedListener(new TextWatcher() {
 
-        Handler handler =
-                new Handler(
-                        Looper.getMainLooper()
-                );
+            @Override
+            public void beforeTextChanged(
+                    CharSequence s,
+                    int start,
+                    int count,
+                    int after) {
+            }
 
+            @Override
+            public void onTextChanged(
+                    CharSequence s,
+                    int start,
+                    int before,
+                    int count) {
 
-        Runnable[] tacVuTraTu =
-                new Runnable[1];
+                if (tacVuTraTu[0] != null) {
+                    handler.removeCallbacks(tacVuTraTu[0]);
+                }
 
+                String tu = s.toString().trim();
 
-        edtTuVung.addTextChangedListener(
-                new TextWatcher() {
+                if (tu.isEmpty()) {
 
-                    @Override
-                    public void beforeTextChanged(
-                            CharSequence s,
-                            int start,
-                            int count,
-                            int after) {
+                    edtPhienAm.setText("");
+                    edtNghia.setText("");
+                    edtNghia.setAdapter(null);
+
+                    danhSachLoaiTuChon.clear();
+
+                    for (TextView chip : danhSachChip.values()) {
+                        capNhatTrangThaiChip(chip, false);
                     }
 
+                    txtGoiYLoaiTu.setText("GỢI Ý TỪ ĐIỂN");
 
-                    @Override
-                    public void onTextChanged(
-                            CharSequence s,
-                            int start,
-                            int before,
-                            int count) {
+                    return;
+                }
 
-                        /*
-                         * Nếu trước đó đang chờ tra
-                         * thì hủy.
-                         */
-                        if (tacVuTraTu[0] != null) {
+                tacVuTraTu[0] = () -> traTuChoPopup(
+                        tu,
+                        edtPhienAm,
+                        edtNghia,
+                        danhSachChip,
+                        danhSachLoaiTuChon,
+                        txtGoiYLoaiTu
+                );
 
-                            handler.removeCallbacks(
-                                    tacVuTraTu[0]
-                            );
+                handler.postDelayed(tacVuTraTu[0], 500);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        // Xóa nhanh từ vựng
+        ImageView imgXoaTu = dialog.findViewById(R.id.img_icon_xoa_tu);
+
+        imgXoaTu.setOnClickListener(v -> {
+            edtTuVung.setText("");
+            edtTuVung.requestFocus();
+        });
+
+        // Thêm loại từ tùy chỉnh
+        btnThemLoaiTu.setOnClickListener(v -> {
+
+            EditText edtLoaiTuMoi = new EditText(requireContext());
+
+            edtLoaiTuMoi.setHint("Ví dụ: phrasal verb");
+            edtLoaiTuMoi.setSingleLine(true);
+            edtLoaiTuMoi.setPadding(32, 20, 32, 20);
+
+            new AlertDialog.Builder(requireContext())
+                    .setTitle("Thêm loại từ")
+                    .setMessage("Nhập tên loại từ muốn thêm")
+                    .setView(edtLoaiTuMoi)
+                    .setNegativeButton("Hủy", null)
+                    .setPositiveButton("Thêm", (dialogThem, which) -> {
+
+                        String loaiTuMoi = edtLoaiTuMoi.getText()
+                                .toString()
+                                .trim();
+
+                        if (loaiTuMoi.isEmpty()) {
+                            Toast.makeText(
+                                    requireContext(),
+                                    "Vui lòng nhập loại từ",
+                                    Toast.LENGTH_SHORT
+                            ).show();
+                            return;
                         }
 
+                        String khoa = loaiTuMoi.toLowerCase();
 
-                        String tu =
-                                s.toString()
-                                        .trim();
+                        if (danhSachLoaiTuChon.contains(khoa)
+                                || danhSachChip.containsKey(khoa)) {
 
-
-                        /*
-                         * Người dùng xóa từ:
-                         * xóa luôn dữ liệu tự động.
-                         */
-                        if (tu.isEmpty()) {
-
-                            edtPhienAm.setText("");
-
-                            edtNghia.setAdapter(null);
+                            Toast.makeText(
+                                    requireContext(),
+                                    "Loại từ này đã tồn tại",
+                                    Toast.LENGTH_SHORT
+                            ).show();
 
                             return;
                         }
 
-
-                        /*
-                         * Chờ 500ms sau lần gõ cuối.
-                         */
-                        tacVuTraTu[0] =
-                                () -> traTuChoPopup(
-                                        tu,
-                                        edtPhienAm,
-                                        edtNghia
-                                );
-
-
-                        handler.postDelayed(
-                                tacVuTraTu[0],
-                                500
+                        themChipTuyChinh(
+                                loaiTuMoi,
+                                khoa,
+                                danhSachChip,
+                                danhSachLoaiTuChon,
+                                btnThemLoaiTu
                         );
-                    }
+                    })
+                    .show();
+        });
 
+        // Đóng popup
+        btnDongPopup.setOnClickListener(v -> dialog.dismiss());
+        btnHuy.setOnClickListener(v -> dialog.dismiss());
 
-                    @Override
-                    public void afterTextChanged(
-                            Editable s) {
-                    }
-                }
-        );
-
-
-        /*
-         * Hiển thị bộ từ hiện tại.
-         */
-        txtBoTuHienTai.setText(
-                tenBoTu
-        );
-
-
-        /*
-         * =========================================
-         * ĐÓNG POPUP
-         * =========================================
-         */
-
-        btnDongPopup.setOnClickListener(
-                v -> dialog.dismiss()
-        );
-
-
-        btnHuy.setOnClickListener(
-                v -> dialog.dismiss()
-        );
-
-
-        /*
-         * =========================================
-         * LƯU TỪ
-         * =========================================
-         */
-
+        // Lưu từ
         btnLuuTu.setOnClickListener(v -> {
 
-            String tuVung =
-                    edtTuVung
-                            .getText()
-                            .toString()
-                            .trim();
+            String tuVung = edtTuVung.getText().toString().trim();
+            String phienAm = edtPhienAm.getText().toString().trim();
+            String nghia = edtNghia.getText().toString().trim();
 
-
-            String phienAm =
-                    edtPhienAm
-                            .getText()
-                            .toString()
-                            .trim();
-
-
-            String nghia =
-                    edtNghia
-                            .getText()
-                            .toString()
-                            .trim();
-
-
-            /*
-             * Từ và nghĩa là bắt buộc.
-             */
             if (tuVung.isEmpty()) {
-
-                edtTuVung.setError(
-                        "Vui lòng nhập từ vựng"
-                );
-
+                edtTuVung.setError("Vui lòng nhập từ vựng");
                 edtTuVung.requestFocus();
-
                 return;
             }
-
 
             if (nghia.isEmpty()) {
-
-                edtNghia.setError(
-                        "Vui lòng nhập nghĩa"
-                );
-
+                edtNghia.setError("Vui lòng nhập nghĩa");
                 edtNghia.requestFocus();
-
                 return;
             }
 
+            // Ghép các loại từ thành chuỗi
+            String loaiTu = String.join(",", danhSachLoaiTuChon);
 
             luuTuVaoServer(
                     dialog,
                     tuVung,
                     phienAm,
-                    nghia
+                    nghia,
+                    loaiTu
             );
         });
 
-
-        /*
-         * Hiển thị popup.
-         */
         dialog.show();
 
-
-        /*
-         * Phải set width sau show()
-         */
         if (dialog.getWindow() != null) {
 
+            int chieuRong = (int) (getResources()
+                    .getDisplayMetrics().widthPixels * 0.84f);
+
             dialog.getWindow().setLayout(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    chieuRong,
                     ViewGroup.LayoutParams.WRAP_CONTENT
             );
         }
     }
 
+    private void capNhatTrangThaiChip(TextView chip, boolean daChon) {
+
+        int mauNen;
+        int mauChu;
+        int mauVien;
+
+        // Xác định bảng màu theo từng loại từ
+        int id = chip.getId();
+
+        if (id == R.id.chip_noun) {
+            mauNen = Color.parseColor("#FCE8E8");
+            mauChu = Color.parseColor("#C24141");
+            mauVien = Color.parseColor("#E76B6B");
+
+        } else if (id == R.id.chip_verb) {
+            mauNen = Color.parseColor("#E1F0FF");
+            mauChu = Color.parseColor("#1763B1");
+            mauVien = Color.parseColor("#3989DF");
+
+        } else if (id == R.id.chip_adjective) {
+            mauNen = Color.parseColor("#F1E8FF");
+            mauChu = Color.parseColor("#7541B8");
+            mauVien = Color.parseColor("#9864D8");
+
+        } else if (id == R.id.chip_adverb) {
+            mauNen = Color.parseColor("#E0F5ED");
+            mauChu = Color.parseColor("#16845C");
+            mauVien = Color.parseColor("#35AC7E");
+
+        } else if (id == R.id.chip_pronoun) {
+            mauNen = Color.parseColor("#FFF0D9");
+            mauChu = Color.parseColor("#A96813");
+            mauVien = Color.parseColor("#D99636");
+
+        } else if (id == R.id.chip_preposition) {
+            mauNen = Color.parseColor("#E0F3F5");
+            mauChu = Color.parseColor("#167B88");
+            mauVien = Color.parseColor("#36A5B1");
+
+        } else if (id == R.id.chip_conjunction) {
+            mauNen = Color.parseColor("#FCE6F1");
+            mauChu = Color.parseColor("#B33C79");
+            mauVien = Color.parseColor("#D9679F");
+
+        } else if (id == R.id.chip_interjection) {
+            mauNen = Color.parseColor("#FFF5D9");
+            mauChu = Color.parseColor("#98710C");
+            mauVien = Color.parseColor("#D6AD32");
+
+        } else if (id == R.id.chip_determiner) {
+            mauNen = Color.parseColor("#E9ECFF");
+            mauChu = Color.parseColor("#4C5EB4");
+            mauVien = Color.parseColor("#7183D9");
+
+        } else {
+            // Màu mặc định cho loại từ tùy chỉnh
+            mauNen = Color.parseColor("#E1F0FF");
+            mauChu = Color.parseColor("#1763B1");
+            mauVien = Color.parseColor("#3989DF");
+        }
+
+        // Tạo nền chip
+        GradientDrawable nen = new GradientDrawable();
+
+        nen.setShape(GradientDrawable.RECTANGLE);
+        nen.setCornerRadius(dpToPx(9));
+
+        if (daChon) {
+            nen.setColor(mauNen);
+            nen.setStroke(dpToPx(2), mauVien);
+
+            chip.setTextColor(mauChu);
+            chip.setTypeface(null, Typeface.BOLD);
+
+        } else {
+            nen.setColor(mauNen);
+            nen.setStroke(dpToPx(1), Color.TRANSPARENT);
+
+            chip.setTextColor(mauChu);
+            chip.setTypeface(null, Typeface.NORMAL);
+        }
+
+        chip.setBackground(nen);
+        chip.setSelected(daChon);
+    }
+
+    private void themChipTuyChinh(
+            String tenHienThi,
+            String khoa,
+            Map<String, TextView> danhSachChip,
+            Set<String> danhSachLoaiTuChon,
+            TextView btnThemLoaiTu) {
+
+        TextView chip = new TextView(requireContext());
+
+        chip.setText(tenHienThi);
+        chip.setTextSize(10);
+        chip.setGravity(android.view.Gravity.CENTER);
+        chip.setPadding(24, 0, 24, 0);
+        capNhatTrangThaiChip(chip, false);
+        chip.setClickable(true);
+        chip.setFocusable(true);
+
+        LinearLayout.LayoutParams params =
+                new LinearLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        dpToPx(30)
+                );
+
+        params.topMargin = dpToPx(5);
+
+        ViewGroup parent = (ViewGroup) btnThemLoaiTu.getParent();
+
+        int viTri = parent.indexOfChild(btnThemLoaiTu);
+
+        parent.addView(chip, viTri, params);
+
+        danhSachChip.put(khoa, chip);
+
+        chip.setOnClickListener(v -> {
+
+            if (danhSachLoaiTuChon.contains(khoa)) {
+                danhSachLoaiTuChon.remove(khoa);
+            } else {
+                danhSachLoaiTuChon.add(khoa);
+            }
+
+            capNhatTrangThaiChip(
+                    chip,
+                    danhSachLoaiTuChon.contains(khoa)
+            );
+        });
+    }
+
+    private int dpToPx(float dp) {
+        return (int) (dp * getResources()
+                .getDisplayMetrics().density + 0.5f);
+    }
+
     private void traTuChoPopup(
             String tu,
             EditText edtPhienAm,
-            AutoCompleteTextView edtNghia) {
+            AutoCompleteTextView edtNghia,
+            Map<String, TextView> danhSachChip,
+            Set<String> danhSachLoaiTuChon,
+            TextView txtGoiYLoaiTu) {
 
-        ApiService apiService =
-                RetrofitClient
-                        .getClient()
-                        .create(
-                                ApiService.class
-                        );
+        ApiService apiService = RetrofitClient
+                .getClient()
+                .create(ApiService.class);
 
+        apiService.traTu(tu).enqueue(
+                new Callback<DictionaryResponse>() {
 
-        apiService
-                .traTu(tu)
-                .enqueue(
-                        new Callback<DictionaryResponse>() {
+                    @Override
+                    public void onResponse(
+                            @NonNull Call<DictionaryResponse> call,
+                            @NonNull Response<DictionaryResponse> response) {
 
-                            @Override
-                            public void onResponse(
-                                    @NonNull Call<DictionaryResponse> call,
-                                    @NonNull Response<DictionaryResponse> response) {
+                        if (!response.isSuccessful()
+                                || response.body() == null) {
+                            return;
+                        }
 
-                                if (!response.isSuccessful()
-                                        || response.body() == null) {
+                        DictionaryResponse data = response.body();
 
-                                    return;
-                                }
+                        // Phiên âm
+                        if (data.getIpa() != null) {
+                            edtPhienAm.setText(data.getIpa());
+                        }
 
+                        // Danh sách nghĩa
+                        List<String> danhSachNghia = new ArrayList<>();
 
-                                DictionaryResponse data =
-                                        response.body();
+                        if (data.getMeanings() != null) {
 
+                            for (Meaning meaning : data.getMeanings()) {
 
-                                /*
-                                 * =========================
-                                 * PHIÊN ÂM
-                                 * =========================
-                                 */
+                                if (meaning.getDefinition() != null
+                                        && !danhSachNghia.contains(
+                                        meaning.getDefinition())) {
 
-                                if (data.getIpa() != null) {
-
-                                    edtPhienAm.setText(
-                                            data.getIpa()
+                                    danhSachNghia.add(
+                                            meaning.getDefinition()
                                     );
                                 }
-
-
-                                /*
-                                 * =========================
-                                 * DANH SÁCH NGHĨA
-                                 * =========================
-                                 */
-
-                                List<String> danhSachNghia =
-                                        new ArrayList<>();
-
-
-                                if (data.getMeanings() != null) {
-
-                                    for (Meaning meaning
-                                            : data.getMeanings()) {
-
-                                        if (meaning.getDefinition()
-                                                != null) {
-
-                                            danhSachNghia.add(
-                                                    meaning.getDefinition()
-                                            );
-                                        }
-                                    }
-                                }
-
-
-                                /*
-                                 * Đưa danh sách nghĩa
-                                 * vào dropdown.
-                                 */
-
-                                ArrayAdapter<String> adapterNghia =
-                                        new ArrayAdapter<>(
-                                                requireContext(),
-                                                android.R.layout
-                                                        .simple_dropdown_item_1line,
-                                                danhSachNghia
-                                        );
-
-
-                                edtNghia.setAdapter(
-                                        adapterNghia
-                                );
-
-
-                                /*
-                                 * Bấm vào ô nghĩa
-                                 * → xổ danh sách.
-                                 */
-                                edtNghia.setOnClickListener(v -> {
-
-                                    if (!danhSachNghia.isEmpty()) {
-
-                                        edtNghia.showDropDown();
-                                    }
-                                });
-
-
-                                edtNghia.setOnFocusChangeListener(
-                                        (v, hasFocus) -> {
-
-                                            if (hasFocus
-                                                    && !danhSachNghia.isEmpty()) {
-
-                                                edtNghia.showDropDown();
-                                            }
-                                        }
-                                );
-                            }
-
-
-                            @Override
-                            public void onFailure(
-                                    @NonNull Call<DictionaryResponse> call,
-                                    @NonNull Throwable t) {
-
-                                /*
-                                 * Không Toast ở đây.
-                                 *
-                                 * Tra tự động thất bại thì
-                                 * người dùng vẫn có thể
-                                 * tự nhập phiên âm + nghĩa.
-                                 */
                             }
                         }
-                );
+
+                        ArrayAdapter<String> adapterNghia =
+                                new ArrayAdapter<>(
+                                        requireContext(),
+                                        android.R.layout.simple_dropdown_item_1line,
+                                        danhSachNghia
+                                );
+
+                        edtNghia.setAdapter(adapterNghia);
+
+                        edtNghia.setOnClickListener(v -> {
+                            if (!danhSachNghia.isEmpty()) {
+                                edtNghia.showDropDown();
+                            }
+                        });
+
+                        edtNghia.setOnFocusChangeListener((v, hasFocus) -> {
+                            if (hasFocus && !danhSachNghia.isEmpty()) {
+                                edtNghia.showDropDown();
+                            }
+                        });
+
+                        // Tự động nhận diện loại từ
+                        danhSachLoaiTuChon.clear();
+
+                        for (TextView chip : danhSachChip.values()) {
+                            capNhatTrangThaiChip(chip, false);
+                        }
+
+                        boolean coLoaiTu = false;
+
+                        if (data.getMeanings() != null) {
+
+                            for (Meaning meaning : data.getMeanings()) {
+
+                                String pos = meaning.getPos();
+
+                                android.util.Log.d("Kenglish_POS", "POS nhận được: " + pos);
+
+                                if (pos == null || pos.trim().isEmpty()) {
+                                    continue;
+                                }
+
+                                String khoa = chuanHoaLoaiTu(pos);
+
+                                TextView chip = danhSachChip.get(khoa);
+
+                                if (chip != null) {
+
+                                    danhSachLoaiTuChon.add(khoa);
+
+                                    capNhatTrangThaiChip(chip, true);
+
+                                    coLoaiTu = true;
+                                }
+                            }
+                        }
+
+                        txtGoiYLoaiTu.setText(
+                                coLoaiTu
+                                        ? "ĐÃ NHẬN DIỆN"
+                                        : "CHƯA NHẬN DIỆN"
+                        );
+                    }
+
+                    private String chuanHoaLoaiTu(String pos) {
+
+                        if (pos == null) {
+                            return "";
+                        }
+
+                        String loaiTu = pos.trim().toLowerCase();
+
+                        switch (loaiTu) {
+
+                            case "danh từ":
+                            case "danh tu":
+                                return "noun";
+
+                            case "động từ":
+                            case "dong tu":
+                                return "verb";
+
+                            case "tính từ":
+                            case "tinh tu":
+                                return "adjective";
+
+                            case "trạng từ":
+                            case "trang tu":
+                                return "adverb";
+
+                            case "đại từ":
+                            case "dai tu":
+                                return "pronoun";
+
+                            case "giới từ":
+                            case "gioi tu":
+                                return "preposition";
+
+                            case "liên từ":
+                            case "lien tu":
+                                return "conjunction";
+
+                            case "thán từ":
+                            case "than tu":
+                                return "interjection";
+
+                            case "từ hạn định":
+                            case "tu han dinh":
+                                return "determiner";
+
+                            default:
+                                return loaiTu;
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(
+                            @NonNull Call<DictionaryResponse> call,
+                            @NonNull Throwable t) {
+
+                        // Người dùng vẫn có thể nhập thủ công
+                    }
+                }
+        );
     }
 
     private void luuTuVaoServer(
             Dialog dialog,
             String tuVung,
             String phienAm,
-            String nghia) {
+            String nghia,
+            String loaiTu) {
 
 
         SharedPreferences sharedPreferences =
@@ -1408,18 +1554,15 @@ public class ChiTietBoTu extends Fragment {
          *
          * Các trường khác để null.
          */
-        ThemTuRequest request =
-                new ThemTuRequest(
-                        tuVung,
-                        phienAm.isEmpty()
-                                ? null
-                                : phienAm,
-                        null,
-                        nghia,
-                        null,
-                        null,
-                        null
-                );
+        ThemTuRequest request = new ThemTuRequest(
+                tuVung,
+                phienAm.isEmpty() ? null : phienAm,
+                loaiTu.isEmpty() ? null : loaiTu,
+                nghia,
+                null,
+                null,
+                null
+        );
 
 
         ApiService apiService =

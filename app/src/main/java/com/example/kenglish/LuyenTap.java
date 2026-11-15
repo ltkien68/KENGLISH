@@ -376,7 +376,7 @@ public class LuyenTap extends Fragment {
                 return;
             }
 
-            if (position != 0 && position != 1) {
+            if (position != 0 && position != 1 && position != 2) {
                 thongBao("Chế độ này đang được phát triển");
                 return;
             }
@@ -1299,9 +1299,15 @@ public class LuyenTap extends Fragment {
                         if (viTriGameDaChon == 0) {
                             fragment = Flashcard.newInstance(duLieu.getTuVung());
                             tag = "FLASHCARD";
+
                         } else if (viTriGameDaChon == 1) {
                             fragment = TracNghiem.newInstance(duLieu.getTuVung());
                             tag = "TRAC_NGHIEM";
+
+                        } else if (viTriGameDaChon == 2) {
+                            fragment = NoiTu.newInstance(duLieu.getTuVung());
+                            tag = "NOI_TU";
+
                         } else {
                             return;
                         }
