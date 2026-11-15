@@ -292,20 +292,33 @@ public class XepHang extends Fragment {
         thanhChonXepHang.setTranslationX(chieuRongMoi * viTri);
     }
 
+
     private void capNhatMauTab() {
-        int mauThuong = Color.parseColor("#AAB4C5");
-        int mauChon = Color.parseColor("#37659C");
-        tabLuotChoi.setTextColor(mauThuong);
-        tabStreak.setTextColor(mauThuong);
-        tabCongDong.setTextColor(mauThuong);
-        if (TAB_LUOT_CHOI.equals(tabDangChon)) {
-            tabLuotChoi.setTextColor(mauChon);
-        } else if (TAB_STREAK.equals(tabDangChon)) {
-            tabStreak.setTextColor(mauChon);
-        } else {
-            tabCongDong.setTextColor(mauChon);
+        int mauThuong = Color.parseColor("#7C8492");
+        int mauChon = Color.parseColor("#1877F2");
+
+        TextView[] danhSachTab = {
+                tabLuotChoi,
+                tabStreak,
+                tabCongDong
+        };
+
+        for (TextView tab : danhSachTab) {
+            boolean duocChon =
+                    (tab == tabLuotChoi && TAB_LUOT_CHOI.equals(tabDangChon))
+                            || (tab == tabStreak && TAB_STREAK.equals(tabDangChon))
+                            || (tab == tabCongDong && TAB_CONG_DONG.equals(tabDangChon));
+
+            tab.setSelected(duocChon);
+            tab.setTextColor(duocChon ? mauChon : mauThuong);
+            tab.setTypeface(
+                    null,
+                    duocChon ? android.graphics.Typeface.BOLD
+                            : android.graphics.Typeface.NORMAL
+            );
         }
     }
+
 
     private void guiBaiViet() {
         String noiDung = edtNoiDungCongDong

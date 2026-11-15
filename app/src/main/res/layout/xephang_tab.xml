@@ -23,6 +23,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@drawable/nen_xephang_tab_item"
             android:clickable="true"
             android:focusable="true"
             android:fontFamily="sans-serif-medium"
@@ -36,9 +37,10 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@drawable/nen_xephang_tab_item"
             android:clickable="true"
             android:focusable="true"
-            android:fontFamily="sans-serif-medium"
+            android:fontFamily="sans-serif"
             android:gravity="center"
             android:text="Streak"
             android:textColor="#7C8492"
@@ -49,13 +51,15 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:background="@drawable/nen_xephang_tab_item"
             android:clickable="true"
             android:focusable="true"
-            android:fontFamily="sans-serif-medium"
+            android:fontFamily="sans-serif"
             android:gravity="center"
             android:text="Cộng đồng"
             android:textColor="#7C8492"
             android:textSize="12sp" />
+
     </LinearLayout>
 
 </FrameLayout>

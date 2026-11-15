@@ -3,104 +3,136 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F7F9FC"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="#F5FAFF"
+    android:paddingStart="12dp"
+    android:paddingEnd="12dp"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp">
 
     <!-- HEADER -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="44dp"
+        android:layout_height="54dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <TextView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:background="@drawable/nen_congdong_avatar"
+            android:gravity="center"
+            android:text="👥"
+            android:textSize="19sp" />
+
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:fontFamily="sans-serif-medium"
-            android:text="CỘNG ĐỒNG KENGLISH"
-            android:textColor="#0B3475"
-            android:textStyle="bold"
-            android:textSize="15sp" />
+            android:layout_marginStart="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:text="Cộng đồng Kenglish"
+                android:textColor="#0B3475"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="Không gian học tập chung"
+                android:textColor="#7C8492"
+                android:textSize="11sp" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/btn_lam_moi_cong_dong"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/nen_xephang_nutphu"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:background="@drawable/nen_congdong_nut_lam_moi"
             android:clickable="true"
             android:focusable="true"
-            android:fontFamily="sans-serif"
             android:gravity="center"
             android:text="↻"
-            android:textColor="#087CFF"
-            android:textSize="20sp" />
+            android:textColor="#1877F2"
+            android:textSize="21sp" />
     </LinearLayout>
 
-    <!-- DANH SÁCH BÀI VIẾT -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="4dp"
+        android:background="#E5EDF7" />
+
+    <!-- DANH SÁCH TIN NHẮN -->
     <ListView
         android:id="@+id/list_cong_dong"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="12dp"
         android:layout_weight="1"
+        android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
         android:clipToPadding="false"
         android:divider="@android:color/transparent"
-        android:dividerHeight="10dp"
+        android:dividerHeight="8dp"
         android:listSelector="@android:color/transparent"
         android:overScrollMode="never"
-        android:paddingBottom="12dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="10dp"
         android:scrollbars="none" />
 
-    <!-- THANH NHẬP -->
+    <!-- KHU VỰC NHẬP TIN -->
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="6dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <EditText
             android:id="@+id/edt_noi_dung_cong_dong"
             android:layout_width="0dp"
-            android:layout_height="48dp"
+            android:layout_height="46dp"
             android:layout_weight="1"
-            android:background="@drawable/nen_xephang_input"
+            android:background="@drawable/nen_congdong_input"
             android:fontFamily="sans-serif"
             android:gravity="center_vertical"
-            android:hint="Viết tin nhắn..."
+            android:hint="Nhập tin nhắn..."
             android:inputType="textCapSentences|textMultiLine"
             android:maxLines="3"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
-            android:textColor="#111111"
-            android:textColorHint="#9AA3AF"
+            android:textColor="#172B4D"
+            android:textColorHint="#9AA8BA"
             android:textSize="13sp" />
 
         <TextView
             android:id="@+id/btn_gui_cong_dong"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
             android:layout_marginStart="8dp"
-            android:background="@drawable/nen_xephang_gui"
+            android:background="@drawable/nen_congdong_gui"
             android:clickable="true"
             android:focusable="true"
-            android:fontFamily="sans-serif-medium"
             android:gravity="center"
             android:text="➤"
             android:textColor="#FFFFFF"
-            android:textSize="17sp" />
+            android:textSize="18sp" />
     </LinearLayout>
 
-    <!-- GIỚI HẠN -->
+    <!-- GIỚI HẠN TIN NHẮN -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
-        android:fontFamily="sans-serif"
-        android:gravity="end"
-        android:text="Tối đa 3 tin nhắn/ngày"
-        android:textColor="#7C8492"
-        android:textSize="11sp" />
+        android:layout_marginTop="5dp"
+        android:gravity="center"
+        android:text="Bạn có thể gửi tối đa 3 tin nhắn mỗi ngày"
+        android:textColor="#98A5B5"
+        android:textSize="10sp" />
+
 </LinearLayout>
