@@ -29,6 +29,14 @@ public class MainActivity extends AppCompatActivity {
     private static final String TAG_KAI = "KAI_CHAT";
     private static final String BACKSTACK_KAI = "kai_chat";
 
+    private float toaDoChamX;
+    private float toaDoChamY;
+    private float viTriBanDauX;
+    private float viTriBanDauY;
+    private boolean dangKeoKai = false;
+
+    private static final int NGUONG_KEO = 8;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,7 +131,79 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void thietLapKai() {
+
         nutNoiKai.setOnClickListener(v -> moKai());
+
+        nutNoiKai.setOnTouchListener((v, event) -> {
+
+            switch (event.getAction()) {
+
+                case android.view.MotionEvent.ACTION_DOWN:
+
+                    toaDoChamX = event.getRawX();
+                    toaDoChamY = event.getRawY();
+
+                    viTriBanDauX = v.getX();
+                    viTriBanDauY = v.getY();
+
+                    dangKeoKai = false;
+
+                    return true;
+
+                case android.view.MotionEvent.ACTION_MOVE:
+
+                    float dichX = event.getRawX() - toaDoChamX;
+                    float dichY = event.getRawY() - toaDoChamY;
+
+                    if (Math.abs(dichX) > NGUONG_KEO
+                            || Math.abs(dichY) > NGUONG_KEO) {
+
+                        dangKeoKai = true;
+                    }
+
+                    if (dangKeoKai) {
+
+                        android.view.ViewParent parent = v.getParent();
+
+                        if (!(parent instanceof android.view.ViewGroup)) {
+                            return true;
+                        }
+
+                        android.view.ViewGroup khung =
+                                (android.view.ViewGroup) parent;
+
+                        float xMoi = viTriBanDauX + dichX;
+                        float yMoi = viTriBanDauY + dichY;
+
+                        // Giới hạn trong vùng chứa nút
+                        xMoi = Math.max(0,
+                                Math.min(xMoi, khung.getWidth() - v.getWidth()));
+
+                        yMoi = Math.max(0,
+                                Math.min(yMoi, khung.getHeight() - v.getHeight()));
+
+                        v.setX(xMoi);
+                        v.setY(yMoi);
+                    }
+
+                    return true;
+
+                case android.view.MotionEvent.ACTION_UP:
+
+                    if (!dangKeoKai) {
+                        v.performClick();
+                    }
+
+                    return true;
+
+                case android.view.MotionEvent.ACTION_CANCEL:
+
+                    dangKeoKai = false;
+                    return true;
+            }
+
+            return false;
+        });
     }
 
     private void moKai() {

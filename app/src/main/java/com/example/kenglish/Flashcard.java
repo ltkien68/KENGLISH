@@ -1,9 +1,11 @@
 package com.example.kenglish;
 
 import android.os.Bundle;
+import android.speech.tts.TextToSpeech;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -19,6 +21,7 @@ import com.example.kenglish.model.TuVung;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 public class Flashcard extends Fragment {
@@ -44,14 +47,23 @@ public class Flashcard extends Fragment {
     private TextView txtViDu;
     private TextView txtGoiY;
 
+    private ImageView btnPhatAm;
+
     private LinearLayout layoutDanhGia;
 
     private ProgressBar progressFlashcard;
 
+    private TextToSpeech textToSpeech;
+
+    private boolean ttsSanSang = false;
+    private boolean ttsDaKhoiTao = false;
+
+    private String tuChoPhatAm;
 
     private final Map<Integer, KetQuaTuVung> ketQuaPhienHoc =
             new LinkedHashMap<>();
 
+    // ==================== KHỞI TẠO ====================
 
     public static Flashcard newInstance(List<TuVung> danhSach) {
 
@@ -84,40 +96,88 @@ public class Flashcard extends Fragment {
 
         anhXa(view);
         layDuLieu();
+        khoiTaoPhatAm();
         xuLySuKien();
         hienThiThe();
 
         return view;
     }
 
+    // ==================== ÁNH XẠ VIEW ====================
+
     private void anhXa(View view) {
 
-        cardFlashcard = view.findViewById(R.id.card_flashcard);
+        cardFlashcard = view.findViewById(
+                R.id.card_flashcard
+        );
 
-        btnQuayLai = view.findViewById(R.id.btn_quay_lai);
-        btnTruoc = view.findViewById(R.id.btn_truoc);
-        btnTiep = view.findViewById(R.id.btn_tiep);
-        btnDaThuoc = view.findViewById(R.id.btn_da_thuoc);
-        btnChuaThuoc = view.findViewById(R.id.btn_chua_thuoc);
+        btnQuayLai = view.findViewById(
+                R.id.btn_quay_lai
+        );
 
-        txtTienDo = view.findViewById(R.id.txt_tien_do_flashcard);
-        txtMatThe = view.findViewById(R.id.txt_mat_the);
-        txtTu = view.findViewById(R.id.txt_tu_flashcard);
-        txtPhienAm = view.findViewById(R.id.txt_phien_am_flashcard);
-        txtLoaiTu = view.findViewById(R.id.txt_loai_tu_flashcard);
-        txtViDu = view.findViewById(R.id.txt_vi_du_flashcard);
-        txtGoiY = view.findViewById(R.id.txt_goi_y_lat);
+        btnTruoc = view.findViewById(
+                R.id.btn_truoc
+        );
 
-        progressFlashcard = view.findViewById(R.id.progress_flashcard);
+        btnTiep = view.findViewById(
+                R.id.btn_tiep
+        );
 
-        cardFlashcard.setCameraDistance(
-                8000 * getResources().getDisplayMetrics().density
+        btnDaThuoc = view.findViewById(
+                R.id.btn_da_thuoc
+        );
+
+        btnChuaThuoc = view.findViewById(
+                R.id.btn_chua_thuoc
+        );
+
+        btnPhatAm = view.findViewById(
+                R.id.btn_phat_am_flashcard
+        );
+
+        txtTienDo = view.findViewById(
+                R.id.txt_tien_do_flashcard
+        );
+
+        txtMatThe = view.findViewById(
+                R.id.txt_mat_the
+        );
+
+        txtTu = view.findViewById(
+                R.id.txt_tu_flashcard
+        );
+
+        txtPhienAm = view.findViewById(
+                R.id.txt_phien_am_flashcard
+        );
+
+        txtLoaiTu = view.findViewById(
+                R.id.txt_loai_tu_flashcard
+        );
+
+        txtViDu = view.findViewById(
+                R.id.txt_vi_du_flashcard
+        );
+
+        txtGoiY = view.findViewById(
+                R.id.txt_goi_y_lat
+        );
+
+        progressFlashcard = view.findViewById(
+                R.id.progress_flashcard
         );
 
         layoutDanhGia = view.findViewById(
                 R.id.layout_danh_gia
         );
+
+        cardFlashcard.setCameraDistance(
+                8000 * getResources()
+                        .getDisplayMetrics().density
+        );
     }
+
+    // ==================== LẤY DỮ LIỆU ====================
 
     @SuppressWarnings("unchecked")
     private void layDuLieu() {
@@ -128,7 +188,9 @@ public class Flashcard extends Fragment {
             return;
         }
 
-        Object duLieu = bundle.getSerializable("danh_sach_tu");
+        Object duLieu = bundle.getSerializable(
+                "danh_sach_tu"
+        );
 
         if (duLieu instanceof ArrayList) {
 
@@ -140,26 +202,151 @@ public class Flashcard extends Fragment {
         }
     }
 
+    // ==================== TEXT TO SPEECH ====================
+
+    private void khoiTaoPhatAm() {
+
+        textToSpeech = new TextToSpeech(
+                requireContext(),
+                trangThai -> {
+
+                    if (textToSpeech == null) {
+                        return;
+                    }
+
+                    ttsDaKhoiTao = true;
+
+                    if (trangThai == TextToSpeech.SUCCESS) {
+
+                        int ketQua = textToSpeech.setLanguage(
+                                Locale.US
+                        );
+
+                        if (ketQua >= TextToSpeech.LANG_AVAILABLE) {
+
+                            ttsSanSang = true;
+
+                            // Phát âm nếu người dùng đã nhấn loa
+                            // trong lúc TTS đang khởi tạo.
+                            if (tuChoPhatAm != null) {
+
+                                phatAmNgay(tuChoPhatAm);
+
+                                tuChoPhatAm = null;
+                            }
+
+                        } else {
+
+                            ttsSanSang = false;
+
+                            if (isAdded()) {
+                                Toast.makeText(
+                                        requireContext(),
+                                        "Thiết bị chưa hỗ trợ giọng đọc tiếng Anh",
+                                        Toast.LENGTH_SHORT
+                                ).show();
+                            }
+                        }
+
+                    } else {
+
+                        ttsSanSang = false;
+
+                        if (isAdded()) {
+                            Toast.makeText(
+                                    requireContext(),
+                                    "Không thể khởi tạo Text To Speech",
+                                    Toast.LENGTH_SHORT
+                            ).show();
+                        }
+                    }
+                }
+        );
+    }
+
+    // Phát âm từ được truyền vào.
+    private void phatAm(String tu) {
+
+        if (tu == null || tu.trim().isEmpty()) {
+            return;
+        }
+
+        if (textToSpeech == null || !ttsSanSang) {
+
+            // Chờ TTS khởi tạo xong.
+            if (!ttsDaKhoiTao) {
+
+                tuChoPhatAm = tu;
+
+            } else {
+
+                Toast.makeText(
+                        requireContext(),
+                        "Chưa thể phát âm từ này",
+                        Toast.LENGTH_SHORT
+                ).show();
+            }
+
+            return;
+        }
+
+        phatAmNgay(tu);
+    }
+
+    // Thực hiện phát âm.
+    private void phatAmNgay(String tu) {
+
+        if (textToSpeech == null || !ttsSanSang) {
+            return;
+        }
+
+        textToSpeech.speak(
+                tu,
+                TextToSpeech.QUEUE_FLUSH,
+                null,
+                "flashcard_tts"
+        );
+    }
+
+    // ==================== SỰ KIỆN ====================
+
     private void xuLySuKien() {
 
+        // Quay lại
         btnQuayLai.setOnClickListener(v ->
                 requireActivity()
                         .getSupportFragmentManager()
                         .popBackStack()
         );
 
+        // Lật thẻ
         cardFlashcard.setOnClickListener(v -> latThe());
 
+        // Phát âm từ hiện tại
+        btnPhatAm.setOnClickListener(v -> {
+
+            if (viTriHienTai >= 0
+                    && viTriHienTai < danhSachTu.size()) {
+
+                TuVung tu = danhSachTu.get(viTriHienTai);
+
+                phatAm(tu.getTu_goc());
+            }
+        });
+
+        // Thẻ trước
         btnTruoc.setOnClickListener(v -> {
 
             if (viTriHienTai > 0) {
+
                 viTriHienTai--;
                 dangHienMatSau = false;
+
                 hienThiThe();
             }
         });
 
-
+        // Thẻ tiếp theo
         btnTiep.setOnClickListener(v -> {
 
             if (danhSachTu.isEmpty()) {
@@ -170,6 +357,7 @@ public class Flashcard extends Fragment {
 
                 viTriHienTai++;
                 dangHienMatSau = false;
+
                 hienThiThe();
 
             } else {
@@ -195,7 +383,9 @@ public class Flashcard extends Fragment {
 
                             viTriHienTai = i;
                             dangHienMatSau = false;
+
                             hienThiThe();
+
                             break;
                         }
                     }
@@ -203,15 +393,18 @@ public class Flashcard extends Fragment {
             }
         });
 
-
+        // Đánh dấu đã thuộc
         btnDaThuoc.setOnClickListener(v -> {
             danhDauTu(1);
         });
 
+        // Đánh dấu chưa thuộc
         btnChuaThuoc.setOnClickListener(v -> {
             danhDauTu(0);
         });
     }
+
+    // ==================== HIỂN THỊ THẺ ====================
 
     private void hienThiThe() {
 
@@ -219,9 +412,13 @@ public class Flashcard extends Fragment {
 
             txtTu.setText("Không có từ vựng");
             txtPhienAm.setText("");
+
             txtLoaiTu.setVisibility(View.GONE);
             txtViDu.setVisibility(View.GONE);
+
             txtTienDo.setText("0 / 0");
+
+            btnPhatAm.setVisibility(View.GONE);
 
             return;
         }
@@ -293,6 +490,12 @@ public class Flashcard extends Fragment {
 
         txtGoiY.setText("Chạm để lật thẻ");
 
+        btnPhatAm.setVisibility(
+                coNoiDung(tu.getTu_goc())
+                        ? View.VISIBLE
+                        : View.GONE
+        );
+
         btnTruoc.setAlpha(
                 viTriHienTai == 0 ? 0.4f : 1f
         );
@@ -300,9 +503,11 @@ public class Flashcard extends Fragment {
         btnTiep.setText(
                 viTriHienTai == danhSachTu.size() - 1
                         ? "HOÀN THÀNH"
-                        : "TIẾP →"
+                        : "TIẾP"
         );
     }
+
+    // ==================== LẬT THẺ ====================
 
     private void latThe() {
 
@@ -333,7 +538,7 @@ public class Flashcard extends Fragment {
                 .start();
     }
 
-
+    // ==================== ĐÁNH GIÁ TỪ ====================
 
     private void danhDauTu(int trangThai) {
 
@@ -350,16 +555,17 @@ public class Flashcard extends Fragment {
                 trangThai
         );
 
-        // Lưu hoặc ghi đè kết quả của từ hiện tại
+        // Lưu hoặc ghi đè kết quả của từ hiện tại.
         ketQuaPhienHoc.put(tu.getId(), ketQua);
 
-        // Cập nhật giao diện lựa chọn
+        // Cập nhật giao diện lựa chọn.
         hienThiTrangThaiDanhGia();
 
         // Không tự chuyển thẻ, để người dùng
         // chủ động bấm TIẾP hoặc TRƯỚC.
     }
 
+    // ==================== MÀN HÌNH KẾT QUẢ ====================
 
     private void moManHinhKetQua() {
 
@@ -400,6 +606,7 @@ public class Flashcard extends Fragment {
                 .commit();
     }
 
+    // ==================== HỖ TRỢ ====================
 
     private boolean coNoiDung(String giaTri) {
 
@@ -414,6 +621,7 @@ public class Flashcard extends Fragment {
                 : "";
     }
 
+    // ==================== TRẠNG THÁI ĐÁNH GIÁ ====================
 
     private void hienThiTrangThaiDanhGia() {
 
@@ -426,7 +634,7 @@ public class Flashcard extends Fragment {
         KetQuaTuVung ketQua =
                 ketQuaPhienHoc.get(tu.getId());
 
-        // Chưa đánh giá từ này
+        // Chưa đánh giá từ này.
         if (ketQua == null) {
 
             btnDaThuoc.setAlpha(1f);
@@ -443,9 +651,28 @@ public class Flashcard extends Fragment {
         btnDaThuoc.setSelected(daThuoc);
         btnChuaThuoc.setSelected(!daThuoc);
 
-        // Nút được chọn nổi bật hơn
+        // Nút được chọn nổi bật hơn.
         btnDaThuoc.setAlpha(daThuoc ? 1f : 0.4f);
         btnChuaThuoc.setAlpha(daThuoc ? 0.4f : 1f);
     }
 
+    // ==================== GIẢI PHÓNG TTS ====================
+
+    @Override
+    public void onDestroyView() {
+
+        if (textToSpeech != null) {
+
+            textToSpeech.stop();
+            textToSpeech.shutdown();
+
+            textToSpeech = null;
+        }
+
+        ttsSanSang = false;
+        ttsDaKhoiTao = false;
+        tuChoPhatAm = null;
+
+        super.onDestroyView();
+    }
 }

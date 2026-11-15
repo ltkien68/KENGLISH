@@ -23,17 +23,33 @@
             android:textSize="15sp"
             android:textStyle="bold"/>
 
-        <TextView
+        <LinearLayout
             android:id="@+id/txt_xem_chi_tiet_thong_ke"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
             android:clickable="true"
             android:focusable="true"
-            android:fontFamily="sans-serif"
-            android:padding="4dp"
-            android:text="Xem chi tiết →"
-            android:textColor="#1877F2"
-            android:textSize="11sp"/>
+            android:padding="4dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:text="Xem chi tiết"
+                android:textColor="#1877F2"
+                android:textSize="11sp"/>
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:layout_marginStart="5dp"
+                android:src="@drawable/ic_muitenphai"
+                android:scaleType="fitCenter"
+                app:tint="#1877F2" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
