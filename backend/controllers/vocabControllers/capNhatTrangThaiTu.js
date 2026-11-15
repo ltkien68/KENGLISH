@@ -33,7 +33,6 @@ const capNhatTrangThaiTu = async (req, res) => {
             });
         }
 
-
         // Kiểm tra từ có thuộc bộ từ của user không
         // Đồng thời lấy trạng thái hiện tại
         const [danhSachTu] =

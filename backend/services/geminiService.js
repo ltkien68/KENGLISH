@@ -1,6 +1,4 @@
-const {
-    goiGeminiKai
-} = require("./kaiModelService");
+const { goiGeminiKai } = require("./kaiModelService");
 
 const SYSTEM_INSTRUCTION = `
 Bạn là Kenglish AI, trợ lý học tiếng Anh của ứng dụng Kenglish.
@@ -22,34 +20,32 @@ Quy tắc:
 - Không giả vờ có quyền truy cập dữ liệu cá nhân của người dùng.
 `;
 
-const guiCauHoiGemini = async (cauHoi, luaChon = "auto") => {
-    if (
-        typeof cauHoi !== "string" ||
-        !cauHoi.trim() ||
-        cauHoi.length > 2000
-    ) {
-        throw new Error("KAI_INVALID_QUESTION");
-    }
+const MODEL_KAI = "flash-lite";
 
-    const response = await goiGeminiKai({
-        luaChon,
-        contents: cauHoi.trim(),
-        config: {
-            systemInstruction: SYSTEM_INSTRUCTION,
-            temperature: 0.7,
-            maxOutputTokens: 2048
-        }
-    });
+const guiCauHoiGemini = async (cauHoi) => {
+  if (typeof cauHoi !== "string" || !cauHoi.trim() || cauHoi.length > 2000) {
+    throw new Error("KAI_INVALID_QUESTION");
+  }
 
-    const traLoi = response.text;
+  const response = await goiGeminiKai({
+    luaChon: MODEL_KAI,
+    contents: cauHoi.trim(),
+    config: {
+      systemInstruction: SYSTEM_INSTRUCTION,
+      temperature: 0.7,
+      maxOutputTokens: 2048,
+    },
+  });
 
-    if (!traLoi || !traLoi.trim()) {
-        throw new Error("GEMINI_EMPTY_RESPONSE");
-    }
+  const traLoi = response.text;
 
-    return traLoi.trim();
+  if (!traLoi || !traLoi.trim()) {
+    throw new Error("GEMINI_EMPTY_RESPONSE");
+  }
+
+  return traLoi.trim();
 };
 
 module.exports = {
-    guiCauHoiGemini
+  guiCauHoiGemini,
 };
