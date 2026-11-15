@@ -36,6 +36,9 @@ import com.example.kenglish.model.DictionaryResponse;
 import com.example.kenglish.model.SuggestionResponse;
 import com.example.kenglish.model.LichSuTraTuResponse;
 import com.example.kenglish.model.ThemLichSuRequest;
+import com.example.kenglish.model.BaiVietCongDong;
+import com.example.kenglish.model.DanhSachTinNhanCongDongResponse;
+import com.example.kenglish.model.GuiTinNhanCongDongRequest;
 
 import java.util.List;
 
@@ -276,5 +279,26 @@ public interface ApiService {
     @POST("auth/dat-lai-mat-khau")
     Call<ApiResponse> datLaiMatKhau(
             @Body DatLaiMatKhauRequest request
+    );
+
+    // ==================== CỘNG ĐỒNG ====================
+
+    @GET("community/days")
+    Call<ApiResponse<List<String>>> layDanhSachNgayCongDong(
+            @Header("Authorization") String token
+    );
+
+    @GET("community/messages")
+    Call<ApiResponse<DanhSachTinNhanCongDongResponse>> layTinNhanCongDong(
+            @Header("Authorization") String token,
+            @Query("ngay") String ngay,
+            @Query("limit") int limit,
+            @Query("before_id") Long beforeId
+    );
+
+    @POST("community/messages")
+    Call<ApiResponse<BaiVietCongDong>> guiTinNhanCongDong(
+            @Header("Authorization") String token,
+            @Body GuiTinNhanCongDongRequest request
     );
 }

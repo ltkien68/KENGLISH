@@ -39,6 +39,7 @@ dependencies {
     implementation("com.google.android.material:material:1.12.0")
     implementation("com.github.bumptech.glide:glide:4.16.0")
     implementation("com.google.android.flexbox:flexbox:3.0.0")
+    implementation("io.socket:socket.io-client:2.1.1")
     implementation(libs.activity.ktx)
     implementation(libs.appcompat)
     implementation(libs.constraintlayout)

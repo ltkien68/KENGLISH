@@ -1,52 +1,45 @@
 package com.example.kenglish.model;
 
+import com.google.gson.annotations.SerializedName;
 
-/**
- * Model lưu thông tin một bài viết trong Cộng đồng.
- */
 public class BaiVietCongDong {
 
-    private int id;
+    private long id;
+
+    @SerializedName("nguoi_dung_id")
+    private int nguoiDungId;
+
+    @SerializedName("ten_hien_thi")
     private String tenNguoiDung;
+
+    @SerializedName("avatar_url")
     private String anhDaiDien;
+
+    @SerializedName("noi_dung")
     private String noiDung;
+
+    @SerializedName("tao_luc")
     private String thoiGian;
 
-
-    public BaiVietCongDong(
-            int id,
-            String tenNguoiDung,
-            String anhDaiDien,
-            String noiDung,
-            String thoiGian) {
-
-        this.id = id;
-        this.tenNguoiDung = tenNguoiDung;
-        this.anhDaiDien = anhDaiDien;
-        this.noiDung = noiDung;
-        this.thoiGian = thoiGian;
-    }
-
-
-    public int getId() {
+    public long getId() {
         return id;
     }
 
+    public int getNguoiDungId() {
+        return nguoiDungId;
+    }
 
     public String getTenNguoiDung() {
         return tenNguoiDung;
     }
 
-
     public String getAnhDaiDien() {
         return anhDaiDien;
     }
 
-
     public String getNoiDung() {
         return noiDung;
     }
-
 
     public String getThoiGian() {
         return thoiGian;

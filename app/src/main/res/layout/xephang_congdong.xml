@@ -1,73 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:background="#F5FAFF"
-    android:paddingStart="12dp"
-    android:paddingEnd="12dp"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp">
+    android:paddingStart="9dp"
+    android:paddingEnd="9dp"
+    android:paddingTop="4dp"
+    android:paddingBottom="5dp">
 
-    <!-- HEADER -->
-    <LinearLayout
+    <!-- THANH TRÊN CÙNG -->
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="54dp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:layout_height="16dp">
 
-        <TextView
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:background="@drawable/nen_congdong_avatar"
-            android:gravity="center"
-            android:text="👥"
-            android:textSize="19sp" />
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginStart="10dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="sans-serif-medium"
-                android:text="Cộng đồng Kenglish"
-                android:textColor="#0B3475"
-                android:textSize="14sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:text="Không gian học tập chung"
-                android:textColor="#7C8492"
-                android:textSize="11sp" />
-        </LinearLayout>
-
-        <TextView
+        <ImageView
             android:id="@+id/btn_lam_moi_cong_dong"
-            android:layout_width="38dp"
-            android:layout_height="38dp"
-            android:background="@drawable/nen_congdong_nut_lam_moi"
+            android:layout_width="14dp"
+            android:layout_height="14dp"
+            android:layout_gravity="end|center_vertical"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:focusable="true"
-            android:gravity="center"
-            android:text="↻"
-            android:textColor="#1877F2"
-            android:textSize="21sp" />
-    </LinearLayout>
+            android:contentDescription="Làm mới cộng đồng"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_reset"
+            app:tint="#37659C"/>
 
-    <View
+    </FrameLayout>
+
+    <!-- THANH CHỌN NGÀY -->
+    <HorizontalScrollView
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginTop="4dp"
-        android:background="#E5EDF7" />
+        android:layout_height="34dp"
+        android:layout_marginTop="0dp"
+        android:scrollbars="none"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:id="@+id/khung_ngay_cong_dong"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="horizontal" />
+
+    </HorizontalScrollView>
 
     <!-- DANH SÁCH TIN NHẮN -->
     <ListView
@@ -75,64 +53,65 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="3dp"
         android:background="@android:color/transparent"
         android:clipToPadding="false"
         android:divider="@android:color/transparent"
-        android:dividerHeight="8dp"
+        android:dividerHeight="5dp"
         android:listSelector="@android:color/transparent"
         android:overScrollMode="never"
-        android:paddingTop="6dp"
-        android:paddingBottom="10dp"
+        android:paddingTop="3dp"
+        android:paddingBottom="5dp"
         android:scrollbars="none" />
 
     <!-- KHU VỰC NHẬP TIN -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="6dp"
+        android:layout_marginTop="3dp"
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <EditText
             android:id="@+id/edt_noi_dung_cong_dong"
             android:layout_width="0dp"
-            android:layout_height="46dp"
+            android:layout_height="40dp"
             android:layout_weight="1"
             android:background="@drawable/nen_congdong_input"
             android:fontFamily="sans-serif"
             android:gravity="center_vertical"
             android:hint="Nhập tin nhắn..."
             android:inputType="textCapSentences|textMultiLine"
-            android:maxLines="3"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
+            android:maxLines="2"
+            android:paddingStart="12dp"
+            android:paddingEnd="12dp"
             android:textColor="#172B4D"
             android:textColorHint="#9AA8BA"
-            android:textSize="13sp" />
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/btn_gui_cong_dong"
-            android:layout_width="44dp"
-            android:layout_height="44dp"
-            android:layout_marginStart="8dp"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:layout_marginStart="6dp"
             android:background="@drawable/nen_congdong_gui"
             android:clickable="true"
             android:focusable="true"
             android:gravity="center"
             android:text="➤"
             android:textColor="#FFFFFF"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
+
     </LinearLayout>
 
-    <!-- GIỚI HẠN TIN NHẮN -->
+    <!-- THÔNG TIN LƯU TRỮ -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="3dp"
         android:gravity="center"
-        android:text="Bạn có thể gửi tối đa 3 tin nhắn mỗi ngày"
+        android:text="Tin nhắn được lưu trong 3 tháng gần nhất"
         android:textColor="#98A5B5"
-        android:textSize="10sp" />
+        android:textSize="9sp" />
 
 </LinearLayout>
