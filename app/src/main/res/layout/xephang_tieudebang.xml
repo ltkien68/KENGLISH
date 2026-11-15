@@ -2,12 +2,12 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="44dp"
+    android:layout_height="38dp"
     android:background="@drawable/nen_xephang_tieude"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:paddingStart="12dp"
-    android:paddingEnd="12dp">
+    android:paddingStart="10dp"
+    android:paddingEnd="10dp">
 
     <TextView
         android:layout_width="46dp"
@@ -15,29 +15,30 @@
         android:fontFamily="sans-serif-medium"
         android:gravity="center"
         android:text="HẠNG"
-        android:textColor="#0B3475"
+        android:textColor="#526B8C"
         android:textStyle="bold"
-        android:textSize="11sp" />
+        android:textSize="10sp" />
 
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:fontFamily="sans-serif-medium"
-        android:paddingStart="56dp"
+        android:paddingStart="12dp"
         android:text="NGƯỜI DÙNG"
-        android:textColor="#0B3475"
+        android:textColor="#526B8C"
         android:textStyle="bold"
-        android:textSize="11sp" />
+        android:textSize="10sp" />
 
     <TextView
         android:id="@+id/txt_tieu_de_diem"
-        android:layout_width="70dp"
+        android:layout_width="64dp"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif-medium"
         android:gravity="end"
         android:text="LƯỢT"
-        android:textColor="#0B3475"
+        android:textColor="#526B8C"
         android:textStyle="bold"
-        android:textSize="11sp" />
+        android:textSize="10sp" />
+
 </LinearLayout>
