@@ -88,7 +88,7 @@ Với yêu cầu chat:
     chuDe.length > 100 ||
     !Number.isInteger(soLuong) ||
     soLuong < 1 ||
-    soLuong > 10 ||
+    soLuong > 50 ||
     typeof duLieu.mo_luyen_tap !== "boolean"
   ) {
     throw new Error("KAI_INVALID_INTENT");
